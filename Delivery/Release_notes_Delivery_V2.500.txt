@@ -1,0 +1,29 @@
+==Release notes for Delivery==
+
+Compiler of release notes: Dalton Maag
+Designer: Dalton Maag
+Designer URL: daltonmaag.com
+
+Release date: 2022-03-25
+
+Change log:
+- v2.500: Added icon characters.
+- v2.000: Added math extension characters.
+		  Hinting fixes.
+- v1.001: Fixed /logicalnot.
+- v1.000: This is the first release.
+
+Basic information
+1 Font name: Delivery
+2 TrueType Version record: 2.500
+3 Character set: All European Latin, Cyrillic, Greek
+4 Supported scripts: Latin, Cyrillic, Greek
+5 Number of glyphs: Uprights: 805, Italics: 810, Condensed: 805
+6 Weights/Styles: Light, Light Italic, Regular, Italic, Bold, Bold Italic, Condensed Light, Condensed Black
+7 Usage: Text and Display
+
+Technology
+1 File formats: The files have been delivered in the TrueType-based OpenType format, for use in all major Operating Systems, TTF for use in apps, and in web font format: WOFF; WOFF2; EOT.
+2 Embedding settings: Editing of the document is allowed (editable mode); subsetting is allowed.
+3 Screen optimization information: All glyphs are manually hinted for optimized rasterization in Microsoft ClearType or for other LCD devices.
+4 Default numerals: Tabular. Proportional numerals accessible via OpenType features.
