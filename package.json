@@ -1,0 +1,19 @@
+{
+  "dependencies": {
+    "dotenv": "^16.4.5"
+  },
+  "scripts": {
+    "test": "jest --coverage",
+    "test:watch": "jest --watch --coverage",
+    "test:all": "jest --coverage --runInBand",
+    "test:name-population": "node test-name-population.js",
+    "test:name-population:coverage": "node test-name-population.js --coverage",
+    "test:name-population:watch": "node test-name-population.js --watch"
+  },
+  "devDependencies": {
+    "jest": "^27.4.7",
+    "jest-junit": "^13.0.0",
+    "jsdom": "^16.7.0",
+    "supertest": "^7.1.1"
+  }
+}

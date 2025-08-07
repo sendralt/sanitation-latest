@@ -1,0 +1,131 @@
+<div class="page-container">
+  <header class="page-header">
+    <h1>Manual Checklist Assignment</h1>
+    <p class="page-subtitle">Assign specific checklists to users</p>
+  </header>
+
+  <% if (locals.errorMessages && errorMessages.length > 0) { %>
+    <div class="flash-message error" role="alert">
+      <% errorMessages.forEach(function(message) { %>
+        <p class="mb-0"><%- message %></p>
+      <% }); %>
+    </div>
+  <% } %>
+  <% if (locals.successMessages && successMessages.length > 0) { %>
+    <div class="flash-message success" role="alert">
+      <% successMessages.forEach(function(message) { %>
+        <p class="mb-0"><%- message %></p>
+      <% }); %>
+    </div>
+  <% } %>
+
+  <form action="/admin/assignments/assign" method="POST" novalidate>
+    <input type="hidden" name="_csrf" value="<%- _csrf %>">
+
+    <div class="form-group">
+      <label for="userId" class="form-label">Select User</label>
+      <select class="form-select form-control <%= (locals.validationErrors && validationErrors.userId) ? 'is-invalid' : '' %>"
+              id="userId" name="userId" required>
+        <option value="">Choose a user...</option>
+        <% users.forEach(function(u) { %>
+          <option value="<%= u.id %>" <%= (locals.formData && formData.userId === u.id) ? 'selected' : '' %>>
+            <%= u.firstName %> <%= u.lastName %> (<%= u.username %>)
+          </option>
+        <% }); %>
+      </select>
+      <% if (locals.validationErrors && validationErrors.userId) { %>
+        <div class="invalid-feedback">
+          <%- validationErrors.userId %>
+        </div>
+      <% } %>
+    </div>
+
+    <div class="form-group">
+      <label for="checklistId" class="form-label">Select Checklist</label>
+      <select class="form-select form-control <%= (locals.validationErrors && validationErrors.checklistId) ? 'is-invalid' : '' %>"
+              id="checklistId" name="checklistId" required>
+        <option value="">Choose a checklist...</option>
+        <% 
+        // Group checklists by type
+        const checklistsByType = {};
+        checklists.forEach(function(c) {
+          if (!checklistsByType[c.type]) {
+            checklistsByType[c.type] = [];
+          }
+          checklistsByType[c.type].push(c);
+        });
+        
+        // Display grouped options
+        Object.keys(checklistsByType).forEach(function(type) {
+        %>
+          <optgroup label="<%= type.charAt(0).toUpperCase() + type.slice(1) %> Checklists">
+            <% checklistsByType[type].forEach(function(c) { %>
+              <option value="<%= c.id %>" <%= (locals.formData && formData.checklistId === c.id) ? 'selected' : '' %>>
+                <%= c.title %>
+                <% if (c.lastAssignedAt) { %>
+                  (Last assigned: <%= new Date(c.lastAssignedAt).toLocaleDateString() %>)
+                <% } else { %>
+                  (Never assigned)
+                <% } %>
+              </option>
+            <% }); %>
+          </optgroup>
+        <% }); %>
+      </select>
+      <% if (locals.validationErrors && validationErrors.checklistId) { %>
+        <div class="invalid-feedback">
+          <%- validationErrors.checklistId %>
+        </div>
+      <% } %>
+    </div>
+
+    <div class="form-group">
+      <div class="form-check">
+        <input type="checkbox" id="overrideExisting" name="overrideExisting" class="form-check-input" 
+               <%= (locals.formData && formData.overrideExisting) ? 'checked' : '' %>>
+        <label for="overrideExisting" class="form-check-label">
+          <strong>Override existing assignment</strong>
+          <br>
+          <small class="text-muted">
+            Check this box to cancel any existing active assignment for the selected user and replace it with the new assignment.
+            If unchecked, the assignment will fail if the user already has an active assignment.
+          </small>
+        </label>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-secondary">Assign Checklist</button>
+      <a href="/admin/assignments/manage" class="btn btn-secondary">View All Assignments</a>
+      <a href="/dashboard" class="btn btn-outline-secondary">Back to Dashboard</a>
+    </div>
+  </form>
+
+  <div class="info-section">
+    <h3>Assignment Information</h3>
+    <ul>
+      <li><strong>Total Users Available:</strong> <%= users.length %></li>
+      <li><strong>Total Checklists Available:</strong> <%= checklists.length %></li>
+      <li><strong>Daily Checklists:</strong> <%= checklists.filter(c => c.type === 'daily').length %></li>
+      <li><strong>Weekly Checklists:</strong> <%= checklists.filter(c => c.type === 'weekly').length %></li>
+      <li><strong>Quarterly Checklists:</strong> <%= checklists.filter(c => c.type === 'quarterly').length %></li>
+    </ul>
+  </div>
+</div>
+
+<script>
+  (function () {
+    'use strict'
+    var forms = document.querySelectorAll('form[novalidate]')
+    Array.prototype.slice.call(forms)
+      .forEach(function (form) {
+        form.addEventListener('submit', function (event) {
+          form.classList.add('was-validated')
+          if (!form.checkValidity()) {
+            event.preventDefault()
+            event.stopPropagation()
+          }
+        }, false)
+      })
+  })()
+</script>

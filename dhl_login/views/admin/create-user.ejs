@@ -1,0 +1,145 @@
+<div class="page-container">
+  <header class="page-header">
+    <h1>Create New User</h1>
+  </header>
+
+  <% if (locals.errorMessages && errorMessages.length > 0) { %>
+    <div class="flash-message error" role="alert">
+      <% errorMessages.forEach(function(message) { %>
+        <p class="mb-0"><%- message %></p>
+      <% }); %>
+    </div>
+  <% } %>
+  <% if (locals.success && success.length > 0) { %>
+    <div class="flash-message success" role="alert">
+      <% success.forEach(function(message) { %>
+        <p class="mb-0"><%- message %></p>
+      <% }); %>
+    </div>
+  <% } %>
+
+  <form action="/admin/users" method="POST" novalidate>
+    <input type="hidden" name="_csrf" value="<%- _csrf %>">
+
+    <div class="form-group">
+      <label for="firstName" class="form-label">First Name</label>
+      <input type="text" class="form-control <%= (locals.validationErrors && validationErrors.firstName) ? 'is-invalid' : '' %>"
+             id="firstName" name="firstName"
+             value="<%= locals.formData && formData.firstName ? formData.firstName : '' %>"
+             required>
+      <% if (locals.validationErrors && validationErrors.firstName) { %>
+        <div class="invalid-feedback">
+          <%- validationErrors.firstName %>
+        </div>
+      <% } %>
+    </div>
+
+    <div class="form-group">
+      <label for="lastName" class="form-label">Last Name</label>
+      <input type="text" class="form-control <%= (locals.validationErrors && validationErrors.lastName) ? 'is-invalid' : '' %>"
+             id="lastName" name="lastName"
+             value="<%= locals.formData && formData.lastName ? formData.lastName : '' %>"
+             required>
+      <% if (locals.validationErrors && validationErrors.lastName) { %>
+        <div class="invalid-feedback">
+          <%- validationErrors.lastName %>
+        </div>
+      <% } %>
+    </div>
+
+    <div class="form-group">
+      <label for="username" class="form-label">Username</label>
+      <input type="text" class="form-control <%= (locals.validationErrors && validationErrors.username) ? 'is-invalid' : '' %>"
+             id="username" name="username"
+             value="<%= locals.formData && formData.username ? formData.username : '' %>"
+             required minlength="3" maxlength="30">
+      <% if (locals.validationErrors && validationErrors.username) { %>
+        <div class="invalid-feedback">
+          <%- validationErrors.username %>
+        </div>
+      <% } %>
+    </div>
+
+    <div class="form-group">
+      <label for="password" class="form-label">Password</label>
+      <input type="password" class="form-control <%= (locals.validationErrors && validationErrors.password) ? 'is-invalid' : '' %>"
+             id="password" name="password" required minlength="8">
+      <% if (locals.validationErrors && validationErrors.password) { %>
+        <div class="invalid-feedback">
+          <%- validationErrors.password %>
+        </div>
+      <% } %>
+    </div>
+
+    <hr class="my-4">
+    <h5 class="mb-3">Security Questions</h5>
+    <% if (locals.validationErrors && validationErrors.securityAnswers) { %>
+      <div class="flash-message error p-2 small">
+        <%- validationErrors.securityAnswers %>
+      </div>
+    <% } %>
+
+    <div class="form-group">
+      <label for="securityQuestion1Id" class="form-label">Security Question 1</label>
+      <select class="form-select form-control <%= (locals.validationErrors && validationErrors.securityAnswers) ? 'is-invalid' : '' %>"
+              id="securityQuestion1Id" name="securityQuestion1Id" required>
+        <option value="">Choose question 1...</option>
+        <% securityQuestions.forEach(function(sq) { %>
+          <option value="<%= sq.id %>" <%= (locals.formData && parseInt(formData.securityQuestion1Id) === sq.id) ? 'selected' : '' %>>
+            <%- sq.text %>
+          </option>
+        <% }); %>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="securityAnswer1" class="form-label">Answer to Question 1</label>
+      <input type="text" class="form-control <%= (locals.validationErrors && validationErrors.securityAnswers) ? 'is-invalid' : '' %>"
+             id="securityAnswer1" name="securityAnswer1"
+             value="<%= locals.formData && formData.securityAnswer1 ? formData.securityAnswer1 : '' %>" required>
+    </div>
+
+    <div class="form-group">
+      <label for="securityQuestion2Id" class="form-label">Security Question 2</label>
+      <select class="form-select form-control <%= (locals.validationErrors && validationErrors.securityAnswers) ? 'is-invalid' : '' %>"
+              id="securityQuestion2Id" name="securityQuestion2Id" required>
+        <option value="">Choose question 2...</option>
+        <% securityQuestions.forEach(function(sq) { %>
+          <option value="<%= sq.id %>" <%= (locals.formData && parseInt(formData.securityQuestion2Id) === sq.id) ? 'selected' : '' %>>
+            <%- sq.text %>
+          </option>
+        <% }); %>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="securityAnswer2" class="form-label">Answer to Question 2</label>
+      <input type="text" class="form-control <%= (locals.validationErrors && validationErrors.securityAnswers) ? 'is-invalid' : '' %>"
+             id="securityAnswer2" name="securityAnswer2"
+             value="<%= locals.formData && formData.securityAnswer2 ? formData.securityAnswer2 : '' %>" required>
+    </div>
+
+    <div class="form-group">
+        <input type="checkbox" id="isAdmin" name="isAdmin" value="true" class="form-check-input" <%= (locals.formData && formData.isAdmin) ? 'checked' : '' %>>
+        <label for="isAdmin" class="checkbox-label form-check-label">Make Admin</label>
+    </div>
+   
+    <button type="submit" class="btn btn-primary mt-3">Create User</button>
+
+  </form>
+</div>
+
+<script>
+  (function () {
+    'use strict'
+    var forms = document.querySelectorAll('form[novalidate]')
+    Array.prototype.slice.call(forms)
+      .forEach(function (form) {
+        form.addEventListener('submit', function (event) {
+          if (!form.checkValidity()) {
+            event.preventDefault()
+            event.stopPropagation()
+          }
+          form.classList.add('was-validated')
+        }, false)
+      })
+  })()
+</script>

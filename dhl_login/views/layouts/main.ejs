@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title><%= title %> | DHL</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <!-- DHL colours -->
+  <!-- Link to the new central stylesheet -->
+  <link rel="stylesheet" href="/css/dhl-styles.css">
+  <!-- The old /app/styles.css might contain other styles. If it's still needed, keep it.
+       If dhl-styles.css is meant to replace it entirely for these EJS views, it can be removed or conditionally included.
+       For now, I'm assuming dhl-styles.css is the primary style for these views. -->
+  <!-- <link rel="stylesheet" href="/app/styles.css"> -->
+</head>
+<body>
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <img src="/dhl-logo.svg" alt="DHL Logo" class="logo">
+    <div class="navbar-right-section">
+      <!-- The form-actions are intended for desktop navigation and should not be part of the mobile dropdown -->
+      <div class="form-actions desktop-only">
+        <a href="/admin/assignments/assign">Assign Checklist</a>
+        <a href="/admin/assignments/manage">Checklist Status</a>
+        <a href="/dashboard">Dashboard</a>
+      </div>
+      <div class="menu-toggle">
+        <img src="/menu_burger_rgb_black.png" alt="Menu" class="menu-icon">
+        <div class="dropdown-menu">
+          <p class="username-display">Hello, <%= user ? user.username : 'Guest' %>!</p>
+          <a href="/logout">Logout</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="App">
+    <!-- flash messages -->
+    <div class="flash">
+      <% if(error && error.length){ %>
+        <% error.forEach(e=>{ %><div class="flash-message error"><%= e %></div><% }) %>
+      <% } %>
+      <% if(success && success.length){ %>
+        <% success.forEach(s=>{ %><div class="flash-message success"><%= s %></div><% }) %>
+      <% } %>
+    </div>
+
+    <%- body %>
+  </div>
+  <footer class="footer">
+    <p>© 2025 DHL Supply Chain | Warehouse Sanitation Checklists</p>
+  </footer>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const menuToggle = document.querySelector('.menu-toggle');
+      const dropdownMenu = document.querySelector('.dropdown-menu');
+      
+      if (menuToggle && dropdownMenu) {
+        menuToggle.addEventListener('click', function() {
+          dropdownMenu.classList.toggle('show');
+        });
+      }
+
+      // Close the dropdown if the user clicks outside of it
+      document.addEventListener('click', function(event) {
+        if (!menuToggle.contains(event.target) && !dropdownMenu.contains(event.target)) {
+          dropdownMenu.classList.remove('show');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

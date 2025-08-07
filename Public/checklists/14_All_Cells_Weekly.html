@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>14-All Cells Weekly</title>
+    <link rel="stylesheet" href="../styles.css">
+    <script defer src="../scripts.js"></script>
+</head>
+<body>
+    <input type="text" id="scannerInput" style="position: absolute; left: -9999px; top: -9999px;">
+    <div class="App">
+        <header class="header">
+            <img src="../dhl-logo.svg" alt="DHL Logo" class="logo">
+        </header>
+
+            <h1>Warehouse Sanitation Checklist</h1>
+
+        <div class="header-inputs">
+            <label for="name">Associate Name:</label>
+            <input type="text" id="name" name="name" placeholder="Enter your name" required>
+            <label>Date:</label>
+            <span id="date-display" class="date-display"></span>
+        </div>
+            <section>
+                <h2 class="no-wrap-heading">Checklist #14-All Cells Weekly</h2>
+            </section>
+                <h3>Scan barcode to check boxes as sanitation tasks are completed. If unable to complete, leave blank and note reason in comments.</h3>
+        
+        <div class="task-container">
+            <section>          
+            <div class="task1-inputs">
+                <h3>Scrub - A Cell</h3>
+                <div class="section" id="section1">
+                    <div class="grid">
+                        <div><input type="checkbox" id="West Aisle14A"><label for="West Aisle14A"> West Aisle</label></div>
+                        <div><input type="checkbox" id="MSO West-Mid Aisle14A"><label for="MSO West-Mid Aisle14A"> MSO West-Mid Aisle</label></div>                        
+                        <div><input type="checkbox" id="East Aisle14A"><label for="East Aisle14A"> East Aisle</label></div>
+                        <div><input type="checkbox" id="West Docks14A"><label for="West Docks 14A"> West Docks</label></div>
+                        <div><input type="checkbox" id="ToWnhall Area14A"><label for="Townhall Area14A"> Toenhall Area 14A</label></div>                        
+                        <div><input type="checkbox" id="MHE Parking Lot14A"><label for="East Aisle14A"> East Aisle</label></div><div></div>
+                    </div>
+                </div>
+            </div>
+            </section>
+
+            <section>          
+            <div class="task2-inputs">
+                <h3>Scrub - B Cell</h3>
+                <div class="grid">
+                    <div><input type="checkbox" id="West Aisle14B"><label for="West Aisle14B"> West Aisle</label></div>
+                    <div><input type="checkbox" id="MSO West-Mid Aisle14B"><label for="MSO West-Mid Aisle14B"> MSO West-Mid Aisle</label></div>                        
+                    <div><input type="checkbox" id="East Aisle14B"><label for="East Aisle14B"> East Aisle</label></div>
+                    <div><input type="checkbox" id="east Docks14B"><label for="east Docks14B"> East Docks</label></div>
+                </div>
+            </div>
+            </section>
+            
+            <section>          
+            <div class="task3-inputs">
+                <h3>Scrub - C Cell</h3>
+                <div class="grid">
+                    <div><input type="checkbox" id="WestAisle14C"><label for="WestAisle14C"> West Aisle</label></div>
+                    <div><input type="checkbox" id="Highway14C"><label for="MSO West-MidAisle 14C"> MSO West-Mid Aisle</label></div>                        
+                    <div><input type="checkbox" id="East Aisle14C"><label for="East Aisle14C"> East Aisle</label></div>
+                    <div><input type="checkbox" id="east Docks14C"><label for="east Docks14C"> East Docks</label></div>
+                    <div><input type="checkbox" id="West Docks14C"><label for="West Docks14C"> West Docks</label></div>
+                    <div><input type="checkbox" id="Damage Cage14C"><label for="Damage Cage14C"> Damage Cage</label></div>                    
+                </div>
+            </div>
+            </section>
+            
+            <section>          
+            <div class="task4-inputs">
+                <h3>Scrub - D Cell</h3>
+                <div class="grid">
+                    <div><input type="checkbox" id="westAisle14D"><label for="westAisle14D"> West Aisle</label></div>
+                    <div><input type="checkbox" id="middleAisle14D"><label for="middleAisle14D"> MSO West-Mid Aisle</label></div>                        
+                    <div><input type="checkbox" id="eastAisle14D"><label for="East Aisle14D"> East Aisle</label></div>
+                    <div><input type="checkbox" id="eastDocks14D"><label for="east Docks14D"> East Docks</label></div>
+                    <div><input type="checkbox" id="westDocks14D"><label for="westDocks14D"> West Docks</label></div>
+                </div>
+            </div>
+            </section>
+            
+            <section>          
+            <div class="task5-inputs">
+                <h3>Scrub - E Cell</h3>
+                <div class="grid">
+                    <div><input type="checkbox" id="westAisle14E"><label for="westAisle14E"> West Aisle</label></div>
+                    <div><input type="checkbox" id="westDocks14E"><label for="westDocks14E"> West Docks</label></div>                        
+                    <div><input type="checkbox" id="eastAisle14E"><label for="East Aisl14E"> East Aisle</label></div>
+                    <div><input type="checkbox" id="eastDocks14E"><label for="east Dock14E"> East Docks</label></div>
+                </div>
+            </div>
+            </section>
+            
+            <section>          
+            <div class="task6-inputs">
+                <h3>Scrub - F Cell</h3>
+                <div class="grid">
+                    <div><input type="checkbox" id="westAisle14F"><label for="westAisle14F"> West Aisle</label></div>
+                    <div><input type="checkbox" id="westDocks14F"><label for="westDocks14F"> West Docks</label></div>                        
+                    <div><input type="checkbox" id="eastAisle14F"><label for="East Aisle14F"> East Aisle</label></div>
+                    <div><input type="checkbox" id="eastDocks14F"><label for="east Docks14DF"> East Docks</label></div>
+                    <div><input type="checkbox" id="FC Room14F"><label for="FC Room14F"> FC Room</label></div>
+                    <div><input type="checkbox" id="FF Room14F"><label for="FF Room14F"> FF Room</label></div>                        
+                </div>
+            </div>
+            </section>
+                                        
+            <div class="comments">
+                <label for="comments">Comments:</label>
+                <textarea id="comments" name="comments" rows="5" cols="133" placeholder="Enter comments here..."></textarea>
+            </div>
+
+
+
+            <div class="button">
+                <input type="submit" value="Submit">
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

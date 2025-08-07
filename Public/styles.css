@@ -1,0 +1,358 @@
+/*
+ * Checklist Styles - for HTML checklist pages
+ * This file is used by the individual checklist HTML files in the Public/checklists/ directory
+ * For EJS views (login, dashboard, admin), see dhl_login/public/css/dhl-styles.css
+ */
+
+/* Delivery Font - Light */
+@font-face {
+  font-family: "Delivery";
+  font-style: normal;
+  font-weight: 300;
+  src:
+    url("/Delivery/Web/WOFF2/Delivery_W_Lt.woff2") format("woff2"),
+    url("/Delivery/Web/WOFF/Delivery_W_Lt.woff") format("woff");
+  unicode-range: U+20-24F, U+370-52F, U+2DE0-2DFF, U+A640-A69F, U+1C80-1C8F, U+600-6FF, U+750-77F, U+8A0-8FF, U+B50-DFF, U+FE70-FEFF;
+}
+
+/* Delivery Font - Regular */
+@font-face {
+  font-family: "Delivery";
+  font-style: normal;
+  font-weight: 400;
+  src:
+    url("/Delivery/Web/WOFF2/Delivery_W_Rg.woff2") format("woff2"),
+    url("/Delivery/Web/WOFF/Delivery_W_Rg.woff") format("woff");
+  unicode-range: U+20-24F, U+370-52F, U+2DE0-2DFF, U+A640-A69F, U+1C80-1C8F, U+600-6FF, U+750-77F, U+8A0-8FF, U+B50-DFF, U+FE70-FEFF;
+}
+
+/* Delivery Font - Bold */
+@font-face {
+  font-family: "Delivery";
+  font-style: normal;
+  font-weight: 700;
+  src:
+    url("/Delivery/Web/WOFF2/Delivery_W_Bd.woff2") format("woff2"),
+    url("/Delivery/Web/WOFF/Delivery_W_Bd.woff") format("woff");
+  unicode-range: U+20-24F, U+370-52F, U+2DE0-2DFF, U+A640-A69F, U+1C80-1C8F, U+600-6FF, U+750-77F, U+8A0-8FF, U+B50-DFF, U+FE70-FEFF;
+}
+
+body {
+  font-family: "Delivery", 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  background: linear-gradient(to bottom, #ffcc00, white); /* Gradient DHL Yellow background like in the first image */
+  background-attachment: fixed; /* Ensures gradient covers entire viewport */
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+/* App Container */
+.App {
+  background: transparent;
+  padding: 20px;
+  max-width: 900px; /* Constrain the width of the main content area */
+  margin: 0 auto; /* Center the .App container on the page */
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Continue to center flex items like logo, titles, input rows */
+}
+
+.task-container h3 { /* Targets any h2 inside .task-heading-container */
+  /*margin: 20px auto; */
+  margin: 40px auto 20px;
+}
+
+/* Header Styles */
+.header {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center; /* Ensure logo is vertically centered if it has extra space */
+  margin-top: 30px; /* More space above the logo */
+  margin-bottom: 30px; /* More space below the logo */
+}
+
+.logo {
+  height: 80px; /* Increased logo size */
+  max-width: 90%; /* Ensure logo doesn't overflow on smaller screens if it's very wide */
+}
+
+/* Form Elements */
+.header-inputs,
+.footer-inputs {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center; /* Center the input groups */
+  align-items: center; /* Vertically align labels and inputs */
+  margin-bottom: 20px;
+  gap: 0.5em; /* Smaller gap between label and its direct input */
+}
+
+.header-inputs label,
+.footer-inputs label {
+  margin-bottom: 5px;
+  font-size: 1rem;
+}
+
+/* Common styles for inputs and textarea */
+.header-inputs input,
+.footer-inputs input,
+textarea {
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid gray;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+/* Style for date display to match input appearance */
+.date-display {
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid gray;
+  border-radius: 5px;
+  font-size: 1rem;
+  background-color: #f9f9f9;
+  color: #333;
+  width: 280px;
+  display: inline-block;
+  margin-right: 1.5em;
+}
+
+/* Specific widths and spacing for header/footer inputs */
+.header-inputs input,
+.footer-inputs input {
+  width: 280px; /* Fixed width based on first image */
+  margin-right: 1.5em; /* Creates space after an input, before the next label */
+}
+
+/* Ensure textarea remains full width if not part of header/footer groups */
+textarea {
+  width: 100%;
+  /* resize: vertical; is handled by its own rule later */
+}
+
+/* Remove margin from the last input in a header/footer row */
+.header-inputs input:last-of-type,
+.footer-inputs input:last-of-type {
+  margin-right: 0;
+}
+
+textarea {
+  resize: vertical;
+}
+
+/* Buttons */
+/* General Button Styles for <a> tags */
+.btn {
+  display: inline-block;
+  padding: 10px 20px;
+  text-decoration: none;
+  color: black;
+  background-color: #ffcc00; /* DHL Yellow */
+  border: 1px solid #DAA520; /* Darker yellow border */
+  border-radius: 5px;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.btn:hover {
+  background-color: #F0B000; /* Darker yellow */
+  color: #BA0C2F; /* DHL Red */
+  border-color: #BA0C2F; /* Match text color */
+}
+
+.btn-secondary {
+  display: inline-block;
+  padding: 10px 20px;
+  text-decoration: none;
+  color: black; /* Dark gray text */
+  background-color: #ffcc00; /* DHL yellow */
+  border: 1px solid #DAA520; /* Darker yellow border */
+  border-radius: 5px;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background-color: #F0B000; /* Darker yellow */
+  color: #BA0C2F; /* DHL Red */
+  border-color: #BA0C2F; /* Match text color */
+}
+.button {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin: 10px;
+}
+
+.button input {
+  padding: 10px 20px;
+  background-color: #FFCC00;
+  color: #BA0C2F;
+  border: #DAA520;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+  margin: 10px;
+}
+
+.button input:hover {
+  background-color: #F0B000;
+}
+
+/* Add styles for the Back/Menu button 
+.menu-button {
+  padding: 10px 20px;
+  background-color: #FFCC00;
+  color: #BA0C2F;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+  margin: 10px;
+}
+
+.menu-button:hover {
+  background-color: slategrey;
+}*/
+
+/* Task Container and Grid */
+.task-container {
+  width: 100%; /* Will now be 100% of the .App container's max-width */
+  margin: 20px 0; /* Adjusted margin for consistency */
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.grid div {
+  display: flex;
+  align-items: center;
+}
+
+label {
+  font-size: 1rem;
+  letter-spacing: 0.5px;
+}
+
+h1, h2 { /* Titles like "Warehouse Sanitation Checklist", "Checklist 1-AB", "A & B Cell Daily Tasks" */
+  color: black;
+  text-align: center;
+  margin: 20px 0; /* Adjusted vertical margin, no horizontal margin from here as .App centers block */
+}
+
+h3, h4 { /* Sub-titles like "A Cell: Wipe Down..." */
+  color: black;
+  text-align: left;
+  margin: 20px 0 10px 0; /* Adjusted margin, more specific for sub-section titles */
+}
+
+.instructional-text {
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding: 0 10%; /* Add some horizontal padding */
+}
+
+/* Comments Section */
+.comments {
+  width: 95%;
+  margin: 5px;
+  margin-top: 5%;
+}
+
+/* Landing Page Styles */
+#landing-page-menu {
+  list-style: none;
+  padding: 0;
+  width: 100%;
+}
+
+.supervisor-validation {
+  background-color: #f0f0f0; /* Light background */
+  border: 1px solid #ddd;
+  padding: 15px;
+  margin-top: 20px;
+  border-radius: 5px;
+}
+
+
+.footer-inputs input.supervisor-name {
+  border-color: #FFCC00;  /* Highlight the border for supervisor input */
+  font-weight: bold;
+}
+
+#landing-page-menu li {
+  margin: 10px 0;
+}
+
+#landing-page-menu li a {
+  text-decoration: none;
+  color: black;
+  background-color: #ffcc00; /* DHL Yellow */
+  padding: 10px 20px;
+  border-radius: 5px;
+  display: block; /* Keep as block to use auto margins for centering */
+  width: 300px; /* Adjust this value to your preferred shorter width. Examples: 70%, 350px */
+  margin-top: 10px; /* Added from #landing-page-menu li's margin for spacing */
+  margin-bottom: 10px; /* Added from #landing-page-menu li's margin for spacing */
+  margin-left: auto; /* Centers the block-level button within its parent li */
+  margin-right: auto; /* Centers the block-level button within its parent li */
+  text-align: center;
+  border: 1px solid #DAA520; /* Adds a border, similar to your .btn class */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Adds a subtle shadow for a 3D button effect */
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for all changing properties */
+}
+
+#landing-page-menu li a:hover {
+  background-color: #F0B000; /* Darker yellow on hover, for better feedback */
+  color: #BA0C2F; /* DHL Red text on hover */
+  border-color: #BA0C2F; /* Border color changes to match text on hover */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15); /* Enhances shadow on hover for a slight "lift" effect */
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .header-inputs,
+  .footer-inputs {
+    align-items: center;
+  }
+
+  .header-inputs label,
+  .footer-inputs label {
+    margin: 5%;
+  }
+
+  .header-inputs input,
+  .footer-inputs input {
+    width: 100%;
+    background-color: lightyellow;
+  }
+
+  .date-display {
+    width: 100%;
+    background-color: lightyellow;
+  }
+}
+.no-wrap-heading {
+    white-space: nowrap;
+}
+/* Highlight class for scanned items */
+.highlight-scan {
+    background-color: rgb(149, 255, 0) !important; /* Or other preferred highlight, !important to ensure override if needed */
+    transition: background-color 0.3s ease-out;
+}

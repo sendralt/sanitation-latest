@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>21_E_Cell_High_Level_Quarterly</title>
+    <link rel="stylesheet" href="../styles.css">
+    <script defer src="../scripts.js"></script>
+</head>
+<body>
+    <input type="text" id="scannerInput" style="position: absolute; left: -9999px; top: -9999px;">
+    <div class="App">
+        <header class="header">
+            <img src="../dhl-logo.svg" alt="DHL Logo" class="logo">
+        </header>
+
+            <h1>Warehouse Sanitation Checklist</h1>
+
+        <div class="header-inputs">
+            <label for="name">Associate Name:</label>
+            <input type="text" id="name" name="name" placeholder="Enter your name" required>
+            <label>Date:</label>
+            <span id="date-display" class="date-display"></span>
+        </div>
+            <section>
+                <h2 class="no-wrap-heading">Checklist #21 E Cell High Level Quarterly</h2>
+            </section>
+                <h3>Scan barcode to check boxes as sanitation tasks are completed. If unable to complete, leave blank and note reason in comments.</h3>
+        
+        <div class="task-container">
+            <section>          
+            <div class="task1-inputs">
+                <h3>Sweep in Corners of Cell</h3>
+                <div class="section" id="section1">
+                    <div class="grid">
+                        <div><input type="checkbox" id="southwest21EHL"><label for="southwest21EHL"> South West</label></div>
+                        <div><input type="checkbox" id="northwest21EHL"><label for="northwest21EHL"> North West</label></div>
+                        <div><input type="checkbox" id="southeast21EHL"><label for="southeast21EHL"> South East</label></div>
+                        <div><input type="checkbox" id="northeast21EHL"><label for="northeast21EHL"> North East</label></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div><input type="checkbox" id="dustDrainPipes21EHL"><label for="dustDrainPipes21EHL"> Dust Drain Pipes</label></div>
+                    </div>
+                </div>
+            </div>
+            </section>          
+            
+            <section>
+            <div class="task2-inputs">    
+                <h3>Dust Overhead Signage</h3>            
+                <div class="grid">
+                    <div><input type="checkbox" id="eastStagingLanes21EHL"><label for="eastStagingLanes21EHL"> East Staging Lanes</label></div>    
+                    <div><input type="checkbox" id="westStagingLanes21EHL"><label for="westStagingLanes21EHL"> Wast Staging Lanes</label></div>
+                    <div><input type="checkbox" id="eastAGVHandoffs21EHL"><label for="eastAGVHandoffs21EHL"> East Staging Lanes</label></div>
+                    <div></div>
+                    <div></div>
+                    <div><input type="checkbox" id="westAGVHandoffs21EHL"><label for="westAGVHandoffs21EHL"> West Staging Lanes</label></div>
+                </div>
+            </div>
+            </section>
+
+            <section>
+            <div class="task3-inputs">    
+                <h3>Dust Clatter Bars</h3>            
+                <div class="grid">
+                    <div><input type="checkbox" id="E-D_WestTransitDoor21EHL"><label for="E-D_WestTransitDoor21EHL"> E-D West Transition Door</label></div>
+                    <div><input type="checkbox" id="E-F_WestTransitDoor21EHL"><label for="E-F_WestTransitDoor21EHL"> E-F West Transition Door</label></div>
+                    <div></div>
+                    <div><input type="checkbox" id="E-D_EastTransitDoor21EHL"><label for="E-D_EastTransitDoor21EHL"> E-D West Transition Door</label></div>
+                    <div><input type="checkbox" id="E-F_EastTransitDoor21EHL"><label for="E-F_EastTransitDoor21EHL"> E-F East Transition Door</label></div>
+                    <div></div>
+                </div>
+            </div>
+            </section>
+                                        
+            <div class="comments">
+                <label for="comments">Comments:</label>
+                <textarea id="comments" name="comments" rows="5" cols="133" placeholder="Enter comments here..."></textarea>
+            </div>
+
+
+
+            <div class="button">
+                <input type="submit" value="Submit">
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

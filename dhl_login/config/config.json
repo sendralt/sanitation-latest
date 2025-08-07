@@ -1,0 +1,14 @@
+{
+  "development": {
+    "dialect": "sqlite",
+    "storage": "data/auth.db"
+  },
+  "test": {
+    "dialect": "sqlite",
+    "storage": "data/auth_test.db"
+  },
+  "production": {
+    "dialect": "sqlite",
+    "storage": "data/auth.db"
+  }
+}

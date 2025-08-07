@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>17-A Cell High Level Quarterly</title>
+    <link rel="stylesheet" href="../styles.css">
+    <script defer src="../scripts.js"></script>
+</head>
+<body>
+    <input type="text" id="scannerInput" style="position: absolute; left: -9999px; top: -9999px;">
+    <div class="App">
+        <header class="header">
+            <img src="../dhl-logo.svg" alt="DHL Logo" class="logo">
+        </header>
+
+            <h1>Warehouse Sanitation Checklist</h1>
+
+        <div class="header-inputs">
+            <label for="name">Associate Name:</label>
+            <input type="text" id="name" name="name" placeholder="Enter your name" required>
+            <label>Date:</label>
+            <span id="date-display" class="date-display"></span>
+        </div>
+            <section>
+                <h2 class="no-wrap-heading">Checklist #17-A Cell High Level Quarterly</h2>
+            </section>
+                <h3>Scan barcode to check boxes as sanitation tasks are completed. If unable to complete, leave blank and note reason in comments.</h3>
+        
+        <div class="task-container">
+            <section>          
+            <div class="task1-inputs">
+                <h3>Sweep in Corners of Cell</h3>
+                <div class="section" id="section1">
+                    <div class="grid">
+                        <div><input type="checkbox" id="southwest17A"><label for="southwest17A"> South West</label></div>
+                        <div><input type="checkbox" id="northwest17A"><label for="northwest17A"> North West</label></div>
+                        <div><input type="checkbox" id="southeast17A"><label for="southeast17A"> South East</label></div>
+                        <div><input type="checkbox" id="northeast17A"><label for="northeast17A"> North East</label></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+            </div>
+            </section>          
+            
+            <section>    
+            <div class="task2-inputs">
+                <h3>Slanted Ceiling </h3>
+                <div class="grid">
+                    <div><input type="checkbox" id="batteryArea17AHL"><label for="batteryArea17AHL"> Battery Area</label></div>
+                    <div></div>
+                    <div></div>
+                    <div><input type="checkbox" id="dustDrainPipes17AHL"><label for="dustDrainPipes17AHL"> Dust Drain Pipes</label></div>
+                </div>
+            </div>
+            </section>
+
+            <section>
+            <div class="task3-inputs">    
+                <h3>Dust Overhead Signage</h3>            
+                <div class="grid">
+                    <div><input type="checkbox" id="eastAGVHandoffs17AHL"><label for="eastAGVHandoffs17AHL"> East AGV Handoffs</label></div>
+                    <div></div>
+                    <div></div>    
+                    <div><input type="checkbox" id="RCOsigns17AHL"><label for="RCOsigns17AHL"> RCO Signs</label></div>
+                </div>
+            </div>
+            </section>
+
+            <section>
+            <div class="task4-inputs">    
+                <h3>Dust Clatter Bars</h3>            
+                <div class="grid">
+                    <div><input type="checkbox" id="A-B West Transition Door 17AHL"><label for="A-B West Transition Door 17AHL"> A-B West Transition Door</label></div>
+                    <div><input type="checkbox" id="A-B Middle MSO Transition Door 17AHL"><label for="A-B Middle MSO Transition Door 17AHL"> A-B Middle MSO Transition Door</label></div>
+                    <div></div>
+                    <div><input type="checkbox" id="A-B East Transition Door 17AHL"><label for="A-B East Transition Door 17AHL"> A-B West Transition Door</label></div>
+                </div>
+            </div>
+            </section>
+                                        
+            <div class="comments">
+                <label for="comments">Comments:</label>
+                <textarea id="comments" name="comments" rows="5" cols="133" placeholder="Enter comments here..."></textarea>
+            </div>
+
+
+
+            <div class="button">
+                <input type="submit" value="Submit">
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

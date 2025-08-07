@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>19-C Cell High Level Quarterly</title>
+    <link rel="stylesheet" href="../styles.css">
+    <script defer src="../scripts.js"></script>
+</head>
+<body>
+    <input type="text" id="scannerInput" style="position: absolute; left: -9999px; top: -9999px;">
+    <div class="App">
+        <header class="header">
+            <img src="../dhl-logo.svg" alt="DHL Logo" class="logo">
+        </header>
+
+            <h1>Warehouse Sanitation Checklist</h1>
+
+        <div class="header-inputs">
+            <label for="name">Associate Name:</label>
+            <input type="text" id="name" name="name" placeholder="Enter your name" required>
+            <label>Date:</label>
+            <span id="date-display" class="date-display"></span>
+        </div>
+            <section>
+                <h2 class="no-wrap-heading">Checklist #19-C Cell High Level Quarterly</h2>
+            </section>
+                <h3>Scan barcode to check boxes as sanitation tasks are completed. If unable to complete, leave blank and note reason in comments.</h3>
+        
+        <div class="task-container">
+            <section>          
+            <div class="task1-inputs">
+                <h3>Sweep in Corners of Cell</h3>
+                <div class="section" id="section1">
+                    <div class="grid">
+                        <div><input type="checkbox" id="southwest19CHL"><label for="southwest19CHL"> South West</label></div>
+                        <div><input type="checkbox" id="northwest19CHL"><label for="northwest19CHL"> North West</label></div>
+                        <div><input type="checkbox" id="southeast19CHL"><label for="southeast19CHL"> South East</label></div>
+                        <div><input type="checkbox" id="northeast19CHL"><label for="northeast19CHL"> North East</label></div>
+                        <div></div>
+                        <div></div>
+                        <div><input type="checkbox" id="dustDrainPipes19CHL"><label for="dustDrainPipes19CHL"> Dust Drain Pipes</label></div>
+                    </div>
+                </div>
+            </div>
+            </section>          
+
+            <section>
+            <div class="task2-inputs">    
+                <h3>Dust Overhead Signage</h3>            
+                <div class="grid">
+                    <div><input type="checkbox" id="eastAGVHandoffs19CHL"><label for="eastAGVHandoffs19CHL"> East AGV Handoffs</label></div>
+                    <div><input type="checkbox" id="eastStagingLanes19CHL"><label for="eastStagingLanes19CHL"> East Staging Lanes</label></div>
+                    <div><input type="checkbox" id="westStagingLanes19CHL"><label for="westStagingLanes19CHL"> West Staging Lanes</label></div>
+                    <div><input type="checkbox" id="alps19CHL"><label for="alps19CHL"> Alps</label></div>
+                    <div></div>
+                    <div></div>    
+                </div>
+            </div>
+            </section>
+
+            <section>
+            <div class="task3-inputs">    
+                <h3>Dust Clatter Bars</h3>            
+                <div class="grid">
+                    <div><input type="checkbox" id="C-B_westTransitDoor19CHL"><label for="C-B_westTransitDoor19CHL"> C-B West Transition Door</label></div>
+                    <div><input type="checkbox" id="C-D_westTransitDoor19CHL"><label for="C-D_westTransitDoor19CHL"> C-D West Transition Door</label></div>
+                    <div></div>
+                    <div><input type="checkbox" id="C-B_middleTransitDoor19CHL"><label for="C-B_middleTransitDoor19CHL"> C-B Middle Transition Door</label></div>
+                    <div><input type="checkbox" id="C-D_middleTransitDoor19CHL"><label for="C-D_middleTransitDoor19CHL"> C-D Middle Transition Door</label></div>
+                    <div></div>
+                    <div><input type="checkbox" id="C-B_EastTransitDoor19CHL"><label for="C-B_EastTransitDoor19CHL"> C-B East Transition Door</label></div>
+                    <div><input type="checkbox" id="C-D_EastTransitDoor19CHL"><label for="C-D_EastTransitDoor19CHL"> C-D East Transition Door</label></div>
+                    <div></div>
+                </div>
+            </div>
+            </section>
+                                        
+            <div class="comments">
+                <label for="comments">Comments:</label>
+                <textarea id="comments" name="comments" rows="5" cols="133" placeholder="Enter comments here..."></textarea>
+            </div>
+
+
+
+            <div class="button">
+                <input type="submit" value="Submit">
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

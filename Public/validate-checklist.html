@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supervisor Checklist Validation</title>
+    <style>
+/* Delivery Font - Light */
+@font-face {
+  font-family: "Delivery";
+  font-style: normal;
+  font-weight: 300;
+  src:
+    url("/Delivery/Web/WOFF2/Delivery_W_Lt.woff2") format("woff2"),
+    url("/Delivery/Web/WOFF/Delivery_W_Lt.woff") format("woff");
+  unicode-range: U+20-24F, U+370-52F, U+2DE0-2DFF, U+A640-A69F, U+1C80-1C8F, U+600-6FF, U+750-77F, U+8A0-8FF, U+B50-DFF, U+FE70-FEFF;
+}
+
+/* Delivery Font - Regular */
+@font-face {
+  font-family: "Delivery";
+  font-style: normal;
+  font-weight: 400;
+  src:
+    url("/Delivery/Web/WOFF2/Delivery_W_Rg.woff2") format("woff2"),
+    url("/Delivery/Web/WOFF/Delivery_W_Rg.woff") format("woff");
+  unicode-range: U+20-24F, U+370-52F, U+2DE0-2DFF, U+A640-A69F, U+1C80-1C8F, U+600-6FF, U+750-77F, U+8A0-8FF, U+B50-DFF, U+FE70-FEFF;
+}
+
+/* Delivery Font - Bold */
+@font-face {
+  font-family: "Delivery";
+  font-style: normal;
+  font-weight: 700;
+  src:
+    url("/Delivery/Web/WOFF2/Delivery_W_Bd.woff2") format("woff2"),
+    url("/Delivery/Web/WOFF/Delivery_W_Bd.woff") format("woff");
+  unicode-range: U+20-24F, U+370-52F, U+2DE0-2DFF, U+A640-A69F, U+1C80-1C8F, U+600-6FF, U+750-77F, U+8A0-8FF, U+B50-DFF, U+FE70-FEFF;
+}
+
+html, body {
+  height: 100%;
+  min-height: 100vh;
+}
+
+html {
+  background: linear-gradient(to bottom, #ffcc00, white); /* Ensure html also has gradient */
+}
+
+body {
+  font-family: "Delivery", 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to bottom, #ffcc00, white); /* Gradient DHL Yellow background like in the first image */
+  background-attachment: fixed; /* Keeps gradient fixed during scroll */
+  background-repeat: no-repeat;
+  color: #333333; /* Default text color */
+}
+
+.page-container { /* Generic container, can be used by login, create-user etc. */
+  max-width: 450px; /* Default max-width */
+  margin: 4rem auto;
+  padding: 2rem;
+  background-color: lightgoldenrodyellow; /* background for the content card */
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+.login-container { /* Specific for login if different sizing is needed */
+  max-width: 450px; /* Narrower for login forms */
+  margin: 4rem auto; /* More vertical margin for centered feel */
+  margin-bottom: 11rem;
+  padding: 2.5rem;
+  background-color: lightgoldenrodyellow;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-container { /* For dashboard specific layouts */
+  max-width: 450px;
+  margin: 4rem auto;
+  margin-bottom: 11rem;
+  padding: 2.5rem;
+  background-color: lightgoldenrodyellow;;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.page-header, .dashboard-header, .login-header { /* Common header styling */
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  /* border-bottom: 1px solid #D40511; */ /* Separator line */
+}
+
+.page-header .logo, .dashboard-header .logo, .login-header .logo {
+  height: 50px; /* Adjust size as needed */
+  margin-right: 1.5rem;
+}
+
+.page-header h1, .dashboard-header h1, .login-header h1 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #D40511; /* DHL Red for the main heading */
+  margin: 0;
+}
+
+.login-header { /* Specific adjustments for login header if needed */
+  justify-content: center; /* Center logo and title in login */
+  flex-direction: column; /* Stack logo and title */
+}
+.login-header .logo {
+  margin-right: 0;
+  margin-bottom: 1rem;
+}
+
+
+.main-content .success-message {
+  font-size: 1.1rem;
+  color: #28a745; /* Green for success indication */
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background-color: #e9f7ef; /* Light green background for the message */
+  border-left: 4px solid #28a745; /* Accent border */
+  border-radius: 4px;
+}
+.main-content .success-message .emoji {
+  font-size: 1.2em; /* Make emoji slightly larger */
+  margin-left: 0.5em;
+}
+
+.actions {
+  margin-bottom: 2rem;
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  width: fit-content; /* Make buttons fit content by default within forms/actions */
+  box-sizing: border-box;
+}
+
+.btn.btn-inline { /* Add this class if you need an inline button */
+    width: fit-content;
+}
+
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.btn-primary {
+  background-color: #ffcc00; /* DHL Yellow */
+  color: #333333; /* Dark text for good contrast on yellow */
+}
+
+.btn-primary:hover {
+  background-color: #b8040f; /* DHL Red on hover */
+  color: white;
+}
+
+.btn-secondary {
+  background-color: #ffcc00; /* DHL Yellow - same as primary for consistency */
+  color: #333333; /* Dark text for good contrast on yellow */
+}
+
+.btn-secondary:hover {
+  background-color: #b8040f; /* DHL Red on hover */
+  color: white;
+}
+
+.admin-actions {
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #D40511; /* Separator line */
+}
+
+.admin-actions h2 {
+  font-size: 1.5rem;
+  color: #333333;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.admin-actions .action-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.admin-actions .action-list li {
+  margin-bottom: 0.75rem;
+}
+
+/* Form Styles */
+.form-group {
+  margin-bottom: 1.25rem; /* Slightly reduced margin for forms */
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #555555;
+}
+
+.form-group input[type="text"],
+.form-group input[type="password"] {
+  width: fit-content;
+  padding: 0.75rem;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 1rem;
+}
+
+.form-group input[type="checkbox"] {
+  width: fit-content;
+  padding: 0.75rem;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 1rem;
+}
+
+.form-group input[type="checkbox"] {
+  width: auto; /* Checkboxes should not be full width */
+  margin-right: 0.5rem;
+  vertical-align: middle;
+}
+.form-group .checkbox-label {
+    display: inline; /* Keep label next to checkbox */
+    font-weight: normal;
+}
+
+
+.form-group input[type="text"]:focus,
+.form-group input[type="password"]:focus {
+  border-color: #ffcc00; /* DHL Yellow for focus */
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(255, 204, 0, 0.3);
+}
+
+.error-message, .flash-message { /* General purpose message styling */
+  color: #D40511; /* DHL Red for errors */
+  background-color: #fdecea; /* Light red background */
+  border: 1px solid #D40511;
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  list-style: none; /* If it's a ul */
+}
+.flash-message.success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+.flash-message.info {
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+/* Basic styling for Bootstrap-like invalid feedback */
+.invalid-feedback {
+  display: none; /* Hidden by default */
+  width: 100%;
+  margin-top: .25rem;
+  font-size: .875em;
+  color: #D40511; /* DHL Red for errors */
+}
+
+.form-control.is-invalid ~ .invalid-feedback,
+.form-select.is-invalid ~ .invalid-feedback,
+.was-validated .form-control:invalid ~ .invalid-feedback, /* For HTML5 validation */
+.was-validated .form-select:invalid ~ .invalid-feedback {
+  display: block;
+}
+
+.form-control.is-invalid,
+.form-select.is-invalid,
+.was-validated .form-control:invalid,
+.was-validated .form-select:invalid {
+  border-color: #D40511;
+}
+/* Add .is-valid styling if needed */
+.form-control.is-valid,
+.form-select.is-valid,
+.was-validated .form-control:valid,
+.was-validated .form-select:valid {
+ border-color: #28a745; /* Green for valid (optional) */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .page-header, .dashboard-header, .login-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .page-header .logo, .dashboard-header .logo, .login-header .logo {
+    margin-bottom: 1rem;
+    height: 60px;
+    margin-right: 0; /* Reset margin for stacked layout */
+    align-self: flex-start; /* Align logo to start when stacked */
+  }
+   .login-header .logo {
+    align-self: center; /* Center logo in login form on mobile */
+   }
+  .page-header h1, .dashboard-header h1, .login-header h1 {
+    font-size: 1.8rem;
+    align-self: flex-start; /* Align title to start when stacked */
+  }
+  .login-header h1 {
+    align-self: center; /* Center title in login form on mobile */
+  }
+
+  .btn:not(.btn-inline) { /* Full width buttons on mobile, unless specified as inline */
+    padding: 0.8rem 1rem; /* Adjust padding for full width */
+  }
+  .btn.btn-inline {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+  }
+
+  .page-container, .dashboard-container, .login-container {
+    margin: 1.5rem;
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-container, .dashboard-container, .login-container {
+    margin: 1rem;
+    padding: 1rem;
+    border-radius: 0; /* Full width on very small screens */
+    box-shadow: none;
+  }
+  .page-header h1, .dashboard-header h1, .login-header h1 {
+    font-size: 1.6rem;
+  }
+  .main-content .success-message {
+    font-size: 1rem;
+    padding: 0.8rem;
+  }
+  .admin-actions .action-list li .btn {
+    width: 100%; /* Make buttons full width on small screens for better tap targets */
+    box-sizing: border-box;
+  }
+  .form-group input[type="text"],
+  .form-group input[type="password"] {
+    padding: 0.7rem; /* Slightly larger tap target */
+  }
+}
+/* Navbar Styles */
+.navbar {
+  background: #ffcc00; /* DHL Yellow */
+  padding: 0.8rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  box-sizing: border-box;
+  /*border-bottom: 1px solid #D40511; */ /* DHL Red accent border */
+}
+
+.navbar .logo { /* Specific selector for navbar logo if different from page-header logo */
+  height: 34px;
+  /* margin-right is handled by justify-content: space-between on .navbar */
+}
+
+.navbar .user-info {
+  color: #333333; /* Dark text on yellow background */
+  font-weight: 500;
+}
+
+.navbar .user-info span {
+  margin-right: 0.5rem;
+}
+
+.navbar .user-info a {
+  color: #D40511; /* DHL Red for links */
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.navbar .user-info a:hover {
+  text-decoration: underline;
+}
+
+/* Ensure body background from main.ejs is also applied if it was specific */
+/* The body background is now #f4f5f7 from the general body style,
+   the old main.ejs had body background: #FFCC00.
+   If the entire page background (outside containers) should be yellow,
+   we can override it here or adjust the body style.
+   For now, sticking to #f4f5f7 for the page and #FFCC00 for navbar.
+*/
+
+/* Dashboard Styles */
+.dashboard-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #FFCC00;
+}
+
+.dashboard-header h1 {
+  color: #D40511;
+  margin: 0;
+  font-size: 2rem;
+}
+
+.assigned-checklists {
+  margin-bottom: 2rem;
+}
+
+.assigned-checklists h2 {
+  color: #D40511;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.checklist-card {
+  background-color: #f8f9fa;
+  border: 2px solid #FFCC00;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.checklist-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.checklist-card h3 {
+  color: #D40511;
+  margin: 0 0 0.5rem 0;
+  font-size: 1.25rem;
+}
+
+.checklist-card p {
+  margin: 0.25rem 0;
+  color: #666;
+}
+
+.checklist-actions {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #ddd;
+}
+
+.no-assignments {
+  text-align: center;
+  padding: 2rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 2px dashed #ccc;
+}
+
+.no-assignments h2 {
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.no-assignments p {
+  color: #888;
+  margin-bottom: 1.5rem;
+}
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <h1>Supervisor Checklist Validation</h1>
+        <h2 id="checklist-title">Loading checklist title...</h2>
+        
+        <form id="supervisor-validation-form">
+            <div id="validation-items-container">
+                <p>Loading validation items...</p>
+            </div>
+
+            <div class="form-group">
+                <label for="supervisorName">Supervisor's Name:</label>
+                <input type="text" id="supervisorName" name="supervisorName" required>
+            </div>
+
+            <button type="submit">Submit Validation</button>
+        </form>
+        <div id="message-area"></div>
+        <p style="margin-top: 20px;"><a href="/login-page">Back to Login</a></p>
+    </div>
+
+    <!-- Include the global scripts.js which should now contain fetchAuthToken -->
+    <script>
+// Global variables for JWT and user data
+let authToken = null;
+let currentUser = null;
+
+// Function to fetch JWT from the server (dhl_login)
+async function fetchAuthToken() {
+    // This function should only be called if not on the main landing page
+    // and the user is expected to be session-authenticated.
+    try {
+        const response = await fetch('/api/auth/issue-jwt-for-session'); // Relative to dhl_login server
+        if (!response.ok) {
+            if (response.status === 401) {
+                console.error('[Debug] fetchAuthToken: Session not authenticated to get JWT (401). User should be redirected to login by server.');
+                // Potentially redirect or show message if server doesn't auto-redirect for /app/*
+                // window.location.href = '/login-page'; // Or let ensureWebAuthenticated handle it
+            } else {
+                console.error(`[Debug] fetchAuthToken: Failed to fetch JWT. Status: ${response.status}, Text: ${response.statusText}`);
+            }
+            return; // Stop if token fetch failed
+        }
+        const data = await response.json();
+        authToken = data.token;
+        currentUser = data.user;
+        console.log('[Debug] fetchAuthToken: JWT acquired successfully for user:', currentUser.username);
+
+        // Auto-populate Associate Name field if it exists and is empty
+        populateAssociateName();
+    } catch (error) {
+        console.error('[Debug] fetchAuthToken: Error acquiring JWT:', error);
+    }
+}
+
+// Function to auto-populate Associate Name field
+function populateAssociateName() {
+    // Only populate if we have user data with firstName and lastName
+    if (!currentUser || !currentUser.firstName || !currentUser.lastName) {
+        console.log('[Debug] populateAssociateName: No user data or missing name fields');
+        return;
+    }
+
+    // Look for the Associate Name input field (id="name")
+    const nameField = document.getElementById('name');
+    if (!nameField) {
+        console.log('[Debug] populateAssociateName: No name field found on this page');
+        return;
+    }
+
+    // Only populate if the field is empty (don't overwrite existing data)
+    if (nameField.value && nameField.value.trim() !== '') {
+        console.log('[Debug] populateAssociateName: Name field already has value, not overwriting');
+        return;
+    }
+
+    // Populate with firstName + lastName
+    const fullName = `${currentUser.firstName} ${currentUser.lastName}`;
+    nameField.value = fullName;
+    console.log('[Debug] populateAssociateName: Auto-populated name field with:', fullName);
+}
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    console.log('[Debug] DOMContentLoaded event fired.');
+    // Elements for the landing page
+    const landingPageMenu = document.querySelector("#landing-page-menu");
+
+    // If on a checklist page (not the main index.html menu), try to fetch the JWT
+    if (!landingPageMenu && window.location.pathname.startsWith('/app/') && window.location.pathname !== '/app/index.html') {
+        fetchAuthToken();
+
+        // Also try to populate name field after a short delay in case auth token is already available
+        setTimeout(() => {
+            populateAssociateName();
+        }, 500);
+    }
+
+    // Form Elements
+    const nameInput = document.getElementById("name");
+    const dateInput = document.getElementById("date");
+    const commentsTextarea = document.getElementById("comments");
+    const addCommentsButton = document.querySelector(".button input[value='Add Comments']");
+    const submitButton = document.querySelector(".button input[value='Submit']");
+    const commentsSection = document.querySelector(".comments");
+    //const auditorNameInput = document.getElementById("auditorName");
+    const taskContainer = document.querySelector(".task-container");
+
+    // List of checklist filenames
+    const checklists = [
+        "checklists/1_A_Cell_West_Side_Daily.html",
+        "checklists/2_A_Cell_East_Side_Daily.html",
+        "checklists/3_B_Cell_West_Side_Daily.html",
+        "checklists/4_B_Cell_East_Side_Daily.html",
+        "checklists/5_C_Cell_West_Side_Daily.html",
+        "checklists/6_C_Cell_East_Side_Daily.html",
+        "checklists/7_D_Cell_West_Side_Daily.html",
+        "checklists/8_D_Cell_East_Side_Daily.html",
+        "checklists/9_E_Cell_West_Side_Daily.html",
+        "checklists/10_E_Cell_East_Side_Daily.html",
+        "checklists/11_F_Cell_West_Side_Daily.html",
+        "checklists/12_F_Cell_East_Side_Daily.html",
+        "checklists/13_All_Cells_Weekly.html",
+        "checklists/14_All_Cells_Weekly.html",
+        "checklists/15_A&B_Cells_LL_Quarterly.html",
+        "checklists/16_D_Cell_LL_Quarterly.html",
+        "checklists/17_A_Cell_High_Level_Quarterly.html",
+        "checklists/18_B_Cell_High_Level_Quarterly.html",
+        "checklists/19_C_Cell_High_Level_Quarterly.html",
+        "checklists/20_D_Cell_High_Level_Quarterly.html",
+        "checklists/21_E_Cell_High_Level_Quarterlyl.html",
+        "checklists/22_F_Cell_High_Level_Quarterlyl.html"
+    ];
+
+    // Generate checklist menu if on the landing page
+    if (landingPageMenu) {
+        checklists.forEach(checklist => {
+            const listItem = document.createElement("li");
+            const link = document.createElement("a");
+            link.href = checklist;
+            link.textContent = `Checklist # ${checklist.replace(".html", "").replace(/_/g, " ")}`;
+            listItem.appendChild(link);
+            landingPageMenu.appendChild(listItem);
+        });
+    }
+
+    // --- Barcode/Scanner Functionality START ---
+    console.log('[Debug] Attempting to get scannerInput element.');
+    const scannerInput = document.getElementById('scannerInput');
+    console.log('[Debug] scannerInput element found:', scannerInput);
+
+    function handleScannerInput() {
+        console.log('[Debug] handleScannerInput called.');
+        if (!scannerInput) {
+            console.log('[Debug] scannerInput is null or undefined in handleScannerInput. Aborting scanner setup.');
+            return;
+        }
+        console.log('[Scanner] handleScannerInput initialized.');
+
+        const messageArea = document.createElement('div');
+        messageArea.id = 'scanner-message';
+        messageArea.style.cssText = `
+            position: fixed;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(255, 0, 0, 0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 1000;
+        `;
+        document.body.appendChild(messageArea);
+        messageArea.style.display = 'none';
+
+        function showMessage(message, duration = 3000) {
+            messageArea.textContent = message;
+            messageArea.style.display = 'block';
+            setTimeout(() => {
+                messageArea.style.display = 'none';
+            }, duration);
+        }
+
+        scannerInput.addEventListener('keydown', function(event) {
+            console.log(`[Scanner] keydown event on scannerInput. Key: ${event.key}, Code: ${event.code}`); // Log any keydown
+            if (event.key === 'Enter') {
+                console.log('[Scanner] Enter key detected.');
+                event.preventDefault(); // Prevent default form submission if any
+                const scannedValue = scannerInput.value.trim();
+                console.log('[Scanner] Scanned Value (trimmed):', scannedValue);
+
+                if (scannedValue) {
+                    console.log('[Scanner] Attempting to find checkbox with ID:', scannedValue);
+                    const targetCheckbox = document.getElementById(scannedValue);
+                    console.log('[Scanner] Result of getElementById:', targetCheckbox);
+                    if (targetCheckbox && targetCheckbox.type === 'checkbox') {
+                        targetCheckbox.checked = !targetCheckbox.checked;
+                        console.log('[Scanner] Checkbox found and toggled:', targetCheckbox.id);
+
+                        // Visual feedback
+                        const parentElement = targetCheckbox.closest('div'); // Assuming checkbox is in a div
+                        if (parentElement) {
+                            parentElement.classList.add('highlight-scan');
+                            setTimeout(() => {
+                                parentElement.classList.remove('highlight-scan');
+                            }, 1000); // Highlight for 1 second
+                        }
+                    } else {
+                        console.warn("[Scanner] Scanned ID not found or not a checkbox:", scannedValue);
+                        showMessage("Checkbox ID not found: " + scannedValue);
+                    }
+                }
+                scannerInput.value = ""; // Clear input for next scan
+                setTimeout(() => scannerInput.focus(), 0); // Re-focus for next scan, deferred slightly
+                console.log('[Scanner] Re-focused on scannerInput after scan (using setTimeout).');
+            }
+        });
+
+        scannerInput.addEventListener('blur', function(event) {
+            console.log('[Debug] scannerInput BLUR event. Current activeElement:', document.activeElement, 'RelatedTarget (what gained focus, if available):', event.relatedTarget);
+            // If focus is lost to something other than itself, try to refocus.
+            // This check helps prevent potential infinite loops if refocusing itself triggers another blur.
+            if (document.activeElement !== scannerInput) {
+                console.log('[Debug] scannerInput lost focus to something else. Attempting to re-focus scannerInput.');
+                // scannerInput.focus(); // Intentionally commented out to allow focus on other fields
+                console.log('[Debug] Active element after trying to re-focus scannerInput in blur handler (scannerInput.focus() is now commented out):', document.activeElement);
+            }
+        });
+        // DELAYED Initial focus
+        setTimeout(() => {
+            console.log('[Debug] Attempting DELAYED focus on scannerInput (after 200ms).');
+            scannerInput.focus();
+            console.log('[Scanner] DELAYED Initial focus set on scannerInput.');
+            console.log('[Debug] Active element immediately after DELAYED scannerInput.focus():', document.activeElement);
+        }, 200);
+    }
+
+    // Call scanner setup if not on landing page
+    // (assuming scannerInput will only exist on checklist pages)
+    if (scannerInput) {
+        handleScannerInput(); // This will now set up listeners and the delayed focus
+        setTimeout(() => {
+            // This log will now effectively check ~300ms after the delayed focus attempt
+            console.log('[Debug] Active element 500ms after handleScannerInput call (and ~300ms after delayed focus attempt):', document.activeElement);
+        }, 500);
+    } else {
+        console.log('[Debug] scannerInput element was not found in DOMContentLoaded. Scanner not initialized.');
+    }
+    // --- Barcode/Scanner Functionality END ---
+
+    // Function to gather checkbox states
+    function getCheckboxStates() {
+        const sections = document.querySelectorAll('section');
+        const checkboxData = {}; // This will be the nested object
+
+        sections.forEach(section => {
+            // Get the heading text of the section, assuming h2 or h3
+            const headingElement = section.querySelector('h2, h3');
+            const headingText = headingElement ? headingElement.textContent.trim() : 'Unnamed Section'; // Fallback for sections without headings
+
+            checkboxData[headingText] = {}; // Create an entry for the heading
+
+            const checkboxesInSection = section.querySelectorAll('input[type="checkbox"]:not(.select-all)');
+            if (checkboxesInSection.length > 0) {
+                checkboxesInSection.forEach(checkbox => {
+                    if (checkbox.id) { // Ensure the checkbox has an ID
+                        let labelText = checkbox.id; // Default to ID if no label is found
+                        const labelElement = section.querySelector(`label[for="${checkbox.id}"]`); // Search label within the section
+                        if (labelElement) {
+                            labelText = labelElement.textContent.trim();
+                        }
+                        // Store checkbox data under its heading
+                        checkboxData[headingText][checkbox.id] = {
+                            checked: checkbox.checked,
+                            label: labelText
+                        };
+                    } else {
+                        console.warn("Checkbox found without an ID within section:", headingText, checkbox);
+                    }
+                });
+            } else {
+            }
+        });
+        return checkboxData;
+    }
+
+    // Validate Form
+    function validateForm() {
+        let isValid = true;
+        if (nameInput && nameInput.value.trim() === "") {
+            alert("Name is required.");
+            isValid = false;
+        }
+        if (dateInput && dateInput.value === "") {
+            alert("Date is required.");
+            isValid = false;
+        }
+        return isValid;
+    }
+
+    // Email validation helper function
+    function validateEmail(email) {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(email.toLowerCase());
+    }
+
+    // Add Comment
+    function addComment() {
+        if (commentsTextarea && commentsTextarea.value.trim() !== "") {
+            const newComment = document.createElement("p");
+            newComment.textContent = commentsTextarea.value;
+            commentsSection.appendChild(newComment);
+            commentsTextarea.value = ""; // Clear the textarea
+        } else {
+            alert("Please enter a comment before adding.");
+        }
+    }
+
+    // Function to redirect to the user's dashboard
+    function goToMenu() {
+        window.location.href = "/dashboard";
+    }
+
+    // Mark Assignment as Completed
+    function markAssignmentCompleted() {
+        // Extract checklist filename from the current page URL
+        const currentPath = window.location.pathname;
+        const filename = currentPath.split('/').pop(); // Get the last part of the path (filename)
+
+        console.log('[Debug] markAssignmentCompleted: Current path:', currentPath, 'Filename:', filename);
+
+        if (!filename || !filename.endsWith('.html')) {
+            console.error('Could not determine checklist filename from URL:', currentPath);
+            return Promise.resolve(); // Don't fail the whole process
+        }
+
+        if (!authToken) {
+            console.error('Auth token not available for markAssignmentCompleted.');
+            return Promise.resolve(); // Don't fail the whole process
+        }
+
+        console.log('[Debug] markAssignmentCompleted: Calling API to complete assignment for:', filename);
+
+        return fetch('/api/assignments/complete-checklist', { // Relative URL to DHL login server
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken}` // Use the same auth token
+            },
+            body: JSON.stringify({
+                checklistFilename: filename
+            })
+        })
+        .then(async response => {
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error(`Failed to mark assignment as completed. Status: ${response.status}, Response: ${errorText}`);
+                // Don't throw error - we don't want to prevent the user from continuing
+                return;
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data) {
+                console.log('Assignment marked as completed:', data);
+                alert('Assignment marked as completed: ' + data.message);
+            }
+        })
+        .catch((error) => {
+            console.error('Error marking assignment as completed:', error);
+            // Don't throw error - we don't want to prevent the user from continuing
+        });
+    }
+
+    // Save Data to Backend
+    function saveData() {
+        // Extract checklist filename from the current page URL
+        const currentPath = window.location.pathname;
+        const filename = currentPath.split('/').pop(); // Get the last part of the path (filename)
+
+        const data = {
+            title: document.title,
+            name: nameInput.value,
+            date: dateInput.value,
+            checkboxes: getCheckboxStates(),
+            comments: commentsTextarea.value,
+            //auditorName: auditorNameInput.value,
+            //supervisorName: supervisorName.value,
+            supervisorEmail: "sendral.ts.1@pg.com",
+            checklistFilename: filename // Add the checklist filename
+        };
+
+        if (!authToken) {
+            alert('Authentication token is not available. Please ensure you are properly logged in.');
+            console.error('Auth token not available for saveData.');
+            return Promise.reject(new Error('Auth token not available.')); // Prevent submission
+        }
+
+        return fetch('http://localhost:3001/submit-form', { // Absolute URL to backend API
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken}` // Add JWT to Authorization header
+            },
+            body: JSON.stringify(data)
+        })
+        .then(async response => { // Made this an async function
+            if (!response.ok) {
+                // Log more details from the response
+                const errorText = await response.text(); // Attempt to get error text from server
+                console.error(`[Debug] saveData: Network response was not ok. Status: ${response.status}, StatusText: ${response.statusText}, ServerResponse: ${errorText}`);
+                throw new Error(`Network response was not ok. Status: ${response.status}. Server message: ${errorText}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Success:', data);
+            alert(data.message); // Provide user feedback
+
+            // After successfully saving checklist data, mark assignment as completed
+            console.log('[Debug] saveData: About to call markAssignmentCompleted()');
+            return markAssignmentCompleted();
+        })
+        .catch((error) => {
+            console.error('[Debug] saveData: Error caught in fetch chain:', error.message, error);
+            // Display a more informative error if possible, or fall back to generic
+            const displayError = error.message.includes("Server message:") ? error.message : 'An error occurred while submitting the form. Check console for details.';
+            alert(displayError);
+            throw error; // Propagate the error for further handling
+        });
+    }
+
+    // Event Listener for Add Comments Button
+    if (addCommentsButton) {
+        addCommentsButton.addEventListener("click", function(event) {
+            event.preventDefault(); // Prevent default action if it's a submit button
+            if (validateForm()) {
+                addComment(); // Add the comment only, do not save form data
+            }
+        });
+    }
+
+    // Event Listener for Submit Button
+    if (submitButton) {
+        submitButton.addEventListener("click", function(event) {
+            event.preventDefault(); // Prevent default form submission
+            if (validateForm()) {
+                submitButton.disabled = true; // Disable the button to prevent multiple clicks
+                saveData().then(() => {
+                    goToMenu(); // Redirect to the menu page after saving data
+                }).catch(() => {
+                    submitButton.disabled = false; // Re-enable the button on failure
+                });
+            }
+        });
+    }
+
+    // Event listener for the Back/Menu button
+    //const backButton = document.getElementById("backButton");
+    //if (backButton) {
+    //    backButton.addEventListener("click", function() {
+    //        window.location.href = "index.html"; // Replace with the correct URL of your landing page
+    //    });
+    //}
+
+    // Select All Functionality (inside DOMContentLoaded)
+    //document.querySelectorAll('.select-all').forEach(selectAllRadio => {
+    //    selectAllRadio.addEventListener('change', function(event) {
+    //        const section = event.target.closest('.section');
+    //        if (section) { // Ensure section exists
+    //            const checkboxes = section.querySelectorAll('input[type="checkbox"]:not(.select-all)');
+    //            checkboxes.forEach(checkbox => {
+    //                checkbox.checked = true;
+//                });
+//            }
+//        });
+//
+});
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const checklistTitleEl = document.getElementById('checklist-title');
+            const itemsContainerEl = document.getElementById('validation-items-container');
+            const validationForm = document.getElementById('supervisor-validation-form');
+            const supervisorNameInput = document.getElementById('supervisorName');
+            const messageArea = document.getElementById('message-area');
+
+            let checklistId = null;
+
+            function displayMessage(message, type = 'info') {
+                messageArea.textContent = message;
+                messageArea.className = type; // e.g., 'success', 'error'
+            }
+
+            function getChecklistIdFromUrl() {
+                const pathParts = window.location.pathname.split('/');
+                // Assuming URL is /app/validate-checklist/:id
+                if (pathParts.length > 0 && pathParts[pathParts.length - 2] === 'validate-checklist') {
+                    return pathParts[pathParts.length - 1];
+                }
+                return null;
+            }
+
+            checklistId = getChecklistIdFromUrl();
+
+            if (!checklistId) {
+                checklistTitleEl.textContent = 'Error: Checklist ID not found in URL.';
+                itemsContainerEl.innerHTML = '<p style="color: red;">Could not determine the checklist to validate.</p>';
+                validationForm.style.display = 'none'; // Hide form if no ID
+                return;
+            }
+
+            // Ensure authToken is available (fetchAuthToken is from global scripts.js)
+            // fetchAuthToken might have already been called if scripts.js runs it on load for /app/* pages
+            // We need to ensure it has completed before proceeding.
+            // A simple way is to re-call it or check if authToken is populated.
+            // For robustness, fetchAuthToken could return a promise.
+            // Assuming fetchAuthToken is defined in scripts.js and populates global 'authToken'
+            if (typeof fetchAuthToken !== 'function') {
+                 displayMessage('Error: Authentication script not loaded correctly.', 'error');
+                 return;
+            }
+            
+            if (!authToken) { // If scripts.js didn't auto-run it or it's not ready
+                await fetchAuthToken(); // Wait for it
+            }
+
+            if (!authToken) {
+                checklistTitleEl.textContent = 'Authentication Error';
+                itemsContainerEl.innerHTML = '<p style="color: red;">Could not authenticate to fetch checklist details. Please ensure you are logged in.</p>';
+                validationForm.style.display = 'none';
+                return;
+            }
+
+            // Fetch checklist data for validation
+            try {
+                const response = await fetch(`http://localhost:3001/validate/${checklistId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({ message: `HTTP error ${response.status}` }));
+                    throw new Error(errorData.message || `Failed to fetch checklist data. Status: ${response.status}`);
+                }
+
+                const checklistData = await response.json();
+                checklistTitleEl.textContent = `Validating: ${checklistData.title || 'Untitled Checklist'}`;
+                
+                // Dynamically render validation items (randomCheckboxes)
+                itemsContainerEl.innerHTML = ''; // Clear loading message
+                if (checklistData.randomCheckboxes && checklistData.randomCheckboxes.length > 0) {
+                    const validationItemsByHeading = {};
+                    // Reconstruct heading structure similar to backend/server.js
+                    // This part needs the full checklistData.checkboxes to find labels and original headings
+                    checklistData.randomCheckboxes.forEach(checkboxId => {
+                        let foundHeading = "Uncategorized Tasks"; // Default
+                        let labelText = checkboxId; // Default
+                        let originalCheckedState = false;
+
+                        for (const headingKey in checklistData.checkboxes) {
+                            if (checklistData.checkboxes[headingKey] && checklistData.checkboxes[headingKey][checkboxId]) {
+                                const item = checklistData.checkboxes[headingKey][checkboxId];
+                                labelText = item.label || checkboxId;
+                                originalCheckedState = item.checked || false; // Use original checked state for pre-population
+                                foundHeading = headingKey;
+                                break;
+                            }
+                        }
+                        if (!validationItemsByHeading[foundHeading]) {
+                            validationItemsByHeading[foundHeading] = [];
+                        }
+                        validationItemsByHeading[foundHeading].push({ id: checkboxId, label: labelText, checked: originalCheckedState });
+                    });
+
+                    for (const heading in validationItemsByHeading) {
+                        const headingEl = document.createElement('h3');
+                        headingEl.textContent = heading;
+                        itemsContainerEl.appendChild(headingEl);
+
+                        validationItemsByHeading[heading].forEach(item => {
+                            const div = document.createElement('div');
+                            div.className = 'task-item';
+                            const checkbox = document.createElement('input');
+                            checkbox.type = 'checkbox';
+                            checkbox.id = `val-${item.id}`; // Prefix to avoid ID clashes if any
+                            checkbox.name = item.id;
+                            checkbox.checked = item.checked; // Pre-populate based on original state
+                            
+                            const label = document.createElement('label');
+                            label.htmlFor = checkbox.id;
+                            label.textContent = item.label;
+
+                            div.appendChild(checkbox);
+                            div.appendChild(label);
+                            itemsContainerEl.appendChild(div);
+                        });
+                    }
+
+                } else {
+                    itemsContainerEl.innerHTML = '<p>No items found for validation in this checklist.</p>';
+                }
+
+            } catch (error) {
+                console.error('Error fetching checklist for validation:', error);
+                checklistTitleEl.textContent = 'Error Loading Checklist';
+                itemsContainerEl.innerHTML = `<p style="color: red;">${error.message}</p>`;
+                validationForm.style.display = 'none';
+            }
+
+            // Handle form submission
+            validationForm.addEventListener('submit', async (event) => {
+                event.preventDefault();
+                const supervisorName = supervisorNameInput.value.trim();
+                if (!supervisorName) {
+                    displayMessage('Supervisor name is required.', 'error');
+                    return;
+                }
+                if (!authToken) {
+                    displayMessage('Authentication error. Please try refreshing.', 'error');
+                    return;
+                }
+
+                const validatedCheckboxes = [];
+                itemsContainerEl.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                    validatedCheckboxes.push({
+                        id: cb.name, // Original ID stored in name attribute
+                        checked: cb.checked
+                    });
+                });
+
+                try {
+                    const response = await fetch(`http://localhost:3001/validate/${checklistId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${authToken}`
+                        },
+                        body: JSON.stringify({
+                            supervisorName: supervisorName,
+                            validatedCheckboxes: validatedCheckboxes
+                        })
+                    });
+
+                    if (!response.ok) {
+                         const errorData = await response.json().catch(() => ({ message: `HTTP error ${response.status}` }));
+                        throw new Error(errorData.message || `Failed to submit validation. Status: ${response.status}`);
+                    }
+                    
+                    const result = await response.json();
+                    displayMessage(result.message || 'Validation submitted successfully!', 'success');
+                    validationForm.style.display = 'none'; // Hide form on success
+
+                    // Redirect to login page after successful validation
+                    setTimeout(() => {
+                        window.location.href = '/login-page';
+                    }, 2000); // Wait 2 seconds to show success message before redirecting
+
+                } catch (error) {
+                    console.error('Error submitting validation:', error);
+                    displayMessage(`Error: ${error.message}`, 'error');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

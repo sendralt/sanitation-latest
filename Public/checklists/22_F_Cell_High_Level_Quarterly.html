@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>21-E Cell High Level Quarterly</title>
+    <link rel="stylesheet" href="../styles.css">
+    <script defer src="../scripts.js"></script>
+</head>
+<body>
+    <input type="text" id="scannerInput" style="position: absolute; left: -9999px; top: -9999px;">
+    <div class="App">
+        <header class="header">
+            <img src="../dhl-logo.svg" alt="DHL Logo" class="logo">
+        </header>
+
+            <h1>Warehouse Sanitation Checklist</h1>
+
+        <div class="header-inputs">
+            <label for="name">Associate Name:</label>
+            <input type="text" id="name" name="name" placeholder="Enter your name" required>
+            <label>Date:</label>
+            <span id="date-display" class="date-display"></span>
+        </div>
+            <section>
+                <h2 class="no-wrap-heading">Checklist #21-E Cell High Level Quarterly</h2>
+            </section>
+                <h3>Scan barcode to check boxes as sanitation tasks are completed. If unable to complete, leave blank and note reason in comments.</h3>
+        
+        <div class="task-container">
+            <section>          
+            <div class="task1-inputs">
+                <h3>Sweep in Corners of Cell</h3>
+                <div class="section" id="section1">
+                    <div class="grid">
+                        <div><input type="checkbox" id="Fsouthwest22FHL"><label for="Fsouthwest22FHL"> F South West</label></div>
+                        <div><input type="checkbox" id="FCsouthwest22FHL"><label for="FCsouthwest22FHL"> FC South West</label></div>
+                        <div><input type="checkbox" id="FAsouthwest22FHL"><label for="FAsouthwest22FHL"> FA South West</label></div>
+                        <div><input type="checkbox" id="Fnortheast22FHL"><label for="Fnortheast22FHL"> F North East</label></div>
+                        <div><input type="checkbox" id="FCnortheast22FHL"><label for="FCnortheast22FHL"> FC North East</label></div>
+                        <div><input type="checkbox" id="FAnortheast22FHL"><label for="FAnortheast22FHL"> FA North East</label></div>
+                        <div><input type="checkbox" id="Fnorthwest22FHL"><label for="Fnorthwest22FHL"> F North West</label></div>
+                        <div><input type="checkbox" id="FCnorthwest22FHL"><label for="FCAnorthwest22FHL"> FC North West</label></div>
+                        <div><input type="checkbox" id="FAnorthwest22FHL"><label for="FAnorthwest22FHL"> FA North West</label></div>
+                        <div><input type="checkbox" id="Fsoutheast22FHL"><label for="Fsoutheast22EHL"> F South East</label></div>
+                        <div><input type="checkbox" id="FCsoutheast22FHL"><label for="FCsoutheast22EHL"> FC South East</label></div>
+                        <div><input type="checkbox" id="FAsoutheast22FHL"><label for="FAsoutheast22EHL"> FA South East</label></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div><input type="checkbox" id="dustDrainPipes22FHL"><label for="dustDrainPipes22FHL"> Dust Drain Pipes</label></div>
+                    </div>
+                </div>
+            </div>
+            </section>          
+            
+            <section>
+            <div class="task2-inputs">    
+                <h3>Dust Overhead Signage</h3>            
+                <div class="grid">
+                    <div><input type="checkbox" id="eastStagingLanes22FHL"><label for="eastStagingLanes22FHL"> East Staging Lanes</label></div>    
+                    <div><input type="checkbox" id="westStagingLanes22FHL"><label for="westStagingLanes22FHL"> Wast Staging Lanes</label></div>
+                    <div><input type="checkbox" id="eastAGVHandoffs22FHL"><label for="eastAGVHandoffs22FHL"> East Staging Lanes</label></div>
+                    <div></div>
+                    <div></div>
+                    <div><input type="checkbox" id="westAGVHandoffs22FHL"><label for="westAGVHandoffs22FHL"> West Staging Lanes</label></div>
+                </div>
+            </div>
+            </section>
+
+            <section>
+            <div class="task3-inputs">    
+                <h3>Dust Clatter Bars</h3>            
+                <div class="grid">
+                    <div><input type="checkbox" id="F-E_WestTransitDoor22FHL"><label for="F-E_WestTransitDoor22FHL"> F-E West Transition Door</label></div>
+                    <div><input type="checkbox" id="F-FC_TransitDoor22FHL"><label for="E-FC_TransitDoor22FHL"> F-FC Transition Door</label></div>
+                    <div></div>
+                    <div><input type="checkbox" id="F-E_EastTransitDoor22FHL"><label for="F-E_EastTransitDoor22FHL"> F-E West Transition Door</label></div>
+                    <div><input type="checkbox" id="F-FF_TransitDoor22FHL"><label for="F-FF_TransitDoor22FHL"> F-FF Transition Door</label></div>
+                    <div></div>
+                    <div><input type="checkbox" id="FF-F_TransitDoor22FHL"><label for="FF-F_TransitDoor22FHL"> FF-F Transition Door</label></div>
+                    <div><input type="checkbox" id="FC-F_TransitDoor22FHL"><label for="FC-F_TransitDoor22FHL"> FC-F Transition Door</label></div>
+                    <div></div>
+                </div>
+            </div>
+            </section>
+                                        
+            <div class="comments">
+                <label for="comments">Comments:</label>
+                <textarea id="comments" name="comments" rows="5" cols="133" placeholder="Enter comments here..."></textarea>
+            </div>
+
+
+
+            <div class="button">
+                <input type="submit" value="Submit">
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

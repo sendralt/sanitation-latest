@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>18-B Cell High Level Quarterly</title>
+    <link rel="stylesheet" href="../styles.css">
+    <script defer src="../scripts.js"></script>
+</head>
+<body>
+    <input type="text" id="scannerInput" style="position: absolute; left: -9999px; top: -9999px;">
+    <div class="App">
+        <header class="header">
+            <img src="../dhl-logo.svg" alt="DHL Logo" class="logo">
+        </header>
+
+            <h1>Warehouse Sanitation Checklist</h1>
+
+        <div class="header-inputs">
+            <label for="name">Associate Name:</label>
+            <input type="text" id="name" name="name" placeholder="Enter your name" required>
+            <label>Date:</label>
+            <span id="date-display" class="date-display"></span>
+        </div>
+            <section>
+                <h2 class="no-wrap-heading">Checklist #18-B Cell High Level Quarterly</h2>
+            </section>
+                <h3>Scan barcode to check boxes as sanitation tasks are completed. If unable to complete, leave blank and note reason in comments.</h3>
+        
+        <div class="task-container">
+            <section>          
+            <div class="task1-inputs">
+                <h3>Sweep in Corners of Cell</h3>
+                <div class="section" id="section1">
+                    <div class="grid">
+                        <div><input type="checkbox" id="southwest18B"><label for="southwest18B"> South West</label></div>
+                        <div><input type="checkbox" id="northwest18B"><label for="northwest18B"> North West</label></div>
+                        <div><input type="checkbox" id="southeast18B"><label for="southeast18B"> South East</label></div>
+                        <div><input type="checkbox" id="northeast18B"><label for="northeast18B"> North East</label></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+            </div>
+            </section>          
+            
+            <section>    
+            <div class="task2-inputs">
+                <h3>Slanted Ceiling </h3>
+                <div class="grid">
+                    <div><input type="checkbox" id="MSOBailer18BHL"><label for="MSOBailer18BHL"> MSOBailer18BHL</label></div>
+                    <div></div>
+                    <div></div>
+                    <div><input type="checkbox" id=" dustSlantedBeam18BHL"><label for="dustSlantedBeam18BHL"> Dust Slanted Building Support Beam on South Wall</label></div>
+                    <div></div>
+                    <div></div>
+                    <div><input type="checkbox" id="dustDrainPipes18BHL"><label for="dustDrainPipes18BHL"> Dust Drain Pipes</label></div>
+                </div>
+            </div>
+            </section>
+
+            <section>
+            <div class="task3-inputs">    
+                <h3>Dust Overhead Signage</h3>            
+                <div class="grid">
+                    <div><input type="checkbox" id="eastAGVHandoffs18BHL"><label for="eastAGVHandoffs18BHL"> East AGV Handoffs</label></div>
+                    <div></div>
+                    <div></div>    
+                </div>
+            </div>
+            </section>
+
+            <section>
+            <div class="task4-inputs">    
+                <h3>Dust Clatter Bars</h3>            
+                <div class="grid">
+                    <div><input type="checkbox" id="B-AWestDoor18AHL"><label for="B-AWestDoor18AHL"> B-A West Transition Door</label></div>
+                    <div><input type="checkbox" id="B-AMiddleMSODoor18BHL"><label for="B-AMiddleMSODoor18BHL"> A-B Middle MSO Transition Door</label></div>
+                    <div></div>
+                    <div><input type="checkbox" id="B-AEastTransitDoor18BHL"><label for="AEastTransitDoor18BHL"> B-A East Transition Door</label></div>
+                    <div><input type="checkbox" id="B-CWestTransitDoor18AHL"><label for="B-CWestTransitDoor18AHL"> B-C West Transition Door</label></div>
+                    <div></div>
+                    <div></div>
+                    <div><input type="checkbox" id="B-CEastTransitDoor18AHL"><label for="B-CEastTransitDoor18AHL"> B-C East Transition Door</label></div>
+                </div>
+            </div>
+            </section>
+                                        
+            <div class="comments">
+                <label for="comments">Comments:</label>
+                <textarea id="comments" name="comments" rows="5" cols="133" placeholder="Enter comments here..."></textarea>
+            </div>
+
+
+
+            <div class="button">
+                <input type="submit" value="Submit">
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

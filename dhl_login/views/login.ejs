@@ -1,0 +1,31 @@
+<div class="login-container">
+  <header class="login-header">
+    <img src="/dhl-logo.svg" alt="DHL Logo" class="logo"> <!-- Assuming /dhl-logo.svg is the correct path -->
+    <h1>Warehouse Sanitation Checklists</h1>
+  </header>
+
+  <form action="/login-page" method="POST" autocomplete="off">
+    <input type="hidden" name="_csrf" value="<%- _csrf %>">
+    <% // The fake inputs are for browser autocomplete quirks, keep them if they serve a purpose %>
+    <input type="text" name="fakeusernameremembered" style="display:none" autocomplete="off">
+    <input type="password" name="fakepasswordremembered" style="display:none" autocomplete="off">
+
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" value="" required autocomplete="off">
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" value="" required autocomplete="off">
+    </div>
+
+    <div style="text-align: center;">
+      <button type="submit" class="btn btn-primary">Login</button>
+    </div>
+
+    <div class="forgot-password-link" style="text-align: center; margin-top: 15px;">
+      <a href="/forgot-password" style="color: #D40511; text-decoration: none; font-size: 14px;">Forgot/Reset Password</a>
+    </div>  
+  </form>
+</div>

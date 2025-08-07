@@ -1,0 +1,66 @@
+<div class="dashboard-container"<% if (user && user.isAdmin) { %> style="max-width: 1200px;"<% } %>>
+    <header class="dashboard-header">
+      <h1>Welcome, <%= user.username %>!</h1>
+    </header>
+
+    <% if (!user.isAdmin) { %>
+    <section class="main-content">
+      <% if (assignments && assignments.length > 0) { %>
+        <div class="assigned-checklists">
+          <h2>Your Assigned Checklists</h2>
+          <% assignments.forEach(assignment => { %>
+            <div class="checklist-card">
+              <h3><%= assignment.checklist.title %></h3>
+              <p><strong>Type:</strong> <%= assignment.checklist.type %></p>
+              <p><strong>Assigned:</strong> <%= new Date(assignment.assignedAt).toLocaleDateString() %></p>
+              <div class="checklist-actions">
+                <a href="/app/checklists/<%= assignment.checklist.filename %>" class="btn btn-primary btn-inline">Start Checklist</a>
+              </div>
+            </div>
+          <% }); %>
+        </div>
+      <% } else { %>
+        <div class="no-assignments">
+          <h2>No Active Assignments</h2>
+          <p>You don't have any checklists assigned at the moment. Please contact your supervisor or try logging in again.</p>
+          <div class="actions">
+            <a href="/app/index.html" class="btn btn-secondary btn-inline">Browse All Checklists</a>
+          </div>
+        </div>
+      <% } %>
+    </section>
+    <% } %>
+
+    <% if (user && user.isAdmin) { %>
+    <section class="admin-actions">
+      <h2>Admin Panel</h2>
+      <div class="admin-cards-container">
+        <div class="admin-card">
+          <div class="admin-card-icon">👥</div>
+          <h3>User Management</h3>
+          <p>Create and manage user accounts for the system</p>
+          <a href="/admin/users/new" class="btn btn-primary">Create New User</a>
+        </div>
+        <div class="admin-card">
+          <div class="admin-card-icon"><img src="/scan_barcode_rgb_black.png" alt="Barcode Icon" style="width: 50px; height: 50px;"></div>
+          <h3>Barcode Generator</h3>
+          <p>Generate barcodes for checklist items and equipment</p>
+          <a href="/app/barcode_generator.html" class="btn btn-primary" target="_blank">Generate Barcodes</a>
+        </div>
+        <div class="admin-card">
+          <div class="admin-card-icon">📋</div>
+          <h3>Manual Assignment</h3>
+          <p>Manually assign specific checklists to selected users</p>
+          <a href="/admin/assignments/assign" class="btn btn-primary">Assign Checklist</a>
+        </div>
+        <div class="admin-card">
+          <div class="admin-card-icon">📊</div>
+          <h3>Assignments Status</h3>
+          <p>View all checklist assignments and their status</p>
+          <a href="/admin/assignments/manage" class="btn btn-primary">View Assignments</a>
+        </div>
+        <% // Add other admin cards here if needed %>
+      </div>
+    </section>
+    <% } %>
+</div>

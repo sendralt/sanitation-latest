@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barcode Generator for Checklist Items</title>
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.0/dist/JsBarcode.all.min.js"></script>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 20px; 
+            line-height: 1.6;
+        }
+        #barcodeContainer {
+            display: flex;
+            flex-direction: column;
+            gap: 20px; /* Space between barcode items */
+        }
+        .barcode-item { 
+            display: flex; 
+            flex-direction: column; /* Stack ID above barcode */
+            align-items: flex-start; /* Align items to the start */
+            margin-bottom: 15px; 
+            padding: 10px; 
+            border: 1px solid #eee; 
+            page-break-inside: avoid; /* Attempt to keep item on one page when printing */
+            width: fit-content; /* Make container only as wide as content */
+        }
+        .barcode-id-text { 
+            font-size: 12px; 
+            margin-bottom: 5px; /* Space between ID text and barcode */
+            font-weight: bold;
+        }
+        .barcode-image { /* Class for the img/svg element if needed for specific styling */
+            min-height: 96px; /* Ensure space for barcode even if generation fails for a moment */
+        }
+        @media print {
+            body { 
+                margin: 0.5in; 
+                font-size: 10pt; /* Adjust base font size for print */
+            }
+            h1 {
+                font-size: 16pt;
+                text-align: center;
+            }
+            #barcodeContainer {
+                gap: 15px;
+            }
+            .barcode-item {
+                border: none; /* Optional: remove border for print */
+                padding: 5px 0; /* Adjust padding for print */
+                margin-bottom: 10px;
+            }
+            .barcode-id-text {
+                font-size: 9pt;
+            }
+            button { display: none; } /* Hide any buttons when printing */
+        }
+    </style>
+</head>
+<body>
+    <h1>Printable Barcodes for Checklist Items</h1>
+    <div id="barcodeContainer">
+        <p>Loading checklist items and generating barcodes...</p>
+        <p>If barcodes do not appear, please check the browser console (F12) for errors, especially regarding fetching checklist files.</p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Updated list of checklist filenames (ensure this matches your actual files in Public/)
+            const checklistFiles = [
+                "checklists/1_A_Cell_West_Side_Daily.html",
+                "checklists/2_A_Cell_East_Side_Daily.html",
+                "checklists/3_B_Cell_West_Side_Daily.html",
+                "checklists/4_B_Cell_East_Side_Daily.html",
+                "checklists/5_C_Cell_West_Side_Daily.html",
+                "checklists/6_C_Cell_East_Side_Daily.html",
+                "checklists/7_D_Cell_West_Side_Daily.html",
+                "checklists/8_D_Cell_East_Side_Daily.html",
+                "checklists/9_E_Cell_West_Side_Daily.html",
+                "checklists/10_E_Cell_East_Side_Daily.html",
+                "checklists/11_F_Cell_West_Side_Daily.html",
+                "checklists/12_F_Cell_East_Side_Daily.html",
+                "checklists/13_All_Cells_Weekly.html",
+                "checklists/14_All_Cells_Weekly.html",
+                "checklists/15_A&B_Cells_LL_Quarterly.html",
+                "checklists/16_D_Cell_LL_Quarterly.html",
+                "checklists/17_A_Cell_High_Level_Quarterly.html",
+                "checklists/18_B_Cell_High_Level_Quarterly.html",
+                "checklists/19_C_Cell_High_Level_Quarterly.html",
+                "checklists/20_D_Cell_High_Level_Quarterly.html",
+                "checklists/21_E_Cell_High_Level_Quarterlyl.html",
+                "checklists/22_F_Cell_High_Level_Quarterlyl.html"
+                // Add any other new checklist HTML file names here if they exist
+            ];
+            const uniqueCheckboxIds = new Set(); // Still useful for global unique count
+            const allCheckboxIdsFromFile = []; // To store all IDs, including duplicates
+            const checklistsWithIds = {}; // To store IDs grouped by checklist filename
+            const barcodeContainer = document.getElementById('barcodeContainer');
+            let filesProcessed = 0;
+
+            function checkForDuplicateIdsAndReport() {
+                const idCounts = {};
+                allCheckboxIdsFromFile.forEach(id => {
+                    idCounts[id] = (idCounts[id] || 0) + 1;
+                });
+
+                const duplicates = Object.entries(idCounts)
+                                     .filter(([id, count]) => count > 1)
+                                     .map(([id, count]) => `${id} (found ${count} times)`);
+
+                let reportHtml = '';
+                if (duplicates.length > 0) {
+                    reportHtml = `<p style="color: red; font-weight: bold;">Warning: Duplicate checkbox IDs found! Scanning these IDs may lead to unpredictable behavior. Duplicates: ${duplicates.join(', ')}</p>`;
+                } else if (allCheckboxIdsFromFile.length > 0) { // Only report if IDs were actually processed
+                    reportHtml = `<p style="color: green; font-weight: bold;">All ${uniqueCheckboxIds.size} checkbox IDs are unique across the processed files.</p>`;
+                }
+                // Prepend the report to the container, before other messages
+                const existingContent = barcodeContainer.innerHTML;
+                barcodeContainer.innerHTML = reportHtml + existingContent;
+            }
+
+            async function fetchAndExtractIds() {
+                if (checklistFiles.length === 0) {
+                    barcodeContainer.innerHTML = '<p>No checklist files defined to process.</p>';
+                    return;
+                }
+
+                for (const filename of checklistFiles) {
+                    try {
+                        // Assuming files are in the same 'Public' directory or accessible via relative path
+                        const response = await fetch(filename);
+                        if (!response.ok) {
+                            console.error(`Failed to fetch ${filename}: ${response.status} ${response.statusText}`);
+                            barcodeContainer.innerHTML += `<p style="color: red;">Error: Could not fetch ${filename}. Please ensure it's in the Public directory and accessible.</p>`;
+                            // filesProcessed++; // Moved to finally
+                            // if (filesProcessed === checklistFiles.length) renderBarcodes(); // Call will be handled in finally
+                            continue; // Skip to next file on fetch error
+                        }
+                        const htmlText = await response.text();
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(htmlText, 'text/html');
+                        const checkboxes = doc.querySelectorAll('input[type="checkbox"]');
+                        checkboxes.forEach(cb => {
+                            if (cb.id) {
+                                uniqueCheckboxIds.add(cb.id); // For global unique count
+                                allCheckboxIdsFromFile.push(cb.id); // For duplicate checking
+
+                                // Populate checklistsWithIds
+                                if (!checklistsWithIds[filename]) {
+                                    checklistsWithIds[filename] = new Set();
+                                }
+                                checklistsWithIds[filename].add(cb.id);
+                            }
+                        });
+                    } catch (error) {
+                        console.error(`Error processing ${filename}:`, error);
+                        barcodeContainer.innerHTML += `<p style="color: red;">Error processing ${filename}. Check console.</p>`;
+                    } finally {
+                        filesProcessed++;
+                        if (filesProcessed === checklistFiles.length) {
+                            checkForDuplicateIdsAndReport(); // Check for duplicates before rendering
+                            renderBarcodes();
+                        }
+                    }
+                }
+            }
+
+            function renderBarcodes() {
+                let totalIdsInChecklistGroups = 0;
+                Object.values(checklistsWithIds).forEach(idSet => totalIdsInChecklistGroups += idSet.size);
+
+                // Preserve and display initial status messages (duplicate report, fetch/processing errors)
+                // These messages are added by checkForDuplicateIdsAndReport() or fetchAndExtractIds()
+                // We clear the container and re-add these preserved messages first.
+                let initialMessagesHTML = '';
+                const duplicateReportElement = barcodeContainer.querySelector('p[style*="font-weight: bold;"]'); // Catches red and green reports
+                if (duplicateReportElement) {
+                    initialMessagesHTML += duplicateReportElement.outerHTML;
+                }
+                const errorElements = barcodeContainer.querySelectorAll('p[style*="color: red"]:not([style*="font-weight: bold"])');
+                errorElements.forEach(el => initialMessagesHTML += el.outerHTML);
+                
+                // Clear existing content except for the "Loading..." and "If barcodes do not appear..." messages if they are the only ones.
+                // This handles the initial state before any processing.
+                const initialLoadingMessages = Array.from(barcodeContainer.querySelectorAll('p')).filter(p =>
+                    p.textContent.includes('Loading checklist items') || p.textContent.includes('If barcodes do not appear')
+                );
+
+                if (initialLoadingMessages.length === barcodeContainer.children.length) {
+                     // If only loading messages are present, clear them before adding new content.
+                    barcodeContainer.innerHTML = initialMessagesHTML;
+                } else {
+                    // Otherwise, just prepend new messages, keeping whatever was there (like errors from fetch)
+                    barcodeContainer.innerHTML = initialMessagesHTML + barcodeContainer.innerHTML.replace(initialMessagesHTML, '');
+                }
+
+
+                // Handle the case of no IDs to render after all files are processed
+                if (filesProcessed === checklistFiles.length && totalIdsInChecklistGroups === 0) {
+                    let noIdsMessageText = 'No checkbox IDs found in any checklist files to generate barcodes.';
+                    if (uniqueCheckboxIds.size > 0) { // Global unique IDs found, but not in groups
+                        noIdsMessageText = `Found ${uniqueCheckboxIds.size} unique IDs globally, but none could be grouped from successfully processed files for barcode generation.`;
+                    }
+                    
+                    const noIdsMessageExists = Array.from(barcodeContainer.querySelectorAll('p')).some(p => p.textContent.includes('No checkbox IDs found') || p.textContent.includes('none could be grouped'));
+                    const generalErrorExists = Array.from(barcodeContainer.querySelectorAll('p[style*="color: red"]')).length > 0;
+
+                    if (!noIdsMessageExists && !generalErrorExists) { // Only add if no specific "no IDs" or general error message is already there
+                        barcodeContainer.insertAdjacentHTML('beforeend', `<p>${noIdsMessageText}</p>`);
+                    } else if (!noIdsMessageExists && totalIdsInChecklistGroups === 0 && uniqueCheckboxIds.size === 0 && !generalErrorExists) {
+                        // Fallback for truly no IDs anywhere and no errors displayed yet
+                         barcodeContainer.insertAdjacentHTML('beforeend', `<p>No checkbox IDs found after processing all files.</p>`);
+                    }
+                    return; // Nothing more to render
+                }
+
+                // If there are IDs to render, add a global summary
+                if (uniqueCheckboxIds.size > 0) {
+                    // Remove any previous "Found X unique..." message to avoid duplicates if re-rendered
+                    const existingSummary = Array.from(barcodeContainer.querySelectorAll('p')).find(p => p.textContent.startsWith('Found') && p.textContent.includes('unique checkbox IDs in total'));
+                    if(existingSummary) existingSummary.remove();
+
+                    const summaryP = document.createElement('p');
+                    summaryP.textContent = `Found ${uniqueCheckboxIds.size} unique checkbox IDs in total across all processed files. Ready to print.`;
+                    // Prepend this summary after any initial error/status messages.
+                    if (barcodeContainer.firstChild && barcodeContainer.firstChild.nodeName === 'P' && barcodeContainer.firstChild.hasAttribute('style')) {
+                        barcodeContainer.insertBefore(summaryP, barcodeContainer.firstChild.nextSibling);
+                    } else {
+                        barcodeContainer.prepend(summaryP);
+                    }
+                }
+                
+                let barcodesActuallyRenderedCount = 0;
+                Object.entries(checklistsWithIds).forEach(([filename, idSet]) => {
+                    if (idSet.size > 0) {
+                        const checklistTitleElement = document.createElement('h2');
+                        let displayName = filename.replace(/\.html$/i, '');
+                        displayName = displayName.replace(/^\d+\s*-\s*|\d+\s+/, '');
+                        checklistTitleElement.textContent = `Checklist: ${displayName}`;
+                        checklistTitleElement.style.cssText = "margin-top: 30px; border-bottom: 1px solid #ccc; padding-bottom: 5px;";
+                        barcodeContainer.appendChild(checklistTitleElement);
+
+                        idSet.forEach(id => {
+                            const itemDiv = document.createElement('div');
+                            itemDiv.className = 'barcode-item';
+
+                            const idTextSpan = document.createElement('span');
+                            idTextSpan.className = 'barcode-id-text';
+                            idTextSpan.textContent = id;
+                            
+                            const barcodeImg = document.createElement('img');
+                            barcodeImg.className = 'barcode-image';
+                            barcodeImg.alt = `Barcode for ${id}`;
+
+                            itemDiv.appendChild(idTextSpan);
+                            itemDiv.appendChild(barcodeImg);
+                            barcodeContainer.appendChild(itemDiv);
+                            barcodesActuallyRenderedCount++;
+
+                            try {
+                                JsBarcode(barcodeImg, id, {
+                                    format: "CODE128",
+                                    lineColor: "#000",
+                                    width: 2,
+                                    height: 96,
+                                    displayValue: false,
+                                    margin: 10
+                                });
+                            } catch (e) {
+                                console.error("Error generating barcode for ID: " + id + " from file " + filename, e);
+                                idTextSpan.textContent += " - (Error generating barcode)";
+                                barcodeImg.style.display = 'none';
+                            }
+                        });
+                    }
+                });
+                
+                // Remove initial loading/placeholder messages if barcodes were rendered or other specific messages took over
+                initialLoadingMessages.forEach(p => p.remove());
+
+
+                if (filesProcessed === checklistFiles.length && barcodesActuallyRenderedCount === 0) {
+                    const noRenderMsgExists = Array.from(barcodeContainer.querySelectorAll('p')).some(p =>
+                        p.textContent.includes('no barcodes were rendered') ||
+                        p.textContent.includes('No checkbox IDs found') ||
+                        p.textContent.includes('none could be grouped')
+                    );
+                    const generalErrorExists = Array.from(barcodeContainer.querySelectorAll('p[style*="color: red"]')).length > 0;
+
+                    if (!noRenderMsgExists && !generalErrorExists) { // Only add if no specific message already covers this
+                        if (uniqueCheckboxIds.size > 0 && totalIdsInChecklistGroups === 0) {
+                            barcodeContainer.insertAdjacentHTML('beforeend', '<p>Some unique IDs were found globally, but no barcodes were rendered into checklist groups.</p>');
+                        } else if (uniqueCheckboxIds.size === 0) {
+                            barcodeContainer.insertAdjacentHTML('beforeend', '<p>After processing all files, no checkbox IDs were found and no barcodes were generated.</p>');
+                        }
+                    }
+                }
+            }
+            
+            fetchAndExtractIds();
+        });
+    </script>
+</body>
+</html>
