@@ -1,0 +1,798 @@
+/*
+ * DHL EJS View Styles - for login, dashboard, and admin pages
+ * This file is used by EJS views served by the dhl_login server
+ * For checklist HTML pages, see Public/styles.css
+ */
+
+/* Delivery Font - Light */
+@font-face {
+  font-family: "Delivery";
+  font-style: normal;
+  font-weight: 300;
+  src:
+    url("/Delivery/Web/WOFF2/Delivery_W_Lt.woff2") format("woff2"),
+    url("/Delivery/Web/WOFF/Delivery_W_Lt.woff") format("woff");
+  unicode-range: U+20-24F, U+370-52F, U+2DE0-2DFF, U+A640-A69F, U+1C80-1C8F, U+600-6FF, U+750-77F, U+8A0-8FF, U+B50-DFF, U+FE70-FEFF;
+}
+
+/* Delivery Font - Regular */
+@font-face {
+  font-family: "Delivery";
+  font-style: normal;
+  font-weight: 400;
+  src:
+    url("/Delivery/Web/WOFF2/Delivery_W_Rg.woff2") format("woff2"),
+    url("/Delivery/Web/WOFF/Delivery_W_Rg.woff") format("woff");
+  unicode-range: U+20-24F, U+370-52F, U+2DE0-2DFF, U+A640-A69F, U+1C80-1C8F, U+600-6FF, U+750-77F, U+8A0-8FF, U+B50-DFF, U+FE70-FEFF;
+}
+
+/* Delivery Font - Bold */
+@font-face {
+  font-family: "Delivery";
+  font-style: normal;
+  font-weight: 700;
+  src:
+    url("/Delivery/Web/WOFF2/Delivery_W_Bd.woff2") format("woff2"),
+    url("/Delivery/Web/WOFF/Delivery_W_Bd.woff") format("woff");
+  unicode-range: U+20-24F, U+370-52F, U+2DE0-2DFF, U+A640-A69F, U+1C80-1C8F, U+600-6FF, U+750-77F, U+8A0-8FF, U+B50-DFF, U+FE70-FEFF;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Delivery", 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  background: linear-gradient(to bottom, #ffcc00, white);
+  background-attachment: fixed; /* Keeps gradient fixed during scroll */
+  background-repeat: no-repeat;
+  min-height: 100vh; /* Ensures full viewport height coverage */
+  color: #333333; /* Default text color */
+}
+
+/* Unified Container System */
+.page-container, .login-container {
+  max-width: 800px;
+  margin: 4rem auto;
+  margin-bottom: 11rem;
+  padding: 2.5rem;
+  background-color: lightgoldenrodyellow;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-container {
+  max-width: 800px; /* More reasonable width for dashboard content */
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: lightgoldenrodyellow;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Unified Header System */
+.page-header, .dashboard-header, .login-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+}
+
+.page-header .logo, .dashboard-header .logo, .login-header .logo {
+  height: 50px;
+  margin-right: 1.5rem;
+}
+
+.page-header h1, .dashboard-header h1, .login-header h1 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #D40511;
+  margin: 0;
+}
+
+/* Dashboard header specific styling */
+.dashboard-header {
+  text-align: center;
+  justify-content: center;
+  border-bottom: 2px solid #FFCC00;
+}
+
+/* Login header specific styling */
+.login-header {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+}
+.login-header .logo {
+  margin-right: 0;
+  margin-bottom: 1rem;
+}
+
+
+.main-content .success-message {
+  font-size: 1.1rem;
+  color: #28a745; /* Green for success indication */
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background-color: #e9f7ef; /* Light green background for the message */
+  border-left: 4px solid #28a745; /* Accent border */
+  border-radius: 4px;
+}
+.main-content .success-message .emoji {
+  font-size: 1.2em; /* Make emoji slightly larger */
+  margin-left: 0.5em;
+}
+
+.actions {
+  margin-bottom: 2rem;
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  width: fit-content; /* Make buttons fit content by default within forms/actions */
+  box-sizing: border-box;
+}
+
+.btn.btn-inline { /* Add this class if you need an inline button */
+    width: auto;
+}
+
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.btn-primary {
+  background-color: #ffcc00; /* DHL Yellow */
+  color: #333333; /* Dark text for good contrast on yellow */
+}
+
+.btn-primary:hover {
+  background-color: #b8040f;
+  color: white;
+}
+
+.btn-secondary {
+  background-color: #ffcc00; /* DHL Yellow - same as primary for consistency */
+  color: #333333; /* Dark text for good contrast on yellow */
+}
+
+.btn-secondary:hover {
+  background-color: #b8040f; /* DHL Red on hover */
+  color: white;
+}
+
+.btn-outline-secondary {
+  background-color: #ffcc00; /* DHL Yellow */
+  color: #333333;
+  border: 1px solid #ccc;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #b8040f;
+  color: white;
+}
+
+.admin-actions {
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #b8040f; /* Separator line */
+}
+
+.admin-actions h2 {
+  font-size: 1.5rem;
+  color: #333333;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+/* Admin Cards Container */
+.admin-cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+/* Individual Admin Card */
+.admin-card {
+  background-color: #f8f9fa;
+  border: 2px solid #FFCC00;
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.admin-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  border-color: #D40511;
+}
+
+/* Admin Card Icon */
+.admin-card-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+/* Admin Card Title */
+.admin-card h3 {
+  color: #D40511;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 0.75rem 0;
+}
+
+/* Admin Card Description */
+.admin-card p {
+  color: #666;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  margin: 0 0 1.5rem 0;
+}
+
+/* Admin Card Button */
+.admin-card .btn {
+  width: fit-content;
+  padding: 0.75rem 1rem;
+  font-weight: 500;
+}
+
+/* Legacy styles for backward compatibility */
+.admin-actions .action-list {
+  list-style: none;
+  padding-left: 0.75rem 1rem;
+}
+
+.admin-actions .action-list li {
+  margin-bottom: 0.75rem;
+}
+
+/* Forgot Password Styles */
+.forgot-password-step {
+  margin-bottom: 2rem;
+}
+
+.step-description {
+  color: #666;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
+.username-display {
+  background-color: #f8f9fa;
+  padding: 0.75rem;
+  border-radius: 4px;
+  border-left: 4px solid #FFCC00;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+}
+
+.form-footer {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e9ecef;
+  text-align: center;
+}
+
+.form-footer .btn {
+  margin: 0 0.5rem;
+}
+
+.form-text {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  color: #6c757d;
+}
+
+/* Form Styles */
+.form-group {
+  margin-bottom: 1.25rem; /* Slightly reduced margin for forms */
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #555555;
+}
+
+.form-group input[type="text"],
+.form-group input[type="password"],
+.form-group input[type="email"],
+.form-group select,
+.form-control,
+.form-select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 1rem;
+  background-color: white;
+}
+
+.form-group input[type="checkbox"] {
+  width: auto;
+  padding: 0;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+}
+
+.form-group .checkbox-label {
+  display: inline;
+  font-weight: normal;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="password"]:focus,
+.form-group input[type="email"]:focus,
+.form-group select:focus,
+.form-control:focus,
+.form-select:focus {
+  border-color: #FFCC00;
+  outline: none;
+  box-shadow: 0 0 0 2px #ffcc00(255, 204, 0, 0.3);
+}
+
+/* Form labels */
+.form-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #555555;
+}
+
+/* Form actions */
+.form-actions {
+  margin-top: 2rem;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.error-message, .flash-message { /* General purpose message styling */
+  color: #D40511; /* DHL Red for errors */
+  background-color: #fdecea; /* Light red background */
+  border: 1px solid #D40511;
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  list-style: none; /* If it's a ul */
+}
+.flash-message.success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+.flash-message.info {
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+/* Basic styling for Bootstrap-like invalid feedback */
+.invalid-feedback {
+  display: none; /* Hidden by default */
+  width: 100%;
+  margin-top: .25rem;
+  font-size: .875em;
+  color: #D40511; /* DHL Red for errors */
+}
+
+.form-control.is-invalid ~ .invalid-feedback,
+.form-select.is-invalid ~ .invalid-feedback,
+.was-validated .form-control:invalid ~ .invalid-feedback, /* For HTML5 validation */
+.was-validated .form-select:invalid ~ .invalid-feedback {
+  display: block;
+}
+
+.form-control.is-invalid,
+.form-select.is-invalid,
+.was-validated .form-control:invalid,
+.was-validated .form-select:invalid {
+  border-color: #D40511;
+}
+/* Add .is-valid styling if needed */
+.form-control.is-valid,
+.form-select.is-valid,
+.was-validated .form-control:valid,
+.was-validated .form-select:valid {
+ border-color: #28a745; /* Green for valid (optional) */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .page-header, .dashboard-header, .login-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .page-header .logo, .dashboard-header .logo, .login-header .logo {
+    margin-bottom: 1rem;
+    height: 60px;
+    margin-right: 0; /* Reset margin for stacked layout */
+    align-self: flex-start; /* Align logo to start when stacked */
+  }
+   .login-header .logo {
+    align-self: center; /* Center logo in login form on mobile */
+   }
+  .page-header h1, .dashboard-header h1, .login-header h1 {
+    font-size: 1.8rem;
+    align-self: flex-start; /* Align title to start when stacked */
+  }
+  .login-header h1 {
+    align-self: center; /* Center title in login form on mobile */
+  }
+
+  .btn:not(.btn-inline) { /* Full width buttons on mobile, unless specified as inline */
+    padding: 0.8rem 1rem; /* Adjust padding for full width */
+  }
+  .btn.btn-inline {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+  }
+
+  .page-container, .dashboard-container, .login-container {
+    margin: 1.5rem;
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-container, .dashboard-container, .login-container {
+    margin: 1rem;
+    padding: 1rem;
+    border-radius: 0; /* Full width on very small screens */
+    box-shadow: none;
+  }
+  .page-header h1, .dashboard-header h1, .login-header h1 {
+    font-size: 1.6rem;
+  }
+  .main-content .success-message {
+    font-size: 1rem;
+    padding: 0.8rem;
+  }
+  .admin-actions .action-list li .btn {
+    width: fit-content; /* Make buttons full width on small screens for better tap targets */
+    box-sizing: border-box;
+  }
+
+  /* Admin Cards Responsive */
+  .admin-cards-container {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .admin-card {
+    padding: 1.5rem;
+  }
+
+  .admin-card-icon {
+    font-size: 2.5rem;
+  }
+  .form-group input[type="text"],
+  .form-group input[type="password"],
+  .form-group input[type="email"],
+  .form-control,
+  .form-select {
+    padding: 0.7rem; /* Slightly larger tap target */
+    font-size: 1rem; /* Ensure readable text on mobile */
+  }
+
+  /* Ensure tables are scrollable on mobile */
+  .table-responsive {
+    overflow-x: auto;
+  }
+
+  /* Stack form actions vertically on mobile */
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .form-actions .btn {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Navbar responsive adjustments */
+  .navbar {
+    flex-direction: column;
+    padding: 0.5rem;
+    text-align: center;
+  }
+
+  .navbar .logo {
+    margin-bottom: 0.5rem;
+  }
+
+  .navbar .user-info {
+    font-size: 0.9rem;
+  }
+}
+
+/* Tablet breakpoint */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .dashboard-container {
+    max-width: 700px;
+    margin: 1.5rem auto;
+  }
+
+  .admin-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Navbar Styles */
+/* Alternative 3: Sleek & Modern with Pill-shaped Hover */
+.navbar {
+  background-color: #FFCC00; /* Solid DHL Yellow */
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  box-sizing: border-box;
+  box-shadow: none; /* Remove shadow */
+  border-bottom: none; /* Remove border */
+  position: relative;
+}
+
+.navbar .logo {
+  height: 40px;
+  transition: transform 0.3s ease;
+}
+
+.navbar .logo:hover {
+  transform: scale(1.05);
+}
+
+.navbar .form-actions {
+  display: block;
+  align-items: center;
+  gap: 2rem;
+  /* Removed margin-right: 0; and align-self: center; */
+  /* justify-content will be handled by parent .navbar-right-section */
+}
+
+
+
+.navbar .form-actions a {
+  font-family: "Delivery", 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 1rem; /* Slightly smaller font size */
+  font-weight: 700; /* Bolder font weight */
+  color: #000000; /* Black text */
+  text-decoration: none;
+  padding: 0 1.5rem; /* Adjust padding for spacing */
+  border-radius: 0; /* Remove border-radius */
+  transition: none; /* Remove transition */
+  line-height: 1;
+  position: static; /* Remove relative positioning */
+  overflow: visible; /* Remove hidden overflow */
+}
+
+
+.navbar .form-actions a:hover {
+  background-color: transparent; /* No background change on hover */
+  color: #D40511; /* DHL Red on hover */
+  box-shadow: none; /* Remove shadow on hover */
+  transform: none; /* Remove transform on hover */
+}
+
+
+
+.menu-toggle {
+  display: block; /* Always visible */
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+  position: relative; /* Ensure z-index works */
+  z-index: 11; /* Ensure it's above other elements in the navbar-right-section */
+}
+
+.menu-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.menu-icon {
+  height: 24px;
+  width: 24px;
+}
+
+/* Responsive adjustments for Alternative 3 */
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: row;
+    padding: 1rem;
+    text-align: center;
+  }
+
+  .navbar-right-section {
+    flex-direction: row;
+    gap: 1rem;
+    margin: 0;
+    width: auto;
+    justify-content: normal; /* Push content to the right */
+    flex-grow: 1; /* Allow it to take available space */
+  }
+
+  .navbar .logo {
+    margin-bottom: 0;
+    height: 36px;
+  }
+
+
+  .navbar .form-actions.show {
+    display: flex; /* Show navigation links when menu is open */
+  }
+
+  .navbar .form-actions a {
+    padding: 0.8rem 1rem;
+    font-size: 1.1rem;
+    text-align: center;
+    border-radius: 5px;
+    margin-bottom: 0.5rem;
+  }
+
+  .navbar .form-actions a:last-child {
+    margin-bottom: 0;
+  }
+}
+
+
+/* Adjust navbar-right-section for desktop to ensure burger icon is on the right */
+@media (min-width: 769px) {
+  .navbar-right-section {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+  .navbar .form-actions {
+    display: flex !important;
+    position: static;
+    background: none;
+    box-shadow: none;
+    flex-direction: row;
+    width: auto;
+    padding: 0;
+    margin-right: 0;
+    gap: 2rem; /* Add gap for spacing between links */
+  }
+  .menu-toggle {
+    display: block;
+  }
+}
+
+/* Footer Styles */
+.footer {
+  background-color: #ffcc00; /* DHL Yellow */
+  color: #333333; /* Dark text for contrast */
+  text-align: center;
+  padding: 1rem 0;
+  position: relative; /* Changed from fixed to relative */
+  bottom: 0;
+  width: 100%;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow at the top */
+  font-size: 0.9rem;
+  font-weight: 400;
+  margin-top: auto; /* Pushes the footer to the bottom */
+}
+
+.footer p {
+  margin: 0;
+  padding: 0;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow at the top */
+  font-size: 0.9rem;
+  font-weight: 400;
+  margin-top: auto; /* Pushes the footer to the bottom */
+}
+
+.footer p {
+  margin: 0;
+  padding: 0;
+}
+
+/* Dropdown Menu Styles */
+.dropdown-menu {
+  display: none; /* Hidden by default */
+  position: absolute;
+  top: 100%; /* Position below the navbar */
+  right: 0;
+  background-color: white; /* Changed from DHL Yellow to white */
+  min-width: 160px;
+  box-shadow: 0px 4px 12px rgba(0,0,0,0.1); /* Lighter shadow */
+  z-index: 1001; /* Ensure it's above other content */
+  border-radius: 8px; /* More rounded corners */
+  overflow: hidden; /* For rounded corners on children */
+  border: 1px solid #e0e0e0; /* Subtle border */
+  padding: 8px 0; /* Adjust padding */
+}
+
+.dropdown-menu.show {
+  display: block; /* Show when 'show' class is added by JS */
+}
+
+.dropdown-menu p,
+.dropdown-menu a {
+  color: #333333; /* Darker text for better contrast on white */
+  padding: 10px 16px; /* Adjusted padding */
+  text-decoration: none;
+  display: block;
+  text-align: left;
+  font-size: 1rem;
+  font-weight: 400; /* Regular font weight */
+  transition: background-color 0.3s ease;
+}
+
+.dropdown-menu a:hover {
+  background-color: #f0f0f0; /* Light grey on hover */
+  color: #333333; /* Keep text dark on hover */
+}
+
+.dropdown-menu .username-display {
+  background-color: transparent; /* No background for username */
+  border-bottom: 1px solid #e0e0e0; /* Separator line below username */
+  font-weight: 500; /* Slightly bolder for username */
+  color: #333333; /* Dark text for username */
+  padding-bottom: 5px; /* Less padding below username */
+  margin-bottom: 5px; /* Less margin below username */
+}
+
+/* Adjustments for navbar-right-section to contain the dropdown */
+.navbar-right-section {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  z-index: 10;
+}
+
+/* Hide form-actions on mobile when dropdown is active */
+@media (max-width: 768px) {
+  .navbar .dropdown-menu.show {
+    display: block; /* Ensure dropdown shows when its own class is active */
+  }
+}
+
+/* Adjust navbar-right-section for desktop to ensure burger icon is on the right */
+@media (min-width: 769px) {
+  .navbar-right-section {
+    margin-left: auto; /* Push to the right */
+    display: flex; /* Make it a flex container */
+    align-items: center; /* Align items vertically */
+    gap: 2rem; /* Space between form-actions and menu-toggle */
+  }
+  .navbar .form-actions {
+    display: flex !important; /* Ensure navigation links are always visible on desktop */
+    position: static;
+    background: none;
+    box-shadow: none;
+    flex-direction: row;
+    width: auto;
+    padding: 0;
+    margin-right: 0; /* Remove margin-right as gap handles spacing */
+  }
+  .menu-toggle {
+    display: block; /* Ensure burger menu is visible on desktop */
+  }
+}

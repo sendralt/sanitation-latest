@@ -887,7 +887,7 @@ document.addEventListener("DOMContentLoaded", function() {
             return Promise.reject(new Error('Auth token not available.')); // Prevent submission
         }
 
-        return fetch('http://localhost:3001/submit-form', { // Absolute URL to backend API
+        return fetch('/backend/submit-form', { // Proxied by nginx to backend API
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -1025,7 +1025,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
             // Fetch checklist data for validation
             try {
-                const response = await fetch(`http://localhost:3001/validate/${checklistId}`, {
+                const response = await fetch(`/backend/validate/${checklistId}`, {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${authToken}`
@@ -1123,7 +1123,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 });
 
                 try {
-                    const response = await fetch(`http://localhost:3001/validate/${checklistId}`, {
+                    const response = await fetch(`/backend/validate/${checklistId}`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',

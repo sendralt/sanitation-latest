@@ -373,7 +373,7 @@ document.addEventListener("DOMContentLoaded", function() {
             return Promise.reject(new Error('Auth token not available.')); // Prevent submission
         }
 
-        return fetch('http://localhost:3001/submit-form', { // Absolute URL to backend API
+        return fetch('/backend/submit-form', { // Proxied by nginx to backend API
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
