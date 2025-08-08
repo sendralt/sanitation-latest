@@ -685,7 +685,7 @@ body {
 
 /* Footer Styles */
 .footer {
-  background-color: #ffcc00; /* DHL Yellow */
+  background-color: #ffcc0000; /* DHL Yellow */
   color: #333333; /* Dark text for contrast */
   text-align: center;
   padding: 1rem 0;
