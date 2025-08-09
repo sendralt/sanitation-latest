@@ -156,7 +156,7 @@ app.post('/submit-form', authenticateApi, async (req, res) => {
 
     try {
         // Update the assignment with the submission data file path
-        const { Assignment, Checklist, User } = require('./dhl_login/models');
+        const { Assignment, Checklist, User } = require('../dhl_login/models');
 
         // Use the checklist filename from the request body
         const checklistFilename = formData.checklistFilename;
@@ -194,8 +194,8 @@ app.post('/submit-form', authenticateApi, async (req, res) => {
     }
 
     // Send an email to the supervisor with the same timestamp in the checklist link
-    // BASE_URL should point to the dhl_login server (e.g., http://localhost:3000)
-    const baseUrl = process.env.BASE_URL || `http://localhost:3000`;
+    // BASE_URL should point to the dhl_login server (e.g., https://dot1hundred.com)
+    const baseUrl = process.env.BASE_URL || `https://dot1hundred.com`;
     const checklistUrl = `${baseUrl}/app/validate-checklist/${timestamp}`; // Link to UI served by dhl_login
 
 
@@ -323,7 +323,7 @@ app.post('/validate/:id', authenticateApi, async (req, res) => {
 
     try {
         // Update the assignment status to 'validated'
-        const { Assignment, User } = require('./dhl_login/models');
+        const { Assignment, User } = require('../dhl_login/models');
         const filename = `data_${fileId}.json`;
 
         // Find the assignment by the submission data file path
@@ -368,6 +368,139 @@ app.post('/validate/:id', authenticateApi, async (req, res) => {
 
     res.status(200).json({ message: 'Validation completed successfully.' });
     console.log(`[Debug] POST /validate/:id - END - ID: ${req.params.id}`);
+});
+
+// --- UNAUTHENTICATED VALIDATION ROUTES FOR SUPERVISORS ---
+// These routes allow supervisors to access validation functionality without JWT authentication
+
+// Unauthenticated GET route for supervisor validation (load the validation page data)
+app.get('/validate-public/:id', (req, res) => {
+    console.log(`[Debug] GET /validate-public/:id - START - ID: ${req.params.id}`);
+    const fileId = req.params.id;  // Get the unique ID from the URL (timestamp)
+
+    // Construct the file path based on the ID
+    const filePath = path.join(dataDir, `data_${fileId}.json`);
+
+    // Check if the file exists
+    if (fs.existsSync(filePath)) {
+        const fileData = fs.readFileSync(filePath, 'utf8');
+        const formData = JSON.parse(fileData);
+
+        // Check if randomCheckboxes is available and is an array
+        if (!formData.randomCheckboxes || !Array.isArray(formData.randomCheckboxes)) {
+            return res.status(400).json({ message: 'Random checkboxes not found in the checklist data.' });
+        }
+
+        // Send the relevant parts of formData as JSON
+        // The client-side (validate-checklist.html) will handle rendering.
+        res.status(200).json({
+            fileId: fileId,
+            title: formData.title,
+            // The full checkboxes object is needed for the client to find labels/headings
+            checkboxes: formData.checkboxes,
+            randomCheckboxes: formData.randomCheckboxes
+            // We don't need to send supervisorValidation here, as this is for initial load.
+        });
+
+    } else {
+        // If the file does not exist, send a 404 error as JSON
+        res.status(404).json({ message: 'Checklist not found.' });
+    }
+    console.log(`[Debug] GET /validate-public/:id - END - ID: ${req.params.id}`);
+});
+
+// Unauthenticated POST route for supervisor validation form submission
+app.post('/validate-public/:id', async (req, res) => {
+    console.log(`[Debug] POST /validate-public/:id - START - ID: ${req.params.id}`);
+    const fileId = req.params.id;
+    const validationData = req.body;
+
+    // Read the original checklist data
+    const filePath = path.join(dataDir, `data_${fileId}.json`);
+    if (!fs.existsSync(filePath)) {
+        return res.status(404).json({ message: 'Checklist not found.' });
+    }
+    // Read the original checklist data from the file
+    const fileData = fs.readFileSync(filePath, 'utf8');
+    const formData = JSON.parse(fileData);
+
+    // Update checkboxes based on the validation data (both checked and unchecked)
+    validationData.validatedCheckboxes.forEach((validatedCb) => {
+        const { id: validatedId, checked: newCheckedState } = validatedCb;
+        let itemUpdated = false;
+        // Iterate through headings to find the validated checkbox ID
+        for (const headingKey in formData.checkboxes) {
+            if (formData.checkboxes[headingKey] && formData.checkboxes[headingKey][validatedId]) {
+                // Update the 'checked' status of the specific checkbox item
+                formData.checkboxes[headingKey][validatedId].checked = newCheckedState;
+                itemUpdated = true;
+                break; // Found and updated, no need to check other headings for this ID
+            }
+        }
+        if (!itemUpdated) {
+            console.warn(`Validated checkbox ID ${validatedId} not found in original checklist data under any heading.`);
+        }
+    });
+
+    // Add supervisor feedback to the formData
+    formData.supervisorValidation = {
+        supervisorName: validationData.supervisorName,
+        validatedCheckboxes: validationData.validatedCheckboxes.reduce((acc, cb) => {
+            acc[cb.id] = cb.checked;
+            return acc;
+        }, {})
+    };
+
+    // Save the updated checklist data back to the file
+    fs.writeFileSync(filePath, JSON.stringify(formData, null, 2));
+
+    try {
+        // Update the assignment status to 'validated'
+        const { Assignment, User } = require('../dhl_login/models');
+        const filename = `data_${fileId}.json`;
+
+        // Find the assignment by the submission data file path
+        const assignment = await Assignment.findOne({
+            where: {
+                submissionDataFilePath: filename,
+                status: 'completed'
+            },
+            include: [{
+                model: User,
+                as: 'user',
+                attributes: ['id', 'username', 'firstName', 'lastName']
+            }]
+        });
+
+        if (assignment) {
+            // Find the supervisor user by name (this is a simplified approach)
+            const supervisor = await User.findOne({
+                where: {
+                    // Try to match by first name and last name combination
+                    // This is a basic implementation - you might want to improve this matching logic
+                    firstName: validationData.supervisorName.split(' ')[0] || validationData.supervisorName,
+                    isAdmin: true // Assuming supervisors are admin users
+                }
+            });
+
+            await assignment.update({
+                status: 'validated',
+                validatedAt: new Date(),
+                validatedByUserId: supervisor ? supervisor.id : null,
+                validationStatus: 'approved' // Assuming validation means approval
+            });
+
+            console.log(`Assignment ${assignment.id} marked as validated by supervisor: ${validationData.supervisorName}`);
+        } else {
+            console.warn(`No assignment found with submission data file path: ${filename}`);
+        }
+    } catch (error) {
+        console.error('Error updating assignment validation status:', error);
+        // Don't fail the validation if this update fails
+    }
+
+    res.status(200).json({ message: 'Validation completed successfully.' });
+    console.log(`[Debug] POST /validate-public/:id - END - ID: ${req.params.id}`);
 });
 
 // Endpoint to view the checklist data in the browser

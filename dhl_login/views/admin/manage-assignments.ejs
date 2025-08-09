@@ -87,7 +87,7 @@
           <select id="status" name="status" class="form-control">
             <option value="all" <%= filters.status === 'all' ? 'selected' : '' %>>All Statuses</option>
             <option value="assigned" <%= filters.status === 'assigned' ? 'selected' : '' %>>Assigned</option>
-            <option value="completed" <%= filters.status === 'completed' ? 'selected' : '' %>>Completed</option>
+            <option value="completed" <%= filters.status === 'completed' ? 'selected' : '' %>>Submitted</option>
             <option value="cancelled" <%= filters.status === 'cancelled' ? 'selected' : '' %>>Cancelled</option>
             <option value="overdue" <%= filters.status === 'overdue' ? 'selected' : '' %>>Overdue</option>
             <option value="validated" <%= filters.status === 'validated' ? 'selected' : '' %>>Validated</option>
@@ -151,7 +151,8 @@
             <th>Status</th>
             <th>Assigned</th>
             <th>Assignment Type</th>
-            <th>Completed</th>
+            <th>Submitted</th>
+            <th>Validated</th>
           </tr>
         </thead>
         <tbody>
@@ -195,6 +196,19 @@
                   <span class="text-muted">Not completed</span>
                 <% } %>
               </td>
+              <td>
+                <% if (assignment.status === 'validated' && assignment.validatedAt) { %>
+                  <%= new Date(assignment.validatedAt).toLocaleDateString() %><br>
+                  <small class="text-muted"><%= new Date(assignment.validatedAt).toLocaleTimeString() %></small>
+                  <% if (assignment.validator) { %>
+                    <br><small class="text-muted">by <%= assignment.validator.firstName %> <%= assignment.validator.lastName %></small>
+                  <% } %>
+                <% } else if (assignment.status === 'validated') { %>
+                  <span class="text-success">Validated</span>
+                <% } else { %>
+                  <span class="text-muted">Not validated</span>
+                <% } %>
+              </td>
             </tr>
           <% }); %>
         </tbody>
@@ -213,10 +227,13 @@
         <strong>Active:</strong> <%= assignments.filter(a => a.status === 'assigned').length %>
       </div>
       <div class="col">
-        <strong>Completed:</strong> <%= assignments.filter(a => a.status === 'completed').length %>
+        <strong>Submitted:</strong> <%= assignments.filter(a => a.status === 'completed').length %>
       </div>
       <div class="col">
         <strong>Cancelled:</strong> <%= assignments.filter(a => a.status === 'cancelled').length %>
+      </div>
+      <div class="col">
+        <strong>Validated:</strong> <%= assignments.filter(a => a.status === 'validated').length %>
       </div>
       <div class="form-actions">
         <button type="submit" class="btn btn-primary">Assign Checklist</button>

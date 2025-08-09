@@ -1012,28 +1012,42 @@ document.addEventListener("DOMContentLoaded", function() {
                  return;
             }
             
-            if (!authToken) { // If scripts.js didn't auto-run it or it's not ready
-                await fetchAuthToken(); // Wait for it
-            }
-
-            if (!authToken) {
-                checklistTitleEl.textContent = 'Authentication Error';
-                itemsContainerEl.innerHTML = '<p style="color: red;">Could not authenticate to fetch checklist details. Please ensure you are logged in.</p>';
-                validationForm.style.display = 'none';
-                return;
-            }
-
-            // Fetch checklist data for validation
+            // Fetch checklist data for validation (no authentication required for supervisors)
             try {
-                const response = await fetch(`/backend/validate/${checklistId}`, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${authToken}`
-                    }
+                const response = await fetch(`/api/validate/${checklistId}`, {
+                    method: 'GET'
                 });
 
                 if (!response.ok) {
                     const errorData = await response.json().catch(() => ({ message: `HTTP error ${response.status}` }));
+
+                    // Handle specific cases for used/expired links
+                    if (response.status === 410) {
+                        checklistTitleEl.textContent = 'Validation Link Expired';
+                        if (errorData.alreadyUsed) {
+                            itemsContainerEl.innerHTML = `
+                                <div style="text-align: center; padding: 2rem; background-color: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px; color: #856404;">
+                                    <h3>⚠️ Link Already Used</h3>
+                                    <p>This validation link has already been accessed and is no longer valid.</p>
+                                    <p>Each validation link can only be used once for security purposes.</p>
+                                    <p>If you need to validate this checklist, please contact the administrator for a new validation link.</p>
+                                </div>
+                            `;
+                        } else if (errorData.alreadyValidated) {
+                            itemsContainerEl.innerHTML = `
+                                <div style="text-align: center; padding: 2rem; background-color: #d4edda; border: 1px solid #c3e6cb; border-radius: 8px; color: #155724;">
+                                    <h3>✅ Already Validated</h3>
+                                    <p>This checklist has already been validated.</p>
+                                    <p><strong>Validated by:</strong> ${errorData.validatedBy}</p>
+                                    ${errorData.validatedAt ? `<p><strong>Validated on:</strong> ${new Date(errorData.validatedAt).toLocaleString()}</p>` : ''}
+                                    <p>No further action is required.</p>
+                                </div>
+                            `;
+                        }
+                        validationForm.style.display = 'none';
+                        return;
+                    }
+
                     throw new Error(errorData.message || `Failed to fetch checklist data. Status: ${response.status}`);
                 }
 
@@ -1109,10 +1123,6 @@ document.addEventListener("DOMContentLoaded", function() {
                     displayMessage('Supervisor name is required.', 'error');
                     return;
                 }
-                if (!authToken) {
-                    displayMessage('Authentication error. Please try refreshing.', 'error');
-                    return;
-                }
 
                 const validatedCheckboxes = [];
                 itemsContainerEl.querySelectorAll('input[type="checkbox"]').forEach(cb => {
@@ -1123,11 +1133,10 @@ document.addEventListener("DOMContentLoaded", function() {
                 });
 
                 try {
-                    const response = await fetch(`/backend/validate/${checklistId}`, {
+                    const response = await fetch(`/api/validate/${checklistId}`, {
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${authToken}`
+                            'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({
                             supervisorName: supervisorName,
