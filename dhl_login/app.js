@@ -431,6 +431,8 @@ app.get('/login-page', (req, res) => {
 
 app.post('/login-page', (req, res, next) => {
   console.log('[Login POST Start] req.session before passport.authenticate:', JSON.stringify(req.session));
+  console.log('[Login POST Start] CSRF token from form:', req.body._csrf);
+  console.log('[Login POST Start] CSRF secret from session:', req.session._csrfSecret);
   passport.authenticate('local', (err, user, info) => {
     console.log('[Login POST passport.authenticate callback] req.session:', JSON.stringify(req.session));
     if (err) { return next(err); }

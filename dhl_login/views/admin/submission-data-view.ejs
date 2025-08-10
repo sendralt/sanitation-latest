@@ -1,0 +1,333 @@
+<style>
+  .submission-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  .assignment-info {
+    background-color: #f8f9fa;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    border-left: 4px solid #D40511;
+  }
+  .assignment-info h2 {
+    margin-top: 0;
+    color: #495057;
+  }
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  .info-item {
+    display: flex;
+    flex-direction: column;
+  }
+  .info-label {
+    font-weight: bold;
+    color: #6c757d;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    margin-bottom: 0.25rem;
+  }
+  .info-value {
+    color: #495057;
+    font-size: 1rem;
+  }
+  .status-badge {
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    display: inline-block;
+    width: fit-content;
+  }
+  .status-completed { background-color: #28a745; color: white; }
+  .status-validated { background-color: #17a2b8; color: white; }
+  
+  .submission-data {
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    overflow: hidden;
+  }
+  .section-header {
+    background-color: #495057;
+    color: white;
+    padding: 1rem 1.5rem;
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: bold;
+  }
+  .section-content {
+    padding: 1.5rem;
+  }
+  .basic-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  
+  .checklist-section {
+    margin-bottom: 2rem;
+  }
+  .checklist-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #495057;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #dee2e6;
+  }
+  .checkbox-group {
+    margin-bottom: 1.5rem;
+    border: 1px solid #dee2e6;
+    border-radius: 0.5rem;
+    overflow: hidden;
+  }
+  .group-header {
+    background-color: #e9ecef;
+    padding: 0.75rem 1rem;
+    font-weight: bold;
+    color: #495057;
+    border-bottom: 1px solid #dee2e6;
+  }
+  .checkbox-items {
+    padding: 1rem;
+  }
+  .checkbox-item {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #f8f9fa;
+  }
+  .checkbox-item:last-child {
+    border-bottom: none;
+  }
+  .checkbox-status {
+    width: 20px;
+    height: 20px;
+    border-radius: 3px;
+    margin-right: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.875rem;
+  }
+  .checkbox-checked {
+    background-color: #28a745;
+    color: white;
+  }
+  .checkbox-unchecked {
+    background-color: #dc3545;
+    color: white;
+  }
+  .checkbox-label {
+    flex: 1;
+    color: #495057;
+  }
+  
+  .comments-section {
+    background-color: #f8f9fa;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    margin-top: 2rem;
+  }
+  .comments-title {
+    font-weight: bold;
+    color: #495057;
+    margin-bottom: 0.75rem;
+  }
+  .comments-content {
+    background-color: white;
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    padding: 1rem;
+    min-height: 100px;
+    white-space: pre-wrap;
+    color: #495057;
+  }
+  
+  .random-checkboxes {
+    background-color: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    margin-top: 2rem;
+  }
+  .random-title {
+    font-weight: bold;
+    color: #856404;
+    margin-bottom: 0.75rem;
+  }
+  .random-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .random-item {
+    background-color: #ffc107;
+    color: #dc3545;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    font-weight: bold;
+  }
+  
+  .actions {
+    margin-top: 2rem;
+    text-align: center;
+  }
+  .btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    margin: 0 0.5rem;
+    border: none;
+    border-radius: 0.25rem;
+    text-decoration: none;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  .btn-primary {
+    background-color: #ffcc00;
+    color: #dc3545;
+  }
+  .btn-primary:hover {
+    background-color: #dc3545;
+  }
+  .btn-secondary {
+    background-color: #6c757d;
+    color: white;
+  }
+  .btn-secondary:hover {
+    background-color: white;
+  }
+</style>
+
+<div class="submission-container">
+  <!-- Assignment Information -->
+  <div class="assignment-info">
+    <h2>Assignment Information</h2>
+    <div class="info-grid">
+      <div class="info-item">
+        <span class="info-label">User</span>
+        <span class="info-value"><%= assignment.user.firstName %> <%= assignment.user.lastName %> (@<%= assignment.user.username %>)</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Checklist</span>
+        <span class="info-value"><%= assignment.checklist.title %></span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Status</span>
+        <span class="status-badge status-<%= assignment.status %>"><%= assignment.status %></span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Assigned Date</span>
+        <span class="info-value"><%= new Date(assignment.assignedAt).toLocaleDateString() %> <%= new Date(assignment.assignedAt).toLocaleTimeString() %></span>
+      </div>
+      <% if (assignment.completedAt) { %>
+      <div class="info-item">
+        <span class="info-label">Completed Date</span>
+        <span class="info-value"><%= new Date(assignment.completedAt).toLocaleDateString() %> <%= new Date(assignment.completedAt).toLocaleTimeString() %></span>
+      </div>
+      <% } %>
+      <% if (assignment.validatedAt && assignment.validator) { %>
+      <div class="info-item">
+        <span class="info-label">Validated By</span>
+        <span class="info-value"><%= assignment.validator.firstName %> <%= assignment.validator.lastName %> (@<%= assignment.validator.username %>)</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Validated Date</span>
+        <span class="info-value"><%= new Date(assignment.validatedAt).toLocaleDateString() %> <%= new Date(assignment.validatedAt).toLocaleTimeString() %></span>
+      </div>
+      <% } %>
+      <div class="info-item">
+        <span class="info-label">Submission File</span>
+        <span class="info-value"><%= filename %></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Submission Data -->
+  <div class="submission-data">
+    <h3 class="section-header">Submission Data</h3>
+    <div class="section-content">
+      <!-- Basic Information -->
+      <div class="basic-info">
+        <div class="info-item">
+          <span class="info-label">Checklist Title</span>
+          <span class="info-value"><%= submissionData.title %></span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Submitted By</span>
+          <span class="info-value"><%= submissionData.name %></span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Submission Date</span>
+          <span class="info-value"><%= submissionData.date %></span>
+        </div>
+        <% if (submissionData.supervisorEmail) { %>
+        <div class="info-item">
+          <span class="info-label">Supervisor Email</span>
+          <span class="info-value"><%= submissionData.supervisorEmail %></span>
+        </div>
+        <% } %>
+      </div>
+
+      <!-- Checklist Items -->
+      <div class="checklist-section">
+        <div class="checklist-title">Checklist Items</div>
+        <% Object.keys(submissionData.checkboxes).forEach(function(sectionName) { %>
+          <% if (Object.keys(submissionData.checkboxes[sectionName]).length > 0) { %>
+            <div class="checkbox-group">
+              <div class="group-header"><%= sectionName %></div>
+              <div class="checkbox-items">
+                <% Object.keys(submissionData.checkboxes[sectionName]).forEach(function(itemKey) { %>
+                  <% const item = submissionData.checkboxes[sectionName][itemKey]; %>
+                  <div class="checkbox-item">
+                    <div class="checkbox-status <%= item.checked ? 'checkbox-checked' : 'checkbox-unchecked' %>">
+                      <%= item.checked ? '✓' : '✗' %>
+                    </div>
+                    <div class="checkbox-label"><%= item.label %></div>
+                  </div>
+                <% }); %>
+              </div>
+            </div>
+          <% } %>
+        <% }); %>
+      </div>
+
+      <!-- Comments -->
+      <% if (submissionData.comments) { %>
+      <div class="comments-section">
+        <div class="comments-title">Comments</div>
+        <div class="comments-content"><%= submissionData.comments %></div>
+      </div>
+      <% } %>
+
+      <!-- Random Checkboxes for Validation -->
+      <% if (submissionData.randomCheckboxes && submissionData.randomCheckboxes.length > 0) { %>
+      <div class="random-checkboxes">
+        <div class="random-title">Random Checkboxes Selected for Validation (20%)</div>
+        <div class="random-items">
+          <% submissionData.randomCheckboxes.forEach(function(checkbox) { %>
+            <span class="random-item"><%= checkbox %></span>
+          <% }); %>
+        </div>
+      </div>
+      <% } %>
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="actions">
+    <button onclick="window.close()" class="btn btn-secondary">Close Window</button>
+    <a href="/admin/assignments/manage" class="btn btn-primary" target="_parent">Back to Assignments</a>
+  </div>
+</div>

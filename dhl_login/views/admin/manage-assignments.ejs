@@ -55,6 +55,27 @@
       .auto-assignment {
         color: #28a745;
       }
+      .clickable-row {
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+      }
+      .clickable-row:hover {
+        background-color: #f8f9fa;
+      }
+      .submission-link {
+        color: #007bff;
+        text-decoration: none;
+        font-weight: bold;
+      }
+      .submission-link:hover {
+        color: #0056b3;
+        text-decoration: underline;
+      }
+      .view-submission-hint {
+        font-size: 0.75rem;
+        color: #6c757d;
+        font-style: italic;
+      }
     </style>
 
 <div class="page-container" style="max-width: none; width: fit-content; min-width: 1000px;">
@@ -157,7 +178,13 @@
         </thead>
         <tbody>
           <% assignments.forEach(function(assignment) { %>
-            <tr>
+            <tr <% if (assignment.status === 'completed' || assignment.status === 'validated') { %>
+                class="clickable-row"
+                data-assignment-id="<%= assignment.id %>"
+                data-submission-file="<%= assignment.submissionDataFilePath || '' %>"
+                onclick="viewSubmissionData('<%= assignment.submissionDataFilePath || '' %>', '<%= assignment.id %>')"
+                title="Click to view submission data"
+                <% } %>>
               <td>
                 <strong><%= assignment.user.firstName %> <%= assignment.user.lastName %></strong><br>
                 <small class="text-muted">@<%= assignment.user.username %></small>
@@ -175,6 +202,13 @@
                 <span class="status-badge status-<%= assignment.status %>">
                   <%= assignment.status %>
                 </span>
+                <% if (assignment.status === 'completed' || assignment.status === 'validated') { %>
+                  <% if (assignment.submissionDataFilePath) { %>
+                    <br><small class="view-submission-hint">Click row to view submission</small>
+                  <% } else { %>
+                    <br><small class="view-submission-hint" style="color: #ffc107;">Click row - submission processing</small>
+                  <% } %>
+                <% } %>
               </td>
               <td>
                 <%= new Date(assignment.assignedAt).toLocaleDateString() %><br>
@@ -242,3 +276,16 @@
     </div>
   </div>
 </div>
+
+<script>
+function viewSubmissionData(submissionFile, assignmentId) {
+  if (!submissionFile || submissionFile.trim() === '') {
+    alert('Submission data is still being processed. Please try again in a few moments, or refresh the page to see if the submission data is now available.');
+    return;
+  }
+
+  // Open the submission data in a new window/tab
+  const url = `/admin/assignments/submission-data/${submissionFile}`;
+  window.open(url, '_blank', 'width=1200,height=800,scrollbars=yes,resizable=yes');
+}
+</script>

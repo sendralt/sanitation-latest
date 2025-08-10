@@ -113,8 +113,8 @@ document.addEventListener("DOMContentLoaded", function() {
         "checklists/18_B_Cell_High_Level_Quarterly.html",
         "checklists/19_C_Cell_High_Level_Quarterly.html",
         "checklists/20_D_Cell_High_Level_Quarterly.html",
-        "checklists/21_E_Cell_High_Level_Quarterlyl.html",
-        "checklists/22_F_Cell_High_Level_Quarterlyl.html"
+        "checklists/21_E_Cell_High_Level_Quarterly.html",
+        "checklists/22_F_Cell_High_Level_Quarterly.html"
     ];
 
     // Generate checklist menu if on the landing page
@@ -356,6 +356,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Save Data to Backend
     function saveData() {
+        // Extract checklist filename from the current page URL
+        const currentPath = window.location.pathname;
+        const filename = currentPath.split('/').pop(); // Get the last part of the path (filename)
+
         const data = {
             title: document.title,
             name: nameInput.value,
@@ -365,6 +369,8 @@ document.addEventListener("DOMContentLoaded", function() {
             //auditorName: auditorNameInput.value,
             //supervisorName: supervisorName.value,
             supervisorEmail: "sendral.ts.1@pg.com",
+            checklistFilename: filename, // Add the checklist filename
+            userId: currentUser ? currentUser.id : null // Add the user ID
         };
 
         if (!authToken) {

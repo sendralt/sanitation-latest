@@ -158,35 +158,45 @@ app.post('/submit-form', authenticateApi, async (req, res) => {
         // Update the assignment with the submission data file path
         const { Assignment, Checklist, User } = require('../dhl_login/models');
 
-        // Use the checklist filename from the request body
+        // Use the checklist filename and userId from the request body
         const checklistFilename = formData.checklistFilename;
+        const userId = formData.userId;
 
-        if (checklistFilename) {
-            const assignment = await Assignment.findOne({
-                where: {
-                    userId: req.user.id,
-                    status: 'completed'
-                },
-                include: [{
-                    model: Checklist,
-                    as: 'checklist',
-                    where: {
-                        filename: checklistFilename
-                    }
-                }],
-                order: [['completedAt', 'DESC']]
-            });
-
-            if (assignment) {
-                await assignment.update({
-                    submissionDataFilePath: filename
+        if (checklistFilename && userId) {
+            try {
+                // First find the checklist by filename
+                const checklist = await Checklist.findOne({
+                    where: { filename: checklistFilename }
                 });
-                console.log(`Updated assignment ${assignment.id} with submission data file path: ${filename}`);
-            } else {
-                console.warn(`No completed assignment found for user ${req.user.id} and checklist ${checklistFilename}`);
+
+                if (checklist) {
+                    // Then find the assignment
+                    const assignment = await Assignment.findOne({
+                        where: {
+                            userId: userId,
+                            checklistId: checklist.id,
+                            status: 'completed'
+                        },
+                        order: [['completedAt', 'DESC']]
+                    });
+
+                    if (assignment) {
+                        await assignment.update({
+                            submissionDataFilePath: filename
+                        });
+                        console.log(`Updated assignment ${assignment.id} with submission data file path: ${filename}`);
+                    } else {
+                        console.warn(`No completed assignment found for user ${req.user.id} and checklist ${checklistFilename}`);
+                    }
+                } else {
+                    console.warn(`Checklist not found with filename: ${checklistFilename}`);
+                }
+            } catch (error) {
+                console.error('Error updating assignment with submission data file path:', error);
             }
         } else {
-            console.warn('No checklist filename provided in form data');
+            if (!checklistFilename) console.warn('No checklist filename provided in form data');
+            if (!userId) console.warn('No userId provided in form data');
         }
     } catch (error) {
         console.error('Error updating assignment with submission data file path:', error);

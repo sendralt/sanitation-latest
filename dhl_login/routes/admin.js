@@ -10,19 +10,20 @@ const {
   getAvailableChecklists,
   getCurrentAssignments
 } = require('../utils/assignmentLogic');
+const fs = require('fs');
+const path = require('path');
 
 // Helper function to get CSRF token (handles test environment)
 function getCsrfToken(req) {
   return req.csrfToken ? req.csrfToken() : 'test-csrf-token';
 }
 
-// Middleware to ensure user is authenticated (example, adjust if your setup is different)
-// This is a basic check. In a real app, you'd likely have a more robust `ensureAuthenticated` middleware.
+// Authentication middleware for web-based admin routes
 const ensureAuthenticated = (req, res, next) => {
-  if (req.isAuthenticated && req.isAuthenticated()) {
+  if (req.isAuthenticated()) {
     return next();
   }
-  req.flash('error', 'Please log in to view this resource.');
+  req.flash('error', 'Please log in to view that resource.');
   res.redirect('/login-page');
 };
 
@@ -356,6 +357,75 @@ router.get('/assignments/manage', ensureAuthenticated, ensureAdmin, async (req, 
     console.error('Error loading assignment management dashboard:', error);
     req.flash('error', 'Failed to load the assignment management dashboard.');
     res.redirect('/dashboard');
+  }
+});
+
+// GET route to display submission data for completed/validated assignments
+router.get('/assignments/submission-data/:filename', ensureAuthenticated, ensureAdmin, async (req, res) => {
+  try {
+    const { filename } = req.params;
+
+    // Validate filename format for security
+    if (!filename || !filename.match(/^data_\d+\.json$/)) {
+      req.flash('error', 'Invalid submission file format.');
+      return res.redirect('/admin/assignments/manage');
+    }
+
+    // Find the assignment to get context information
+    const Assignment = require('../models/assignment');
+    const User = require('../models/user');
+    const Checklist = require('../models/checklist');
+
+    const assignment = await Assignment.findOne({
+      where: { submissionDataFilePath: filename },
+      include: [
+        {
+          model: User,
+          as: 'user',
+          attributes: ['id', 'username', 'firstName', 'lastName']
+        },
+        {
+          model: Checklist,
+          as: 'checklist',
+          attributes: ['id', 'title', 'filename', 'type']
+        },
+        {
+          model: User,
+          as: 'validator',
+          attributes: ['id', 'username', 'firstName', 'lastName'],
+          required: false
+        }
+      ]
+    });
+
+    if (!assignment) {
+      req.flash('error', 'Assignment not found for this submission file.');
+      return res.redirect('/admin/assignments/manage');
+    }
+
+    // Read the submission data file
+    const dataDir = path.join(__dirname, '../../backend/data');
+    const filePath = path.join(dataDir, filename);
+
+    if (!fs.existsSync(filePath)) {
+      req.flash('error', 'Submission data file not found.');
+      return res.redirect('/admin/assignments/manage');
+    }
+
+    const submissionData = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+
+    res.render('admin/submission-data-view', {
+      title: 'Submission Data View',
+      user: req.user,
+      assignment: assignment,
+      submissionData: submissionData,
+      filename: filename
+    });
+
+  } catch (error) {
+    console.error('Error loading submission data:', error);
+    req.flash('error', 'Failed to load submission data.');
+    res.redirect('/admin/assignments/manage');
   }
 });
 
