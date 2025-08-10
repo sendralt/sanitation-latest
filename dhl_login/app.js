@@ -196,14 +196,6 @@ app.get('/api/validate/:id', (req, res) => {
         const fileData = fs.readFileSync(filePath, 'utf8');
         const formData = JSON.parse(fileData);
 
-        // Check if this validation link has already been accessed
-        if (formData.validationLinkAccessed) {
-            return res.status(410).json({
-                message: 'This validation link has already been used and is no longer valid.',
-                alreadyUsed: true
-            });
-        }
-
         // Check if the checklist has already been validated
         if (formData.supervisorValidation) {
             return res.status(410).json({
@@ -219,19 +211,18 @@ app.get('/api/validate/:id', (req, res) => {
             return res.status(400).json({ message: 'Random checkboxes not found in the checklist data.' });
         }
 
-        // Mark the validation link as accessed
-        formData.validationLinkAccessed = true;
-        formData.validationLinkAccessedAt = new Date().toISOString();
-
-        // Save the updated data to mark the link as used
-        fs.writeFileSync(filePath, JSON.stringify(formData, null, 2));
+        // Do NOT mark the link as accessed on GET to avoid email scanners burning the link
+        // Clients should proceed to render; the actual submission (POST) will record validation
 
         // Send the relevant parts of formData as JSON
         res.status(200).json({
             fileId: fileId,
             title: formData.title,
             checkboxes: formData.checkboxes,
-            randomCheckboxes: formData.randomCheckboxes
+            randomCheckboxes: formData.randomCheckboxes,
+            // Optionally include whether this link was previously accessed for informational UI
+            validationLinkAccessed: !!formData.validationLinkAccessed,
+            validationLinkAccessedAt: formData.validationLinkAccessedAt || null
         });
     } else {
         res.status(404).json({ message: 'Checklist not found.' });
@@ -255,6 +246,16 @@ app.post('/api/validate/:id', async (req, res) => {
     // Read the original checklist data from the file
     const fileData = fs.readFileSync(filePath, 'utf8');
     const formData = JSON.parse(fileData);
+
+    // Prevent double-validation: if already validated, return 410
+    if (formData.supervisorValidation) {
+        return res.status(410).json({
+            message: 'This checklist has already been validated.',
+            alreadyValidated: true,
+            validatedBy: formData.supervisorValidation.supervisorName,
+            validatedAt: formData.supervisorValidation.validatedAt
+        });
+    }
 
     // Update checkboxes based on the validation data
     validationData.validatedCheckboxes.forEach((validatedCb) => {

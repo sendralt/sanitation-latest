@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="54" failures="22" errors="0" time="9.144">
+  <testsuite name="Auth Utility Functions" errors="0" failures="0" skipped="0" timestamp="2025-08-10T07:57:04" time="1.845" tests="3">
+    <testcase classname="Auth Utility Functions should correctly hash a password" name="Auth Utility Functions should correctly hash a password" time="0.156">
+    </testcase>
+    <testcase classname="Auth Utility Functions should correctly compare a plain password with a hashed password" name="Auth Utility Functions should correctly compare a plain password with a hashed password" time="0.275">
+    </testcase>
+    <testcase classname="Auth Utility Functions should return false for incorrect password comparison" name="Auth Utility Functions should return false for incorrect password comparison" time="0.269">
+    </testcase>
+  </testsuite>
+  <testsuite name="Security Questions Utility Functions" errors="0" failures="0" skipped="0" timestamp="2025-08-10T07:57:04" time="2.016" tests="10">
+    <testcase classname="Security Questions Utility Functions PREDEFINED_SECURITY_QUESTIONS should be an array with expected structure" name="Security Questions Utility Functions PREDEFINED_SECURITY_QUESTIONS should be an array with expected structure" time="0.009">
+    </testcase>
+    <testcase classname="Security Questions Utility Functions getSecurityQuestions should return a copy of questions without sensitive data" name="Security Questions Utility Functions getSecurityQuestions should return a copy of questions without sensitive data" time="0.002">
+    </testcase>
+    <testcase classname="Security Questions Utility Functions getSecurityQuestionById should return the correct question by ID" name="Security Questions Utility Functions getSecurityQuestionById should return the correct question by ID" time="0">
+    </testcase>
+    <testcase classname="Security Questions Utility Functions getSecurityQuestionById should return null for an invalid ID" name="Security Questions Utility Functions getSecurityQuestionById should return null for an invalid ID" time="0.001">
+    </testcase>
+    <testcase classname="Security Questions Utility Functions getSecurityQuestionById should handle string ID input" name="Security Questions Utility Functions getSecurityQuestionById should handle string ID input" time="0.001">
+    </testcase>
+    <testcase classname="Security Questions Utility Functions normalizeAnswer should trim whitespace and convert to lowercase" name="Security Questions Utility Functions normalizeAnswer should trim whitespace and convert to lowercase" time="0.001">
+    </testcase>
+    <testcase classname="Security Questions Utility Functions normalizeAnswer should return empty string for non-string input" name="Security Questions Utility Functions normalizeAnswer should return empty string for non-string input" time="0.001">
+    </testcase>
+    <testcase classname="Security Questions Utility Functions should correctly hash and compare a security answer" name="Security Questions Utility Functions should correctly hash and compare a security answer" time="0.298">
+    </testcase>
+    <testcase classname="Security Questions Utility Functions should return false for incorrect security answer comparison" name="Security Questions Utility Functions should return false for incorrect security answer comparison" time="0.289">
+    </testcase>
+    <testcase classname="Security Questions Utility Functions should handle case and whitespace insensitivity for answer comparison" name="Security Questions Utility Functions should handle case and whitespace insensitivity for answer comparison" time="0.254">
+    </testcase>
+  </testsuite>
+  <testsuite name="Models" errors="0" failures="0" skipped="0" timestamp="2025-08-10T07:57:04" time="4.305" tests="3">
+    <testcase classname="Models Checklist Model should create a new checklist with valid data" name="Models Checklist Model should create a new checklist with valid data" time="0.127">
+    </testcase>
+    <testcase classname="Models Checklist Model should not create a checklist with missing required fields" name="Models Checklist Model should not create a checklist with missing required fields" time="1.31">
+    </testcase>
+    <testcase classname="Models Assignment Model should create a new assignment with valid data and associations" name="Models Assignment Model should create a new assignment with valid data and associations" time="0.351">
+    </testcase>
+  </testsuite>
+  <testsuite name="scripts.js" errors="0" failures="0" skipped="0" timestamp="2025-08-10T07:57:04" time="5.414" tests="1">
+    <testcase classname="scripts.js should add two numbers correctly" name="scripts.js should add two numbers correctly" time="0.195">
+    </testcase>
+  </testsuite>
+  <testsuite name="Frontend Name Population" errors="0" failures="0" skipped="0" timestamp="2025-08-10T07:57:04" time="5.627" tests="10">
+    <testcase classname="Frontend Name Population populateAssociateName function should populate name field when user data is available" name="Frontend Name Population populateAssociateName function should populate name field when user data is available" time="0.162">
+    </testcase>
+    <testcase classname="Frontend Name Population populateAssociateName function should not populate if user data is missing" name="Frontend Name Population populateAssociateName function should not populate if user data is missing" time="0.023">
+    </testcase>
+    <testcase classname="Frontend Name Population populateAssociateName function should not populate if firstName is missing" name="Frontend Name Population populateAssociateName function should not populate if firstName is missing" time="0.026">
+    </testcase>
+    <testcase classname="Frontend Name Population populateAssociateName function should not populate if lastName is missing" name="Frontend Name Population populateAssociateName function should not populate if lastName is missing" time="0.025">
+    </testcase>
+    <testcase classname="Frontend Name Population populateAssociateName function should not overwrite existing name field value" name="Frontend Name Population populateAssociateName function should not overwrite existing name field value" time="0.023">
+    </testcase>
+    <testcase classname="Frontend Name Population populateAssociateName function should handle empty string in name field as empty" name="Frontend Name Population populateAssociateName function should handle empty string in name field as empty" time="0.033">
+    </testcase>
+    <testcase classname="Frontend Name Population populateAssociateName function should treat whitespace-only value as empty and populate" name="Frontend Name Population populateAssociateName function should treat whitespace-only value as empty and populate" time="0.022">
+    </testcase>
+    <testcase classname="Frontend Name Population populateAssociateName function should do nothing if name field does not exist" name="Frontend Name Population populateAssociateName function should do nothing if name field does not exist" time="0.025">
+    </testcase>
+    <testcase classname="Frontend Name Population fetchAuthToken integration should call populateAssociateName after successful token fetch" name="Frontend Name Population fetchAuthToken integration should call populateAssociateName after successful token fetch" time="0.032">
+    </testcase>
+    <testcase classname="Frontend Name Population fetchAuthToken integration should not call populateAssociateName if fetch fails" name="Frontend Name Population fetchAuthToken integration should not call populateAssociateName if fetch fails" time="0.034">
+    </testcase>
+  </testsuite>
+  <testsuite name="assignNextChecklist" errors="0" failures="3" skipped="0" timestamp="2025-08-10T07:57:04" time="7.15" tests="8">
+    <testcase classname="assignNextChecklist should assign a checklist to a user when one is available" name="assignNextChecklist should assign a checklist to a user when one is available" time="1.504">
+      <failure>SequelizeInstanceError: Instance could not be reloaded because it does not exist anymore (find call returned null)
+    at Checklist.reload (/home/eh8180/sanitation-latest/dhl_login/node_modules/sequelize/src/model.js:4266:13)
+    at Object.&lt;anonymous&gt; (/home/eh8180/sanitation-latest/dhl_login/tests/assignment.test.js:76:5)</failure>
+    </testcase>
+    <testcase classname="assignNextChecklist should return null when no checklist is available" name="assignNextChecklist should return null when no checklist is available" time="0.089">
+    </testcase>
+    <testcase classname="assignNextChecklist should assign the oldest unassigned checklist first" name="assignNextChecklist should assign the oldest unassigned checklist first" time="0.61">
+    </testcase>
+    <testcase classname="assignNextChecklist should not assign multiple assignments to the same user (mixed types)" name="assignNextChecklist should not assign multiple assignments to the same user (mixed types)" time="0.532">
+    </testcase>
+    <testcase classname="assignNextChecklist should NOT assign a new checklist if user already has an active assignment" name="assignNextChecklist should NOT assign a new checklist if user already has an active assignment" time="0.466">
+    </testcase>
+    <testcase classname="assignNextChecklist should assign a new checklist if user has completed their previous assignment" name="assignNextChecklist should assign a new checklist if user has completed their previous assignment" time="0.472">
+      <failure>Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: &quot;7fe00184-9282-4bd0-9e1a-3659d1d0adfe&quot;
+Received: &quot;ff11ebfd-f561-486c-80b4-686a06a2ebd3&quot;
+    at Object.&lt;anonymous&gt; (/home/eh8180/sanitation-latest/dhl_login/tests/assignment.test.js:223:32)</failure>
+    </testcase>
+    <testcase classname="assignNextChecklist should NOT assign checklists to admin users" name="assignNextChecklist should NOT assign checklists to admin users" time="0.487">
+    </testcase>
+    <testcase classname="getCurrentAssignments date filtering should filter assignments by date range" name="getCurrentAssignments date filtering should filter assignments by date range" time="0.002">
+      <failure>Error: ConnectionManager.getConnection was called after the connection manager was closed!
+    at ConnectionManager.getConnection (/home/eh8180/sanitation-latest/dhl_login/node_modules/sequelize/src/dialects/abstract/connection-manager.js:113:13)
+    at /home/eh8180/sanitation-latest/dhl_login/node_modules/sequelize/src/sequelize.js:638:111
+    at /home/eh8180/sanitation-latest/dhl_login/node_modules/retry-as-promised/dist/index.js:65:25
+    at new Promise (&lt;anonymous&gt;)
+    at retryAsPromised (/home/eh8180/sanitation-latest/dhl_login/node_modules/retry-as-promised/dist/index.js:54:12)
+    at Sequelize.query (/home/eh8180/sanitation-latest/dhl_login/node_modules/sequelize/src/sequelize.js:631:12)
+    at SQLiteQueryInterface.insert (/home/eh8180/sanitation-latest/dhl_login/node_modules/sequelize/src/dialects/abstract/query-interface.js:795:42)
+    at User.save (/home/eh8180/sanitation-latest/dhl_login/node_modules/sequelize/src/model.js:4154:73)
+    at Function.create (/home/eh8180/sanitation-latest/dhl_login/node_modules/sequelize/src/model.js:2305:12)
+    at Object.&lt;anonymous&gt; (/home/eh8180/sanitation-latest/dhl_login/tests/assignment.test.js:275:13)</failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="Manual Assignment Feature" errors="0" failures="19" skipped="0" timestamp="2025-08-10T07:57:04" time="7.382" tests="19">
+    <testcase classname="Manual Assignment Feature manuallyAssignChecklist should successfully assign checklist to user" name="Manual Assignment Feature manuallyAssignChecklist should successfully assign checklist to user" time="0">
+      <failure>Error: thrown: &quot;Exceeded timeout of 5000 ms for a hook.
+Use jest.setTimeout(newTimeout) to increase the timeout value, if this is a long-running test.&quot;
+    at /home/eh8180/sanitation-latest/dhl_login/tests/manualAssignment.test.js:16:3
+    at _dispatchDescribe (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/index.js:98:26)
+    at describe (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/index.js:60:5)
+    at Object.&lt;anonymous&gt; (/home/eh8180/sanitation-latest/dhl_login/tests/manualAssignment.test.js:13:1)
+    at Runtime._execModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1646:24)
+    at Runtime._loadModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1185:12)
+    at Runtime.requireModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1009:12)
+    at jestAdapter (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at runTestInternal (/home/eh8180/sanitation-latest/node_modules/jest-runner/build/runTest.js:389:16)</failure>
+    </testcase>
+    <testcase classname="Manual Assignment Feature manuallyAssignChecklist should fail with missing required parameters" name="Manual Assignment Feature manuallyAssignChecklist should fail with missing required parameters" time="0">
+      <failure>Error: thrown: &quot;Exceeded timeout of 5000 ms for a hook.
+Use jest.setTimeout(newTimeout) to increase the timeout value, if this is a long-running test.&quot;
+    at /home/eh8180/sanitation-latest/dhl_login/tests/manualAssignment.test.js:16:3
+    at _dispatchDescribe (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/index.js:98:26)
+    at describe (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/index.js:60:5)
+    at Object.&lt;anonymous&gt; (/home/eh8180/sanitation-latest/dhl_login/tests/manualAssignment.test.js:13:1)
+    at Runtime._execModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1646:24)
+    at Runtime._loadModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1185:12)
+    at Runtime.requireModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1009:12)
+    at jestAdapter (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at runTestInternal (/home/eh8180/sanitation-latest/node_modules/jest-runner/build/runTest.js:389:16)</failure>
+    </testcase>
+    <testcase classname="Manual Assignment Feature manuallyAssignChecklist should fail with invalid UUID format" name="Manual Assignment Feature manuallyAssignChecklist should fail with invalid UUID format" time="0">
+      <failure>Error: thrown: &quot;Exceeded timeout of 5000 ms for a hook.
+Use jest.setTimeout(newTimeout) to increase the timeout value, if this is a long-running test.&quot;
+    at /home/eh8180/sanitation-latest/dhl_login/tests/manualAssignment.test.js:16:3
+    at _dispatchDescribe (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/index.js:98:26)
+    at describe (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/index.js:60:5)
+    at Object.&lt;anonymous&gt; (/home/eh8180/sanitation-latest/dhl_login/tests/manualAssignment.test.js:13:1)
+    at Runtime._execModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1646:24)
+    at Runtime._loadModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1185:12)
+    at Runtime.requireModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1009:12)
+    at jestAdapter (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at runTestInternal (/home/eh8180/sanitation-latest/node_modules/jest-runner/build/runTest.js:389:16)</failure>
+    </testcase>
+    <testcase classname="Manual Assignment Feature manuallyAssignChecklist should fail when admin user does not exist" name="Manual Assignment Feature manuallyAssignChecklist should fail when admin user does not exist" time="0">
+      <failure>Error: thrown: &quot;Exceeded timeout of 5000 ms for a hook.
+Use jest.setTimeout(newTimeout) to increase the timeout value, if this is a long-running test.&quot;
+    at /home/eh8180/sanitation-latest/dhl_login/tests/manualAssignment.test.js:16:3
+    at _dispatchDescribe (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/index.js:98:26)
+    at describe (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/index.js:60:5)
+    at Object.&lt;anonymous&gt; (/home/eh8180/sanitation-latest/dhl_login/tests/manualAssignment.test.js:13:1)
+    at Runtime._execModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1646:24)
+    at Runtime._loadModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1185:12)
+    at Runtime.requireModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1009:12)
+    at jestAdapter (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at runTestInternal (/home/eh8180/sanitation-latest/node_modules/jest-runner/build/runTest.js:389:16)</failure>
+    </testcase>
+    <testcase classname="Manual Assignment Feature manuallyAssignChecklist should fail when admin user is not actually admin" name="Manual Assignment Feature manuallyAssignChecklist should fail when admin user is not actually admin" time="0">
+      <failure>Error: thrown: &quot;Exceeded timeout of 5000 ms for a hook.
+Use jest.setTimeout(newTimeout) to increase the timeout value, if this is a long-running test.&quot;
+    at /home/eh8180/sanitation-latest/dhl_login/tests/manualAssignment.test.js:16:3
+    at _dispatchDescribe (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/index.js:98:26)
+    at describe (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/index.js:60:5)
+    at Object.&lt;anonymous&gt; (/home/eh8180/sanitation-latest/dhl_login/tests/manualAssignment.test.js:13:1)
+    at Runtime._execModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1646:24)
+    at Runtime._loadModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1185:12)
+    at Runtime.requireModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1009:12)
+    at jestAdapter (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at runTestInternal (/home/eh8180/sanitation-latest/node_modules/jest-runner/build/runTest.js:389:16)</failure>
+    </testcase>
+    <testcase classname="Manual Assignment Feature manuallyAssignChecklist should fail when target user does not exist" name="Manual Assignment Feature manuallyAssignChecklist should fail when target user does not exist" time="0">
+      <failure>Error: thrown: &quot;Exceeded timeout of 5000 ms for a hook.
+Use jest.setTimeout(newTimeout) to increase the timeout value, if this is a long-running test.&quot;
+    at /home/eh8180/sanitation-latest/dhl_login/tests/manualAssignment.test.js:16:3
+    at _dispatchDescribe (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/index.js:98:26)
+    at describe (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/index.js:60:5)
+    at Object.&lt;anonymous&gt; (/home/eh8180/sanitation-latest/dhl_login/tests/manualAssignment.test.js:13:1)
+    at Runtime._execModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1646:24)
+    at Runtime._loadModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1185:12)
+    at Runtime.requireModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1009:12)
+    at jestAdapter (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at runTestInternal (/home/eh8180/sanitation-latest/node_modules/jest-runner/build/runTest.js:389:16)</failure>
+    </testcase>
+    <testcase classname="Manual Assignment Feature manuallyAssignChecklist should fail when trying to assign to admin user" name="Manual Assignment Feature manuallyAssignChecklist should fail when trying to assign to admin user" time="0">
+      <failure>Error: thrown: &quot;Exceeded timeout of 5000 ms for a hook.
+Use jest.setTimeout(newTimeout) to increase the timeout value, if this is a long-running test.&quot;
+    at /home/eh8180/sanitation-latest/dhl_login/tests/manualAssignment.test.js:16:3
+    at _dispatchDescribe (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/index.js:98:26)
+    at describe (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/index.js:60:5)
+    at Object.&lt;anonymous&gt; (/home/eh8180/sanitation-latest/dhl_login/tests/manualAssignment.test.js:13:1)
+    at Runtime._execModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1646:24)
+    at Runtime._loadModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1185:12)
+    at Runtime.requireModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1009:12)
+    at jestAdapter (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at runTestInternal (/home/eh8180/sanitation-latest/node_modules/jest-runner/build/runTest.js:389:16)</failure>
+    </testcase>
+    <testcase classname="Manual Assignment Feature manuallyAssignChecklist should fail when admin tries to assign to themselves" name="Manual Assignment Feature manuallyAssignChecklist should fail when admin tries to assign to themselves" time="0">
+      <failure>Error: thrown: &quot;Exceeded timeout of 5000 ms for a hook.
+Use jest.setTimeout(newTimeout) to increase the timeout value, if this is a long-running test.&quot;
+    at /home/eh8180/sanitation-latest/dhl_login/tests/manualAssignment.test.js:16:3
+    at _dispatchDescribe (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/index.js:98:26)
+    at describe (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/index.js:60:5)
+    at Object.&lt;anonymous&gt; (/home/eh8180/sanitation-latest/dhl_login/tests/manualAssignment.test.js:13:1)
+    at Runtime._execModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1646:24)
+    at Runtime._loadModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1185:12)
+    at Runtime.requireModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1009:12)
+    at jestAdapter (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at runTestInternal (/home/eh8180/sanitation-latest/node_modules/jest-runner/build/runTest.js:389:16)</failure>
+    </testcase>
+    <testcase classname="Manual Assignment Feature manuallyAssignChecklist should fail when checklist does not exist" name="Manual Assignment Feature manuallyAssignChecklist should fail when checklist does not exist" time="0">
+      <failure>Error: thrown: &quot;Exceeded timeout of 5000 ms for a hook.
+Use jest.setTimeout(newTimeout) to increase the timeout value, if this is a long-running test.&quot;
+    at /home/eh8180/sanitation-latest/dhl_login/tests/manualAssignment.test.js:16:3
+    at _dispatchDescribe (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/index.js:98:26)
+    at describe (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/index.js:60:5)
+    at Object.&lt;anonymous&gt; (/home/eh8180/sanitation-latest/dhl_login/tests/manualAssignment.test.js:13:1)
+    at Runtime._execModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1646:24)
+    at Runtime._loadModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1185:12)
+    at Runtime.requireModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1009:12)
+    at jestAdapter (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at runTestInternal (/home/eh8180/sanitation-latest/node_modules/jest-runner/build/runTest.js:389:16)</failure>
+    </testcase>
+    <testcase classname="Manual Assignment Feature manuallyAssignChecklist should fail when user already has active assignment without override" name="Manual Assignment Feature manuallyAssignChecklist should fail when user already has active assignment without override" time="0">
+      <failure>Error: thrown: &quot;Exceeded timeout of 5000 ms for a hook.
+Use jest.setTimeout(newTimeout) to increase the timeout value, if this is a long-running test.&quot;
+    at /home/eh8180/sanitation-latest/dhl_login/tests/manualAssignment.test.js:16:3
+    at _dispatchDescribe (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/index.js:98:26)
+    at describe (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/index.js:60:5)
+    at Object.&lt;anonymous&gt; (/home/eh8180/sanitation-latest/dhl_login/tests/manualAssignment.test.js:13:1)
+    at Runtime._execModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1646:24)
+    at Runtime._loadModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1185:12)
+    at Runtime.requireModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1009:12)
+    at jestAdapter (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at runTestInternal (/home/eh8180/sanitation-latest/node_modules/jest-runner/build/runTest.js:389:16)</failure>
+    </testcase>
+    <testcase classname="Manual Assignment Feature manuallyAssignChecklist should succeed when overriding existing assignment" name="Manual Assignment Feature manuallyAssignChecklist should succeed when overriding existing assignment" time="0">
+      <failure>Error: thrown: &quot;Exceeded timeout of 5000 ms for a hook.
+Use jest.setTimeout(newTimeout) to increase the timeout value, if this is a long-running test.&quot;
+    at /home/eh8180/sanitation-latest/dhl_login/tests/manualAssignment.test.js:16:3
+    at _dispatchDescribe (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/index.js:98:26)
+    at describe (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/index.js:60:5)
+    at Object.&lt;anonymous&gt; (/home/eh8180/sanitation-latest/dhl_login/tests/manualAssignment.test.js:13:1)
+    at Runtime._execModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1646:24)
+    at Runtime._loadModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1185:12)
+    at Runtime.requireModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1009:12)
+    at jestAdapter (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at runTestInternal (/home/eh8180/sanitation-latest/node_modules/jest-runner/build/runTest.js:389:16)</failure>
+    </testcase>
+    <testcase classname="Manual Assignment Feature manuallyAssignChecklist should prevent assigning same checklist that is already active" name="Manual Assignment Feature manuallyAssignChecklist should prevent assigning same checklist that is already active" time="0">
+      <failure>Error: thrown: &quot;Exceeded timeout of 5000 ms for a hook.
+Use jest.setTimeout(newTimeout) to increase the timeout value, if this is a long-running test.&quot;
+    at /home/eh8180/sanitation-latest/dhl_login/tests/manualAssignment.test.js:16:3
+    at _dispatchDescribe (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/index.js:98:26)
+    at describe (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/index.js:60:5)
+    at Object.&lt;anonymous&gt; (/home/eh8180/sanitation-latest/dhl_login/tests/manualAssignment.test.js:13:1)
+    at Runtime._execModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1646:24)
+    at Runtime._loadModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1185:12)
+    at Runtime.requireModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1009:12)
+    at jestAdapter (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at runTestInternal (/home/eh8180/sanitation-latest/node_modules/jest-runner/build/runTest.js:389:16)</failure>
+    </testcase>
+    <testcase classname="Manual Assignment Feature manuallyAssignChecklist should put cancelled checklist back into assignment queue" name="Manual Assignment Feature manuallyAssignChecklist should put cancelled checklist back into assignment queue" time="0">
+      <failure>Error: thrown: &quot;Exceeded timeout of 5000 ms for a hook.
+Use jest.setTimeout(newTimeout) to increase the timeout value, if this is a long-running test.&quot;
+    at /home/eh8180/sanitation-latest/dhl_login/tests/manualAssignment.test.js:16:3
+    at _dispatchDescribe (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/index.js:98:26)
+    at describe (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/index.js:60:5)
+    at Object.&lt;anonymous&gt; (/home/eh8180/sanitation-latest/dhl_login/tests/manualAssignment.test.js:13:1)
+    at Runtime._execModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1646:24)
+    at Runtime._loadModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1185:12)
+    at Runtime.requireModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1009:12)
+    at jestAdapter (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at runTestInternal (/home/eh8180/sanitation-latest/node_modules/jest-runner/build/runTest.js:389:16)</failure>
+    </testcase>
+    <testcase classname="Manual Assignment Feature manuallyAssignChecklist should remove cancelled assignments from user dashboard" name="Manual Assignment Feature manuallyAssignChecklist should remove cancelled assignments from user dashboard" time="0">
+      <failure>Error: thrown: &quot;Exceeded timeout of 5000 ms for a hook.
+Use jest.setTimeout(newTimeout) to increase the timeout value, if this is a long-running test.&quot;
+    at /home/eh8180/sanitation-latest/dhl_login/tests/manualAssignment.test.js:16:3
+    at _dispatchDescribe (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/index.js:98:26)
+    at describe (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/index.js:60:5)
+    at Object.&lt;anonymous&gt; (/home/eh8180/sanitation-latest/dhl_login/tests/manualAssignment.test.js:13:1)
+    at Runtime._execModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1646:24)
+    at Runtime._loadModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1185:12)
+    at Runtime.requireModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1009:12)
+    at jestAdapter (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at runTestInternal (/home/eh8180/sanitation-latest/node_modules/jest-runner/build/runTest.js:389:16)</failure>
+    </testcase>
+    <testcase classname="Manual Assignment Feature getAssignableUsers should return only non-admin users" name="Manual Assignment Feature getAssignableUsers should return only non-admin users" time="0">
+      <failure>Error: thrown: &quot;Exceeded timeout of 5000 ms for a hook.
+Use jest.setTimeout(newTimeout) to increase the timeout value, if this is a long-running test.&quot;
+    at /home/eh8180/sanitation-latest/dhl_login/tests/manualAssignment.test.js:16:3
+    at _dispatchDescribe (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/index.js:98:26)
+    at describe (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/index.js:60:5)
+    at Object.&lt;anonymous&gt; (/home/eh8180/sanitation-latest/dhl_login/tests/manualAssignment.test.js:13:1)
+    at Runtime._execModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1646:24)
+    at Runtime._loadModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1185:12)
+    at Runtime.requireModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1009:12)
+    at jestAdapter (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at runTestInternal (/home/eh8180/sanitation-latest/node_modules/jest-runner/build/runTest.js:389:16)</failure>
+    </testcase>
+    <testcase classname="Manual Assignment Feature getAvailableChecklists should return all checklists when no type filter" name="Manual Assignment Feature getAvailableChecklists should return all checklists when no type filter" time="0">
+      <failure>Error: thrown: &quot;Exceeded timeout of 5000 ms for a hook.
+Use jest.setTimeout(newTimeout) to increase the timeout value, if this is a long-running test.&quot;
+    at /home/eh8180/sanitation-latest/dhl_login/tests/manualAssignment.test.js:16:3
+    at _dispatchDescribe (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/index.js:98:26)
+    at describe (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/index.js:60:5)
+    at Object.&lt;anonymous&gt; (/home/eh8180/sanitation-latest/dhl_login/tests/manualAssignment.test.js:13:1)
+    at Runtime._execModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1646:24)
+    at Runtime._loadModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1185:12)
+    at Runtime.requireModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1009:12)
+    at jestAdapter (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at runTestInternal (/home/eh8180/sanitation-latest/node_modules/jest-runner/build/runTest.js:389:16)</failure>
+    </testcase>
+    <testcase classname="Manual Assignment Feature getAvailableChecklists should filter checklists by type" name="Manual Assignment Feature getAvailableChecklists should filter checklists by type" time="0">
+      <failure>Error: thrown: &quot;Exceeded timeout of 5000 ms for a hook.
+Use jest.setTimeout(newTimeout) to increase the timeout value, if this is a long-running test.&quot;
+    at /home/eh8180/sanitation-latest/dhl_login/tests/manualAssignment.test.js:16:3
+    at _dispatchDescribe (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/index.js:98:26)
+    at describe (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/index.js:60:5)
+    at Object.&lt;anonymous&gt; (/home/eh8180/sanitation-latest/dhl_login/tests/manualAssignment.test.js:13:1)
+    at Runtime._execModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1646:24)
+    at Runtime._loadModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1185:12)
+    at Runtime.requireModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1009:12)
+    at jestAdapter (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at runTestInternal (/home/eh8180/sanitation-latest/node_modules/jest-runner/build/runTest.js:389:16)</failure>
+    </testcase>
+    <testcase classname="Manual Assignment Feature getCurrentAssignments should return assignments with proper associations" name="Manual Assignment Feature getCurrentAssignments should return assignments with proper associations" time="0">
+      <failure>Error: thrown: &quot;Exceeded timeout of 5000 ms for a hook.
+Use jest.setTimeout(newTimeout) to increase the timeout value, if this is a long-running test.&quot;
+    at /home/eh8180/sanitation-latest/dhl_login/tests/manualAssignment.test.js:16:3
+    at _dispatchDescribe (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/index.js:98:26)
+    at describe (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/index.js:60:5)
+    at Object.&lt;anonymous&gt; (/home/eh8180/sanitation-latest/dhl_login/tests/manualAssignment.test.js:13:1)
+    at Runtime._execModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1646:24)
+    at Runtime._loadModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1185:12)
+    at Runtime.requireModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1009:12)
+    at jestAdapter (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at runTestInternal (/home/eh8180/sanitation-latest/node_modules/jest-runner/build/runTest.js:389:16)</failure>
+    </testcase>
+    <testcase classname="Manual Assignment Feature getCurrentAssignments should filter assignments by status" name="Manual Assignment Feature getCurrentAssignments should filter assignments by status" time="0">
+      <failure>Error: thrown: &quot;Exceeded timeout of 5000 ms for a hook.
+Use jest.setTimeout(newTimeout) to increase the timeout value, if this is a long-running test.&quot;
+    at /home/eh8180/sanitation-latest/dhl_login/tests/manualAssignment.test.js:16:3
+    at _dispatchDescribe (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/index.js:98:26)
+    at describe (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/index.js:60:5)
+    at Object.&lt;anonymous&gt; (/home/eh8180/sanitation-latest/dhl_login/tests/manualAssignment.test.js:13:1)
+    at Runtime._execModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1646:24)
+    at Runtime._loadModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1185:12)
+    at Runtime.requireModule (/home/eh8180/sanitation-latest/node_modules/jest-runtime/build/index.js:1009:12)
+    at jestAdapter (/home/eh8180/sanitation-latest/node_modules/jest-circus/build/legacy-code-todo-rewrite/jestAdapter.js:79:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at runTestInternal (/home/eh8180/sanitation-latest/node_modules/jest-runner/build/runTest.js:389:16)</failure>
+    </testcase>
+  </testsuite>
+</testsuites>

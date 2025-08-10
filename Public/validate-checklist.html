@@ -1053,7 +1053,22 @@ document.addEventListener("DOMContentLoaded", function() {
 
                 const checklistData = await response.json();
                 checklistTitleEl.textContent = `Validating: ${checklistData.title || 'Untitled Checklist'}`;
-                
+
+                // If the server indicates already validated, show banner and disable form
+                if (checklistData.alreadyValidated) {
+                    itemsContainerEl.innerHTML = `
+                        <div style="text-align: center; padding: 2rem; background-color: #d4edda; border: 1px solid #c3e6cb; border-radius: 8px; color: #155724;">
+                            <h3>✅ Already Validated</h3>
+                            <p>This checklist has already been validated.</p>
+                            ${checklistData.validatedBy ? `<p><strong>Validated by:</strong> ${checklistData.validatedBy}</p>` : ''}
+                            ${checklistData.validatedAt ? `<p><strong>Validated on:</strong> ${new Date(checklistData.validatedAt).toLocaleString()}</p>` : ''}
+                            <p>No further action is required.</p>
+                        </div>
+                    `;
+                    validationForm.style.display = 'none';
+                    return;
+                }
+
                 // Dynamically render validation items (randomCheckboxes)
                 itemsContainerEl.innerHTML = ''; // Clear loading message
                 if (checklistData.randomCheckboxes && checklistData.randomCheckboxes.length > 0) {

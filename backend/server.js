@@ -175,9 +175,10 @@ app.post('/submit-form', authenticateApi, async (req, res) => {
                         where: {
                             userId: userId,
                             checklistId: checklist.id,
-                            status: 'completed'
+                            completedAt: null,
+                            status: 'assigned'
                         },
-                        order: [['completedAt', 'DESC']]
+                        order: [['assignedAt', 'DESC']]
                     });
 
                     if (assignment) {
@@ -186,7 +187,7 @@ app.post('/submit-form', authenticateApi, async (req, res) => {
                         });
                         console.log(`Updated assignment ${assignment.id} with submission data file path: ${filename}`);
                     } else {
-                        console.warn(`No completed assignment found for user ${req.user.id} and checklist ${checklistFilename}`);
+                        console.warn(`No active assignment found for user ${userId} and checklist ${checklistFilename}`);
                     }
                 } else {
                     console.warn(`Checklist not found with filename: ${checklistFilename}`);
