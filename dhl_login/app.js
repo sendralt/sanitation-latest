@@ -182,50 +182,21 @@ app.use(flash());
 // --- Public API routes (no CSRF) ---
 // Place these BEFORE CSRF middleware to allow client access without tokens
 const fs = require('fs');
+const {
+  loadChecklistData,
+  saveChecklistData,
+  updateCheckboxesFromValidation,
+  markAssignmentValidated,
+} = require('./utils/validationHelpers');
 
-// Supervisor validation APIs (existing)
+// Supervisor validation APIs (consolidated)
 app.get('/api/validate/:id', (req, res) => {
     console.log(`[DEBUG] GET /api/validate/:id - START - ID: ${req.params.id}`);
     const fileId = req.params.id;
-    const filePath = path.join(__dirname, '..', 'backend', 'data', `data_${fileId}.json`);
-    if (fs.existsSync(filePath)) {
-        const fileData = fs.readFileSync(filePath, 'utf8');
-        const formData = JSON.parse(fileData);
-        if (formData.supervisorValidation) {
-            return res.status(410).json({
-                message: 'This checklist has already been validated.',
-                alreadyValidated: true,
-                validatedBy: formData.supervisorValidation.supervisorName,
-                validatedAt: formData.supervisorValidation.validatedAt
-            });
-        }
-        if (!formData.randomCheckboxes || !Array.isArray(formData.randomCheckboxes)) {
-            return res.status(400).json({ message: 'Random checkboxes not found in the checklist data.' });
-        }
-        res.status(200).json({
-            fileId: fileId,
-            title: formData.title,
-            checkboxes: formData.checkboxes,
-            randomCheckboxes: formData.randomCheckboxes,
-            validationLinkAccessed: !!formData.validationLinkAccessed,
-            validationLinkAccessedAt: formData.validationLinkAccessedAt || null
-        });
-    } else {
-        res.status(404).json({ message: 'Checklist not found.' });
-    }
-    console.log(`[DEBUG] GET /api/validate/:id - END - ID: ${req.params.id}`);
-});
-
-app.post('/api/validate/:id', async (req, res) => {
-    console.log(`[DEBUG] POST /api/validate/:id - START - ID: ${req.params.id}`);
-    const fileId = req.params.id;
-    const validationData = req.body;
-    const filePath = path.join(__dirname, '..', 'backend', 'data', `data_${fileId}.json`);
-    if (!fs.existsSync(filePath)) {
+    const formData = loadChecklistData(fileId);
+    if (!formData) {
         return res.status(404).json({ message: 'Checklist not found.' });
     }
-    const fileData = fs.readFileSync(filePath, 'utf8');
-    const formData = JSON.parse(fileData);
     if (formData.supervisorValidation) {
         return res.status(410).json({
             message: 'This checklist has already been validated.',
@@ -234,45 +205,48 @@ app.post('/api/validate/:id', async (req, res) => {
             validatedAt: formData.supervisorValidation.validatedAt
         });
     }
-    validationData.validatedCheckboxes.forEach((validatedCb) => {
-        const { id: validatedId, checked: newCheckedState } = validatedCb;
-        for (const headingKey in formData.checkboxes) {
-            if (formData.checkboxes[headingKey] && formData.checkboxes[headingKey][validatedId]) {
-                formData.checkboxes[headingKey][validatedId].checked = newCheckedState;
-                break;
-            }
-        }
+    if (!formData.randomCheckboxes || !Array.isArray(formData.randomCheckboxes)) {
+        return res.status(400).json({ message: 'Random checkboxes not found in the checklist data.' });
+    }
+    res.status(200).json({
+        fileId: fileId,
+        title: formData.title,
+        checkboxes: formData.checkboxes,
+        randomCheckboxes: formData.randomCheckboxes,
+        validationLinkAccessed: !!formData.validationLinkAccessed,
+        validationLinkAccessedAt: formData.validationLinkAccessedAt || null
     });
+});
+
+app.post('/api/validate/:id', async (req, res) => {
+    console.log(`[DEBUG] POST /api/validate/:id - START - ID: ${req.params.id}`);
+    const fileId = req.params.id;
+    const validationData = req.body;
+    const formData = loadChecklistData(fileId);
+    if (!formData) {
+        return res.status(404).json({ message: 'Checklist not found.' });
+    }
+    if (formData.supervisorValidation) {
+        return res.status(410).json({
+            message: 'This checklist has already been validated.',
+            alreadyValidated: true,
+            validatedBy: formData.supervisorValidation.supervisorName,
+            validatedAt: formData.supervisorValidation.validatedAt
+        });
+    }
+    updateCheckboxesFromValidation(formData, validationData.validatedCheckboxes);
     formData.supervisorValidation = {
         supervisorName: validationData.supervisorName,
         validatedAt: new Date().toISOString(),
-        validatedCheckboxes: validationData.validatedCheckboxes.reduce((acc, cb) => {
+        validatedCheckboxes: (validationData.validatedCheckboxes || []).reduce((acc, cb) => {
             acc[cb.id] = cb.checked;
             return acc;
         }, {})
     };
-    fs.writeFileSync(filePath, JSON.stringify(formData, null, 2));
-    try {
-        const { Assignment, User } = require('./models');
-        const filename = `data_${fileId}.json`;
-        const assignment = await Assignment.findOne({
-            where: { submissionDataFilePath: filename, status: 'completed' },
-            include: [{ model: User, as: 'user', attributes: ['id', 'username', 'firstName', 'lastName'] }]
-        });
-        if (assignment) {
-            const supervisor = await User.findOne({
-                where: { firstName: validationData.supervisorName.split(' ')[0] || validationData.supervisorName, isAdmin: true }
-            });
-            await assignment.update({
-                status: 'validated',
-                validatedAt: new Date(),
-                validatedByUserId: supervisor ? supervisor.id : null,
-                validationStatus: 'approved'
-            });
-        }
-    } catch (error) {
-        console.error('Error updating assignment validation status:', error);
-    }
+    saveChecklistData(fileId, formData);
+
+    await markAssignmentValidated(fileId, validationData.supervisorName);
+
     res.status(200).json({ message: 'Validation completed successfully.' });
     console.log(`[DEBUG] POST /api/validate/:id - END - ID: ${req.params.id}`);
 });
