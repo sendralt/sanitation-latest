@@ -7,8 +7,48 @@ A web application for managing warehouse sanitation checklists with user authent
 **VERIFIED:** Based on directory structure at project root, the system has 3 main components:
 
 - **Authentication Server** (`dhl_login/`): User management and session handling
-- **Backend API** (`backend/`): Data processing and email notifications  
-- **Frontend Interface** (`Public/`): Interactive checklists and forms
+- **Backend API** (`backend/`): Data processing and email notifications
+- **Frontend Interface** (`Public/`): Interactive checklists and forms (served under `/app/*` behind session auth; validation page is publicly accessible)
+
+## ✨ New & Changed Features
+
+- VERIFIED: JWT-based backend auth
+  - Frontend fetches a session-issued JWT and includes it as Authorization: Bearer in requests
+    - Source: Public/scripts.js lines 5-31, 382-389, 426-439
+  - Backend protects endpoints with passport-jwt
+    - Source: backend/server.js lines 22-37, 118-123
+
+- VERIFIED: Supervisor validation flow (no login required)
+  - Email links point to dhl_login at /app/validate-checklist/:id
+    - Source: backend/server.js lines 207-214 and dhl_login/app.js lines 393-399
+  - The validation page calls API endpoints served by dhl_login
+    - GET /api/validate/:id and POST /api/validate/:id
+    - Source: dhl_login/app.js lines 187-231 and 233-336
+  - Optional alternative endpoints on backend (for environments without dhl_login routing):
+    - GET/POST /validate-public/:id
+    - Source: backend/server.js lines 384-515
+
+- VERIFIED: Random 20% checklist verification
+  - Backend selects ~20% of submitted checkboxes for supervisor spot‑checks
+  - Source: backend/server.js lines 59-100 (getRandomCheckboxes), applied in /submit-form lines 147-155
+
+- VERIFIED: Assignment lifecycle integration
+  - Upon successful submission, frontend marks current assignment completed and dhl_login assigns the next one
+    - Source: Public/scripts.js lines 301-355 (markAssignmentCompleted) and dhl_login/app.js lines 100-159 (complete-checklist)
+  - When supervisor validates, assignment status updates to validated
+    - Source: dhl_login/app.js lines 291-336; backend/server.js lines 335-371 and 468-507
+
+- VERIFIED: Health check endpoint
+  - backend GET /health for container/orchestration checks
+  - Source: backend/server.js lines 571-578
+
+- VERIFIED: CSRF protection on dhl_login
+  - Lusca CSRF enabled globally except in test; validation API placed before CSRF to allow external access
+  - Source: dhl_login/app.js lines 338-362 and 182-231, 233-336
+
+- VERIFIED: Admin can view submission payloads
+  - Route: /admin/assignments/submission-data/:filename
+  - Source: dhl_login/routes/admin.js lines 363-430
 
 ## 📋 Available Checklists
 
@@ -29,13 +69,13 @@ A web application for managing warehouse sanitation checklists with user authent
 # Root dependencies
 npm install
 
-# Authentication server dependencies  
+# Authentication server dependencies
 cd dhl_login
 npm install
 cd ..
 
 # Backend API dependencies
-cd backend  
+cd backend
 npm install
 cd ..
 ```
@@ -57,7 +97,7 @@ INITIAL_ADMIN_SEC_ANSWER2=Central Elementary
 ```
 
 #### Backend API (backend/.env)
-**VERIFIED:** Based on `backend/server.js` lines 17, 25, 198, 219-220:
+**VERIFIED:** Based on `backend/server.js` lines 17, 25, 209, 230-231:
 
 ```env
 PORT=3001
@@ -102,7 +142,7 @@ npm start
 **Terminal 2 - Backend API:**
 ```bash
 cd backend
-npm start  
+npm start
 # Runs on http://localhost:3001 (default)
 ```
 
@@ -117,13 +157,13 @@ npm start
 ### For Supervisors
 1. Receive email notifications when checklists are submitted
 2. Click validation links in emails to review submissions
-3. **NOTE:** Supervisor email is hardcoded as "sendral.ts.1@pg.com" in `Public/validate-checklist.html` line 880
+3. Validation links open on `/app/validate-checklist/:id` (served by dhl_login). NOTE: Supervisor email is currently hardcoded as "sendral.ts.1@pg.com" in `Public/scripts.js` line 371 and `Public/validate-checklist.html` line 880
 
 ### For Administrators
 **VERIFIED:** Based on `dhl_login/routes/admin.js` lines 35, 174, 302:
 
 1. **User Management**: Access `/admin/users/new` to create user accounts
-2. **Assignment Management**: Use `/admin/assignments/assign` for manual checklist assignments  
+2. **Assignment Management**: Use `/admin/assignments/assign` for manual checklist assignments
 3. **Monitoring**: View assignment status at `/admin/assignments/manage`
 
 **Default Admin Login:** `admin` / `password123` (change in production)
@@ -135,21 +175,21 @@ npm start
 ```bash
 # Root level tests
 npm test                    # jest --coverage
-npm run test:watch         # jest --watch --coverage  
+npm run test:watch         # jest --watch --coverage
 npm run test:all           # jest --coverage --runInBand
 npm run test:name-population
 
 # Authentication server tests
 cd dhl_login && npm test   # jest --testEnvironment=node
 
-# Backend API tests  
+# Backend API tests
 cd backend && npm test     # jest
 ```
 
 ## ⚙️ Configuration
 
 ### Email Setup
-**VERIFIED:** Based on `backend/server.js` lines 216-222:
+**VERIFIED:** Based on `backend/server.js` lines 226-233:
 - Uses Gmail SMTP service
 - Requires EMAIL_USER and EMAIL_PASS environment variables
 - Supervisor email hardcoded in frontend code
@@ -172,7 +212,7 @@ cd backend && npm test     # jest
 - Ensure `dhl_login/data/` directory exists
 - Run `npm run sync-db` in dhl_login directory
 
-**Authentication Problems:**  
+**Authentication Problems:**
 - Verify JWT_SECRET matches in both .env files
 - Clear browser cookies
 
@@ -195,7 +235,7 @@ sanitation-latest/
 │   ├── scripts.js            # Main JavaScript
 │   ├── styles.css            # Styling
 │   └── barcode_generator.html # Barcode utility
-├── backend/                   # API server  
+├── backend/                   # API server
 │   ├── server.js             # Main server (port 3001)
 │   └── data/                 # JSON submission storage
 ├── dhl_login/                # Authentication server
