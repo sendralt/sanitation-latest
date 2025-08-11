@@ -2,60 +2,28 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches:
-      - main
-      - develop
+    branches: [ main, develop ]
   pull_request:
-    branches:
-      - main
-      - develop
+    branches: [ main ]
 
 jobs:
-  build-and-test:
+  test:
     runs-on: ubuntu-latest
 
-    env:
-      NODE_ENV: test
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+    - uses: actions/checkout@v4
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v4
+    - uses: actions/setup-node@v4
       with:
-        node-version: '20' # Use Node.js 20 LTS for better CI compatibility
+        node-version: '22'
 
-    - name: Install dependencies
+    - name: Install and test
       run: |
-        echo "Checking if package-lock.json exists..."
-        ls -la package-lock.json || echo "package-lock.json not found"
-        echo "Installing dependencies..."
         npm install
-      working-directory: ./dhl_login # Install dependencies specifically for the dhl_login application
-
-    - name: Run linting
-      run: npm run lint
-      working-directory: ./dhl_login # Run ESLint to check code quality
-
-    - name: Run unit tests only (fast feedback)
-      run: npm run test:unit
-      working-directory: ./dhl_login # Run unit tests first for quick feedback
-
-    - name: Run full test suite with coverage
-      run: |
-        echo "Starting full test suite..."
-        echo "Current directory: $(pwd)"
-        echo "Node version: $(node --version)"
-        echo "NPM version: $(npm --version)"
-        echo "Available memory:"
-        free -h || echo "free command not available"
-        echo "Running tests..."
         npm test
-      working-directory: ./dhl_login # Run all tests with coverage reporting
+      working-directory: ./dhl_login
       env:
         NODE_ENV: test
-        CI: true
 
     - name: Upload coverage report (HTML)
       uses: actions/upload-artifact@v4

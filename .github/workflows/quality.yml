@@ -19,7 +19,7 @@ jobs:
           node-version: '22'
 
       - name: Install dependencies (dhl_login)
-        run: npm ci
+        run: npm install
         working-directory: ./dhl_login
 
       - name: Lint (ESLint)
