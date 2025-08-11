@@ -3,49 +3,28 @@ const request = require('supertest');
 const app = require('../app');
 const { User } = require('../models');
 const { hashPassword } = require('../utils/auth');
+const { createTestUser, cleanupTestData, getAuthenticatedAgent } = require('./helpers/testHelpers');
 const jwt = require('jsonwebtoken');
 
 describe('Name Population Integration Tests', () => {
   let testUser;
-  let agent;
 
   beforeEach(async () => {
-    // Clean up data before each test
-    await User.destroy({ where: {}, force: true });
-
-    // Create a test user with firstName and lastName
-    const hashedPassword = await hashPassword('password123');
-    testUser = await User.create({
+    await cleanupTestData();
+    testUser = await createTestUser({
       username: 'integrationuser',
       firstName: 'Jane',
       lastName: 'Smith',
-      passwordHash: hashedPassword,
-      securityQuestion1Id: 1,
-      securityAnswer1Hash: 'hashedanswer1',
-      securityQuestion2Id: 2,
-      securityAnswer2Hash: 'hashedanswer2',
-      isAdmin: false
+      passwordHash: await hashPassword('password123'),
     });
-
-    // Create a new agent for each test to maintain session
-    agent = request.agent(app);
   });
 
   describe('Complete Authentication Flow', () => {
     it('should provide firstName and lastName through JWT after login', async () => {
-      // Step 1: Login to establish session
-      const loginResponse = await agent
-        .post('/login-page')
-        .send({
-          username: 'integrationuser',
-          password: 'password123'
-        });
+      // Get authenticated agent
+      const agent = await getAuthenticatedAgent(app, 'integrationuser', 'password123');
 
-      // Login should redirect to dashboard
-      expect(loginResponse.status).toBe(302);
-      expect(loginResponse.headers.location).toBe('/dashboard');
-
-      // Step 2: Request JWT for session
+      // Request JWT for session
       const jwtResponse = await agent
         .get('/api/auth/issue-jwt-for-session')
         .expect(200);
@@ -67,26 +46,15 @@ describe('Name Population Integration Tests', () => {
 
     it('should handle users with special characters in names', async () => {
       // Create user with special characters
-      const hashedPassword = await hashPassword('password123');
-      const specialUser = await User.create({
+      const specialUser = await createTestUser({
         username: 'specialuser',
         firstName: 'José',
         lastName: "O'Connor",
-        passwordHash: hashedPassword,
-        securityQuestion1Id: 1,
-        securityAnswer1Hash: 'hashedanswer1',
-        securityQuestion2Id: 2,
-        securityAnswer2Hash: 'hashedanswer2',
-        isAdmin: false
+        passwordHash: await hashPassword('password123'),
       });
 
-      // Login
-      await agent
-        .post('/login-page')
-        .send({
-          username: 'specialuser',
-          password: 'password123'
-        });
+      // Get authenticated agent
+      const agent = await getAuthenticatedAgent(app, 'specialuser', 'password123');
 
       // Request JWT
       const jwtResponse = await agent
@@ -107,26 +75,15 @@ describe('Name Population Integration Tests', () => {
 
     it('should handle users with very long names', async () => {
       // Create user with long names
-      const hashedPassword = await hashPassword('password123');
-      const longNameUser = await User.create({
+      const longNameUser = await createTestUser({
         username: 'longnameuser',
         firstName: 'Verylongfirstnamethatexceedsnormallength',
         lastName: 'Verylonglastnamethatexceedsnormallengthtotest',
-        passwordHash: hashedPassword,
-        securityQuestion1Id: 1,
-        securityAnswer1Hash: 'hashedanswer1',
-        securityQuestion2Id: 2,
-        securityAnswer2Hash: 'hashedanswer2',
-        isAdmin: false
+        passwordHash: await hashPassword('password123'),
       });
 
-      // Login
-      await agent
-        .post('/login-page')
-        .send({
-          username: 'longnameuser',
-          password: 'password123'
-        });
+      // Get authenticated agent
+      const agent = await getAuthenticatedAgent(app, 'longnameuser', 'password123');
 
       // Request JWT
       const jwtResponse = await agent
@@ -141,31 +98,17 @@ describe('Name Population Integration Tests', () => {
 
   describe('Error Handling', () => {
     it('should handle missing firstName gracefully', async () => {
-      // Create user with null firstName (if allowed by model)
-      const hashedPassword = await hashPassword('password123');
-      
-      // This test depends on whether the model allows null firstName
-      // If not, we'll test with empty string
+      // Create user with empty firstName
       try {
-        const userWithoutFirstName = await User.create({
+        const userWithoutFirstName = await createTestUser({
           username: 'nofirstname',
           firstName: '', // Empty string instead of null
           lastName: 'LastName',
-          passwordHash: hashedPassword,
-          securityQuestion1Id: 1,
-          securityAnswer1Hash: 'hashedanswer1',
-          securityQuestion2Id: 2,
-          securityAnswer2Hash: 'hashedanswer2',
-          isAdmin: false
+          passwordHash: await hashPassword('password123'),
         });
 
-        // Login
-        await agent
-          .post('/login-page')
-          .send({
-            username: 'nofirstname',
-            password: 'password123'
-          });
+        // Get authenticated agent
+        const agent = await getAuthenticatedAgent(app, 'nofirstname', 'password123');
 
         // Request JWT
         const jwtResponse = await agent
@@ -190,7 +133,7 @@ describe('Name Population Integration Tests', () => {
 
     it('should not break when user is not authenticated', async () => {
       // Try to get JWT without logging in
-      const response = await agent
+      const response = await request(app)
         .get('/api/auth/issue-jwt-for-session')
         .expect(401);
 
@@ -200,13 +143,8 @@ describe('Name Population Integration Tests', () => {
 
   describe('Backward Compatibility', () => {
     it('should maintain all existing JWT fields', async () => {
-      // Login
-      await agent
-        .post('/login-page')
-        .send({
-          username: 'integrationuser',
-          password: 'password123'
-        });
+      // Get authenticated agent
+      const agent = await getAuthenticatedAgent(app, 'integrationuser', 'password123');
 
       // Request JWT
       const jwtResponse = await agent
