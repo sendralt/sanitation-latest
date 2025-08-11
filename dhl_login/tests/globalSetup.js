@@ -9,6 +9,11 @@ module.exports = async () => {
   // Disable rate limiting for tests
   process.env.DISABLE_RATE_LIMIT = 'true';
 
+  // Reduce console logging in CI to prevent memory issues
+  if (process.env.CI) {
+    process.env.REDUCE_LOGGING = 'true';
+  }
+
   // Ensure database file directory exists (for sqlite storage)
   const fs = require('fs');
   const path = require('path');

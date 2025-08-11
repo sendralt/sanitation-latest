@@ -27,7 +27,7 @@ jobs:
         node-version: '18' # Use a Node.js version compatible with your project
 
     - name: Install dependencies
-      run: npm install
+      run: npm ci
       working-directory: ./dhl_login # Install dependencies specifically for the dhl_login application
 
     - name: Run linting
@@ -39,7 +39,14 @@ jobs:
       working-directory: ./dhl_login # Run unit tests first for quick feedback
 
     - name: Run full test suite with coverage
-      run: npm test
+      run: |
+        echo "Starting full test suite..."
+        timeout 300 npm test || {
+          echo "Tests failed or timed out after 5 minutes"
+          echo "Checking for any remaining processes..."
+          ps aux | grep node || true
+          exit 1
+        }
       working-directory: ./dhl_login # Run all tests with coverage reporting
 
     - name: Upload coverage report (HTML)
