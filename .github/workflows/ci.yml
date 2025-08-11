@@ -14,6 +14,9 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
+    env:
+      NODE_ENV: test
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -21,18 +24,54 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '22.18.0' # Use a Node.js version compatible with your project
+        node-version: '18.x' # Use a Node.js version compatible with your project
 
     - name: Install dependencies
       run: npm install
       working-directory: ./dhl_login # Install dependencies specifically for the dhl_login application
 
-    - name: Run tests and collect coverage
-      run: npm test
-      working-directory: ./dhl_login # Run tests specifically for the dhl_login application
+    - name: Run linting
+      run: npm run lint
+      working-directory: ./dhl_login # Run ESLint to check code quality
 
-    - name: Upload coverage report
+    - name: Run unit tests only (fast feedback)
+      run: npm run test:unit
+      working-directory: ./dhl_login # Run unit tests first for quick feedback
+
+    - name: Run full test suite with coverage
+      run: npm test
+      working-directory: ./dhl_login # Run all tests with coverage reporting
+
+    - name: Upload coverage report (HTML)
       uses: actions/upload-artifact@v4
       with:
-        name: coverage-report
-        path: dhl_login/coverage/lcov-report # Path to the generated coverage report
+        name: coverage-report-html
+        path: dhl_login/coverage/lcov-report # HTML coverage report for viewing
+
+    - name: Upload coverage report (LCOV)
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-report-lcov
+        path: dhl_login/coverage/lcov.info # LCOV format for external tools
+
+    - name: Comment coverage on PR
+      if: github.event_name == 'pull_request'
+      uses: romeovs/lcov-reporter-action@v0.3.1
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        lcov-file: dhl_login/coverage/lcov.info
+        delete-old-comments: true
+
+    - name: Check coverage thresholds
+      run: |
+        echo "Coverage thresholds configured in jest.config.js:"
+        echo "- Branches: 40%"
+        echo "- Functions: 55%"
+        echo "- Lines: 50%"
+        echo "- Statements: 50%"
+        echo ""
+        echo "If tests failed due to coverage, consider:"
+        echo "1. Adding more tests to increase coverage"
+        echo "2. Adjusting thresholds in jest.config.js if needed"
+        echo "3. Excluding files from coverage if appropriate"
+      working-directory: ./dhl_login
