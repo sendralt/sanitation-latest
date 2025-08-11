@@ -4,6 +4,8 @@ module.exports = {
   globalTeardown: '<rootDir>/tests/globalTeardown.js',
   // Increase default timeout for integration tests if needed
   testTimeout: 30000,
+  // Run tests sequentially to avoid database conflicts
+  maxWorkers: 1,
   coverageThreshold: {
     global: {
       branches: 40,
