@@ -363,16 +363,26 @@ async function getCurrentAssignments(filters = {}) {
       whereClause.assignedAt = {};
 
       if (filters.dateFrom) {
-        // Start of the day for dateFrom
-        const fromDate = new Date(filters.dateFrom);
-        fromDate.setHours(0, 0, 0, 0);
+        // Parse date string as local date to avoid timezone issues
+        const dateParts = filters.dateFrom.split('-'); // ['2025', '01', '02']
+        const fromDate = new Date(
+          parseInt(dateParts[0]),
+          parseInt(dateParts[1]) - 1, // Month is 0-based
+          parseInt(dateParts[2]),
+          0, 0, 0, 0 // Hours, minutes, seconds, milliseconds
+        );
         whereClause.assignedAt[Op.gte] = fromDate;
       }
 
       if (filters.dateTo) {
-        // End of the day for dateTo
-        const toDate = new Date(filters.dateTo);
-        toDate.setHours(23, 59, 59, 999);
+        // Parse date string as local date to avoid timezone issues
+        const dateParts = filters.dateTo.split('-'); // ['2025', '01', '02']
+        const toDate = new Date(
+          parseInt(dateParts[0]),
+          parseInt(dateParts[1]) - 1, // Month is 0-based
+          parseInt(dateParts[2]),
+          23, 59, 59, 999 // End of day
+        );
         whereClause.assignedAt[Op.lte] = toDate;
       }
     }

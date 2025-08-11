@@ -294,11 +294,12 @@ describe('getCurrentAssignments date filtering', () => {
     }
   });
 
-  it.skip('should filter assignments by date range', async () => {
+  it('should filter assignments by date range', async () => {
     // Create assignments on specific dates for testing (using local time to match filter logic)
     const testDate1 = new Date('2025-01-01T10:00:00'); // Jan 1
     const testDate2 = new Date('2025-01-02T10:00:00'); // Jan 2
     const testDate3 = new Date('2025-01-03T10:00:00'); // Jan 3
+
 
     // Assignment from Jan 1
     const assignment1 = await Assignment.create({
@@ -328,31 +329,36 @@ describe('getCurrentAssignments date filtering', () => {
     });
     testAssignmentIds.push(assignment3.id);
 
-    // Test 1: Filter from Jan 2 onwards - verify filtering works
+    // Test 1: Filter from Jan 2 onwards (should get Jan 2 and Jan 3, not Jan 1)
     const fromJan2Results = await getCurrentAssignments({
       dateFrom: '2025-01-02'
     });
     const ourFromJan2Results = fromJan2Results.filter(a =>
       testAssignmentIds.includes(a.id)
     );
-    // Should include at least the Jan 2 and Jan 3 assignments
+
+    // Should include Jan 2 and Jan 3 assignments
     expect(ourFromJan2Results.map(a => a.id)).toContain(assignment2.id);
     expect(ourFromJan2Results.map(a => a.id)).toContain(assignment3.id);
-    expect(ourFromJan2Results.length).toBeGreaterThanOrEqual(2);
+    // Should NOT include Jan 1 assignment
+    expect(ourFromJan2Results.map(a => a.id)).not.toContain(assignment1.id);
+    expect(ourFromJan2Results.length).toBe(2);
 
-    // Test 2: Filter up to Jan 2 - verify filtering works
+    // Test 2: Filter up to Jan 2 (should get Jan 1 and Jan 2, not Jan 3)
     const upToJan2Results = await getCurrentAssignments({
       dateTo: '2025-01-02'
     });
     const ourUpToJan2Results = upToJan2Results.filter(a =>
       testAssignmentIds.includes(a.id)
     );
-    // Should include at least the Jan 1 and Jan 2 assignments
+    // Should include Jan 1 and Jan 2 assignments
     expect(ourUpToJan2Results.map(a => a.id)).toContain(assignment1.id);
     expect(ourUpToJan2Results.map(a => a.id)).toContain(assignment2.id);
-    expect(ourUpToJan2Results.length).toBeGreaterThanOrEqual(2);
+    // Should NOT include Jan 3 assignment
+    expect(ourUpToJan2Results.map(a => a.id)).not.toContain(assignment3.id);
+    expect(ourUpToJan2Results.length).toBe(2);
 
-    // Test 3: Filter only Jan 2 - verify specific date filtering works
+    // Test 3: Filter only Jan 2 (should get only Jan 2)
     const onlyJan2Results = await getCurrentAssignments({
       dateFrom: '2025-01-02',
       dateTo: '2025-01-02'
@@ -360,8 +366,12 @@ describe('getCurrentAssignments date filtering', () => {
     const ourOnlyJan2Results = onlyJan2Results.filter(a =>
       testAssignmentIds.includes(a.id)
     );
-    // Should include the Jan 2 assignment
+    // Should include only Jan 2 assignment
     expect(ourOnlyJan2Results.map(a => a.id)).toContain(assignment2.id);
-    expect(ourOnlyJan2Results.length).toBeGreaterThanOrEqual(1);
+    // Should NOT include Jan 1 or Jan 3 assignments
+    expect(ourOnlyJan2Results.map(a => a.id)).not.toContain(assignment1.id);
+    expect(ourOnlyJan2Results.map(a => a.id)).not.toContain(assignment3.id);
+    expect(ourOnlyJan2Results.length).toBe(1);
+    expect(ourOnlyJan2Results[0].userId).toBe(user2.id);
   });
 });
