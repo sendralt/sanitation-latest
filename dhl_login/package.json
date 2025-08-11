@@ -4,6 +4,7 @@
   "main": "app.js",
   "scripts": {
     "test": "jest --testEnvironment=node",
+    "test:unit": "jest __tests__ --testEnvironment=node --runInBand",
     "sync-db": "node sync-db.js",
     "start": "node app.js",
     "backup": "node backup-db.js"
