@@ -1,0 +1,38 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18' # Use a Node.js version compatible with your project
+
+    - name: Install dependencies
+      run: npm install
+      working-directory: ./dhl_login # Install dependencies specifically for the dhl_login application
+
+    - name: Run tests and collect coverage
+      run: npm test
+      working-directory: ./dhl_login # Run tests specifically for the dhl_login application
+
+    - name: Upload coverage report
+      uses: actions/upload-artifact@v3
+      with:
+        name: coverage-report
+        path: dhl_login/coverage/lcov-report # Path to the generated coverage report
