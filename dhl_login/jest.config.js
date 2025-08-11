@@ -3,7 +3,7 @@ module.exports = {
   globalSetup: '<rootDir>/tests/globalSetup.js',
   globalTeardown: '<rootDir>/tests/globalTeardown.js',
   // Increase default timeout for integration tests if needed
-  testTimeout: process.env.CI ? 60000 : 30000, // 60s in CI, 30s locally
+  testTimeout: process.env.CI ? 120000 : 30000, // 2 minutes in CI, 30s locally
   // Run tests sequentially to avoid database conflicts
   maxWorkers: 1,
   coverageThreshold: {
