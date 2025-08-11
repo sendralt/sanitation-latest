@@ -24,10 +24,14 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '22' # Use a Node.js version compatible with your project
+        node-version: '20' # Use Node.js 20 LTS for better CI compatibility
 
     - name: Install dependencies
-      run: npm ci
+      run: |
+        echo "Checking if package-lock.json exists..."
+        ls -la package-lock.json || echo "package-lock.json not found"
+        echo "Installing dependencies..."
+        npm install
       working-directory: ./dhl_login # Install dependencies specifically for the dhl_login application
 
     - name: Run linting
