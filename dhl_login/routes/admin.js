@@ -71,28 +71,15 @@ router.post('/users', ensureAuthenticated, ensureAdmin, async (req, res) => {
   if (!lastName || lastName.trim() === '') {
     validationErrors.lastName = 'Last Name is required.';
   }
-  if (!username || username.trim().length < 3 || username.trim().length > 30) {
-    validationErrors.username = 'Username must be 3-30 characters long.';
-  }
-  // Add more username validation if needed (e.g., alphanumeric)
+  // Centralized validation
+  const { validateUsername, validatePassword, validateSecurityAnswers } = require('../utils/validation');
+  const userErr = validateUsername(username);
+  if (userErr) validationErrors.username = userErr;
+  const passErr = validatePassword(password);
+  if (passErr) validationErrors.password = passErr;
+  const secErr = validateSecurityAnswers(securityAnswers);
+  if (secErr) validationErrors.securityAnswers = secErr;
 
-  if (!password || password.length < 8) {
-    validationErrors.password = 'Password must be at least 8 characters long.';
-  }
-
-  if (securityAnswers.length !== 2 || !securityAnswers[0].questionId || !securityAnswers[1].questionId ||
-      securityAnswers[0].answer.trim() === '' || securityAnswers[1].answer.trim() === '') {
-    validationErrors.securityAnswers = 'Two security questions and answers are required.';
-  } else if (securityAnswers[0].questionId === securityAnswers[1].questionId) {
-    validationErrors.securityAnswers = 'Security questions must be unique.';
-  } else {
-    const q1 = getSecurityQuestionById(securityAnswers[0].questionId);
-    const q2 = getSecurityQuestionById(securityAnswers[1].questionId);
-    if (!q1 || !q2) {
-        validationErrors.securityAnswers = 'Invalid security question ID provided.';
-    }
-  }
-  
   // Check if username already exists
   if (!validationErrors.username) {
     try {
@@ -209,8 +196,8 @@ router.post('/assignments/assign', ensureAuthenticated, ensureAdmin, async (req,
     validationErrors.userId = 'Please select a user.';
   } else {
     // Validate UUID format
-    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-    if (!uuidRegex.test(userId)) {
+    const { isValidUUID } = require('../utils/validation');
+    if (!isValidUUID(userId)) {
       validationErrors.userId = 'Invalid user selection.';
     }
   }
@@ -219,8 +206,8 @@ router.post('/assignments/assign', ensureAuthenticated, ensureAdmin, async (req,
     validationErrors.checklistId = 'Please select a checklist.';
   } else {
     // Validate UUID format
-    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-    if (!uuidRegex.test(checklistId)) {
+    const { isValidUUID } = require('../utils/validation');
+    if (!isValidUUID(checklistId)) {
       validationErrors.checklistId = 'Invalid checklist selection.';
     }
   }
