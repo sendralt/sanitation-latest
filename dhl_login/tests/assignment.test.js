@@ -1,7 +1,3 @@
-// Set NODE_ENV to test to ensure we use the test database
-process.env.NODE_ENV = 'test';
-
-const sequelize = require('../config/sequelize');
 const { User, Checklist, Assignment } = require('../models');
 
 // Instead of mocking, let's test the actual function
@@ -10,37 +6,11 @@ const { assignNextChecklist, getCurrentAssignments } = require('../utils/assignm
 describe('assignNextChecklist', () => {
   let user;
 
-  beforeAll(async () => {
-    // Connect to the database and sync the models
-    await sequelize.authenticate();
-    // Sync all models with force: true to ensure clean test environment
-    await User.sync({ force: true });
-    await Checklist.sync({ force: true });
-    await Assignment.sync({ force: true });
-  });
-
-  afterAll(async () => {
-    // Clean up all data after tests complete - order matters due to foreign key constraints
-    try {
-      await Assignment.destroy({ where: {}, force: true });
-      await Checklist.destroy({ where: {}, force: true });
-      await User.destroy({ where: {}, force: true });
-    } catch (error) {
-      console.warn('Final cleanup warning:', error.message);
-    }
-    await sequelize.close();
-  });
-
   beforeEach(async () => {
     // Clean up data before each test - order matters due to foreign key constraints
-    try {
-      await Assignment.destroy({ where: {}, force: true });
-      await Checklist.destroy({ where: {}, force: true });
-      await User.destroy({ where: {}, force: true });
-    } catch (error) {
-      // If cleanup fails, try to continue - the sync({ force: true }) should handle it
-      console.warn('Cleanup warning:', error.message);
-    }
+    await Assignment.destroy({ where: {}, force: true });
+    await Checklist.destroy({ where: {}, force: true });
+    await User.destroy({ where: {}, force: true });
 
     user = await User.create({
       username: 'testuser',

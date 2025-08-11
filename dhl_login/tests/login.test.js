@@ -13,19 +13,7 @@ const { assignNextChecklist } = require('../utils/assignmentLogic');
 describe('POST /login-page', () => {
   let user;
 
-  beforeAll(async () => {
-    // Connect to the database and sync the models
-    await sequelize.authenticate();
-    await sequelize.sync({ force: true });
-  });
 
-  afterAll(async () => {
-    // Clean up all data after tests complete
-    await Assignment.destroy({ where: {}, force: true });
-    await Checklist.destroy({ where: {}, force: true });
-    await User.destroy({ where: {}, force: true });
-    await sequelize.close();
-  });
 
   beforeEach(async () => {
     // Clean up data before each test - order matters due to foreign key constraints

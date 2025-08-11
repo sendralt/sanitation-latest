@@ -1,26 +1,8 @@
-// Set NODE_ENV to test to ensure we use the test database
-process.env.NODE_ENV = 'test';
-
-const sequelize = require('../config/sequelize');
 const User = require('../models/user');
 const Checklist = require('../models/checklist');
 const Assignment = require('../models/assignment');
 
 describe('Models', () => {
-  beforeAll(async () => {
-    // Connect to the database and sync the models
-    await sequelize.authenticate();
-    await sequelize.sync({ force: true }); // Use force: true to recreate tables for a clean test environment
-  });
-
-  afterAll(async () => {
-    // Clean up all data after tests complete
-    await Assignment.destroy({ where: {}, force: true });
-    await Checklist.destroy({ where: {}, force: true });
-    await User.destroy({ where: {}, force: true });
-    await sequelize.close();
-  });
-
   beforeEach(async () => {
     // Clean up data before each test - order matters due to foreign key constraints
     await Assignment.destroy({ where: {}, force: true });
