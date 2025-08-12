@@ -222,7 +222,8 @@ app.post('/submit-form', authenticateApi, async (req, res) => {
     });
 });
 
-// Send an email to the supervisor with a checklist link, filename, and title
+// Send an email to the supervisor(s) with a checklist link, filename, and title
+// supervisorEmail can be a single email string or an array of email strings
 function sendEmailToSupervisor(supervisorEmail, checklistUrl, filename, checklistTitle, callback) {
     const transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -232,9 +233,13 @@ function sendEmailToSupervisor(supervisorEmail, checklistUrl, filename, checklis
         }
     });
 
+    // Handle both single email and array of emails
+    const recipients = Array.isArray(supervisorEmail) ? supervisorEmail.join(', ') : supervisorEmail;
+    console.log(`[Debug] Sending email to: ${recipients}`);
+
     const mailOptions = {
         from: process.env.EMAIL_USER,
-        to: supervisorEmail,
+        to: supervisorEmail, // Nodemailer handles both string and array formats
         subject: `Sanitation Checklist for Review: ${checklistTitle}`, // Add title to subject
         html: `<p>A new checklist "<b>${checklistTitle}</b>" (Filename: ${filename}) requires your validation. Click <a href="${checklistUrl}">here</a> to review.</p>` // Add title and filename to body, make link text "here"
     };
@@ -568,6 +573,18 @@ app.get('/view-checklist-html/:id', authenticateApi, (req, res) => {
 
 
 
+// Configuration endpoint to provide frontend with environment-based settings
+app.get('/config', (req, res) => {
+    const supervisorEmailEnv = process.env.SUPERVISOR_EMAIL || 'sendral.ts.1@pg.com';
+    // Split by comma and trim whitespace, then filter out empty strings
+    const supervisorEmails = supervisorEmailEnv.split(',').map(email => email.trim()).filter(email => email.length > 0);
+
+    res.status(200).json({
+        supervisorEmail: supervisorEmails.length === 1 ? supervisorEmails[0] : supervisorEmails, // Single email as string, multiple as array
+        supervisorEmails: supervisorEmails // Always provide as array for consistency
+    });
+});
+
 // Health check endpoint for Docker
 app.get('/health', (req, res) => {
     res.status(200).json({
@@ -577,14 +594,15 @@ app.get('/health', (req, res) => {
     });
 });
 
-// Start the server
-console.log('Attempting to start server...');
-const server = app.listen(port, '0.0.0.0', () => { // Use the port variable
-    console.log('Backend API Server listener callback executed.');
-    console.log(`Backend API Server is running on http://localhost:${port}`);
-});
+// Start the server only if this file is run directly (not when required for testing)
+if (require.main === module) {
+    console.log('Attempting to start server...');
+    const server = app.listen(port, '0.0.0.0', () => { // Use the port variable
+        console.log('Backend API Server listener callback executed.');
+        console.log(`Backend API Server is running on http://localhost:${port}`);
+    });
 
-server.on('error', (error) => {
+    server.on('error', (error) => {
     if (error.syscall !== 'listen') {
         throw error;
     }
@@ -608,6 +626,8 @@ server.on('error', (error) => {
             throw error;
     }
 });
+
+} // End of if (require.main === module)
 
 //app.listen(port, () => {
 //    console.log(`Server is running on http://localhost:${port}`);

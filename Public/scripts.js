@@ -1,6 +1,7 @@
 // Global variables for JWT and user data
 let authToken = null;
 let currentUser = null;
+let appConfig = null;
 
 // Function to fetch JWT from the server (dhl_login)
 async function fetchAuthToken() {
@@ -57,6 +58,21 @@ function populateAssociateName() {
     console.log('[Debug] populateAssociateName: Auto-populated name field with:', fullName);
 }
 
+// Function to fetch application configuration from backend
+async function fetchAppConfig() {
+    try {
+        const response = await fetch('/backend/config'); // Proxied by nginx to backend API
+        if (!response.ok) {
+            console.error(`[Debug] fetchAppConfig: Failed to fetch config. Status: ${response.status}`);
+            return;
+        }
+        const config = await response.json();
+        appConfig = config;
+        console.log('[Debug] fetchAppConfig: Configuration loaded successfully:', config);
+    } catch (error) {
+        console.error('[Debug] fetchAppConfig: Error fetching configuration:', error);
+    }
+}
 
 // Global variable for current date
 let currentDate = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
@@ -66,9 +82,10 @@ document.addEventListener("DOMContentLoaded", function() {
     // Elements for the landing page
     const landingPageMenu = document.querySelector("#landing-page-menu");
 
-    // If on a checklist page (not the main index.html menu), try to fetch the JWT
+    // If on a checklist page (not the main index.html menu), try to fetch the JWT and config
     if (!landingPageMenu && window.location.pathname.startsWith('/app/') && window.location.pathname !== '/app/index.html') {
         fetchAuthToken();
+        fetchAppConfig(); // Fetch configuration data
 
         // Also try to populate name field after a short delay in case auth token is already available
         setTimeout(() => {
@@ -360,6 +377,9 @@ document.addEventListener("DOMContentLoaded", function() {
         const currentPath = window.location.pathname;
         const filename = currentPath.split('/').pop(); // Get the last part of the path (filename)
 
+        // Handle both single email and multiple emails from config
+        const supervisorEmail = appConfig?.supervisorEmails || appConfig?.supervisorEmail || "sendral.ts.1@pg.com";
+
         const data = {
             title: document.title,
             name: nameInput.value,
@@ -368,7 +388,7 @@ document.addEventListener("DOMContentLoaded", function() {
             comments: commentsTextarea.value,
             //auditorName: auditorNameInput.value,
             //supervisorName: supervisorName.value,
-            supervisorEmail: "sendral.ts.1@pg.com",
+            supervisorEmail: supervisorEmail, // Use config (single or multiple) or fallback
             checklistFilename: filename, // Add the checklist filename
             userId: currentUser ? currentUser.id : null // Add the user ID
         };
