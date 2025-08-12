@@ -51,27 +51,14 @@ router.get('/security-questions', (req, res) => {
 router.post('/register', registrationLimiter, async (req, res) => {
     const { username, password, securityAnswers } = req.body;
 
-    // Validation
-    if (!username || !validator.isLength(username, { min: 3, max: 30 }) /* || !validator.isAlphanumeric(username)*/) {
-        return res.status(400).json({ message: 'Username must be 3-30 characters long.' }); // and alphanumeric
-    }
-    if (!password || !validator.isLength(password, { min: 8 })) {
-        return res.status(400).json({ message: 'Password must be at least 8 characters long.' });
-    }
-    if (!Array.isArray(securityAnswers) || securityAnswers.length !== 2) {
-        return res.status(400).json({ message: 'Exactly two security answers are required.' });
-    }
-
-    const questionIds = securityAnswers.map(sa => sa.questionId);
-    if (new Set(questionIds).size !== 2) {
-        return res.status(400).json({ message: 'Security questions must be unique.' });
-    }
-
-    for (const sa of securityAnswers) {
-        if (!sa.questionId || !getSecurityQuestionById(sa.questionId) || typeof sa.answer !== 'string' || sa.answer.trim() === '') {
-            return res.status(400).json({ message: 'Invalid security question or answer provided.' });
-        }
-    }
+    // Validation (centralized)
+    const { validateUsername, validatePassword, validateSecurityAnswers } = require('../utils/validation');
+    const usernameErr = validateUsername(username);
+    if (usernameErr) return res.status(400).json({ message: usernameErr });
+    const passwordErr = validatePassword(password);
+    if (passwordErr) return res.status(400).json({ message: passwordErr });
+    const secErr = validateSecurityAnswers(securityAnswers);
+    if (secErr) return res.status(400).json({ message: secErr });
 
     try {
         const existingUser = await User.findOne({ where: { username } });

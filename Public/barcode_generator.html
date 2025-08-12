@@ -67,32 +67,18 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', async function() {
-            // Updated list of checklist filenames (ensure this matches your actual files in Public/)
-            const checklistFiles = [
-                "checklists/1_A_Cell_West_Side_Daily.html",
-                "checklists/2_A_Cell_East_Side_Daily.html",
-                "checklists/3_B_Cell_West_Side_Daily.html",
-                "checklists/4_B_Cell_East_Side_Daily.html",
-                "checklists/5_C_Cell_West_Side_Daily.html",
-                "checklists/6_C_Cell_East_Side_Daily.html",
-                "checklists/7_D_Cell_West_Side_Daily.html",
-                "checklists/8_D_Cell_East_Side_Daily.html",
-                "checklists/9_E_Cell_West_Side_Daily.html",
-                "checklists/10_E_Cell_East_Side_Daily.html",
-                "checklists/11_F_Cell_West_Side_Daily.html",
-                "checklists/12_F_Cell_East_Side_Daily.html",
-                "checklists/13_All_Cells_Weekly.html",
-                "checklists/14_All_Cells_Weekly.html",
-                "checklists/15_A&B_Cells_LL_Quarterly.html",
-                "checklists/16_D_Cell_LL_Quarterly.html",
-                "checklists/17_A_Cell_High_Level_Quarterly.html",
-                "checklists/18_B_Cell_High_Level_Quarterly.html",
-                "checklists/19_C_Cell_High_Level_Quarterly.html",
-                "checklists/20_D_Cell_High_Level_Quarterly.html",
-                "checklists/21_E_Cell_High_Level_Quarterly.html",
-                "checklists/22_F_Cell_High_Level_Quarterly.html"
-                // Add any other new checklist HTML file names here if they exist
-            ];
+            // Fetch checklist list from server to avoid hard-coded drift
+            let checklistFiles = [];
+            try {
+                const resp = await fetch('/api/checklists');
+                if (resp.ok) {
+                    const items = await resp.json();
+                    // filenames are relative to /app/checklists/ in the protected app; here we need to fetch raw HTMLs from Public/checklists
+                    checklistFiles = Array.isArray(items) ? items.map(i => `checklists/${i.filename}`) : [];
+                }
+            } catch (e) {
+                console.error('Failed to load checklist list from /api/checklists:', e);
+            }
             const uniqueCheckboxIds = new Set(); // Still useful for global unique count
             const allCheckboxIdsFromFile = []; // To store all IDs, including duplicates
             const checklistsWithIds = {}; // To store IDs grouped by checklist filename

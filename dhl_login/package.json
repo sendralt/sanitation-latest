@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {
-    "test": "jest --testEnvironment=node",
+    "test": "jest --config=jest.config.js --coverage",
+    "test:unit": "jest __tests__ --config=jest.config.js --runInBand",
+    "lint": "eslint . --ext .js",
     "sync-db": "node sync-db.js",
     "start": "node app.js",
     "backup": "node backup-db.js"
@@ -32,6 +34,7 @@
     "validator": "^13.15.0"
   },
   "devDependencies": {
-    "sequelize-cli": "^6.6.3"
+    "sequelize-cli": "^6.6.3",
+    "eslint": "^8.57.0"
   }
 }

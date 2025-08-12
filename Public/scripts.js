@@ -108,42 +108,39 @@ document.addEventListener("DOMContentLoaded", function() {
         dateDisplay.textContent = currentDate;
     }
 
-    // List of checklist filenames
-    const checklists = [
-        "checklists/1_A_Cell_West_Side_Daily.html",
-        "checklists/2_A_Cell_East_Side_Daily.html",
-        "checklists/3_B_Cell_West_Side_Daily.html",
-        "checklists/4_B_Cell_East_Side_Daily.html",
-        "checklists/5_C_Cell_West_Side_Daily.html",
-        "checklists/6_C_Cell_East_Side_Daily.html",
-        "checklists/7_D_Cell_West_Side_Daily.html",
-        "checklists/8_D_Cell_East_Side_Daily.html",
-        "checklists/9_E_Cell_West_Side_Daily.html",
-        "checklists/10_E_Cell_East_Side_Daily.html",
-        "checklists/11_F_Cell_West_Side_Daily.html",
-        "checklists/12_F_Cell_East_Side_Daily.html",
-        "checklists/13_All_Cells_Weekly_Wet_Mop.html",
-        "checklists/14_All_Cells_Weekly_Floor_Scrub.html",
-        "checklists/15_A&B_Cells_LL_Quarterly.html",
-        "checklists/16_D_Cell_LL_Quarterly.html",
-        "checklists/17_A_Cell_High_Level_Quarterly.html",
-        "checklists/18_B_Cell_High_Level_Quarterly.html",
-        "checklists/19_C_Cell_High_Level_Quarterly.html",
-        "checklists/20_D_Cell_High_Level_Quarterly.html",
-        "checklists/21_E_Cell_High_Level_Quarterly.html",
-        "checklists/22_F_Cell_High_Level_Quarterly.html"
-    ];
+    // Fetch checklist catalog from server and render menu (dynamic)
+    async function renderChecklistMenu() {
+        try {
+            const res = await fetch('/api/checklists');
+            if (!res.ok) {
+                console.error('Failed to fetch checklists. Status:', res.status);
+                return;
+            }
+            const checklists = await res.json();
+            if (!Array.isArray(checklists)) return;
+
+            // Sort client-side as safety (server already orders by type then order)
+            checklists.sort((a, b) => (a.type.localeCompare(b.type)) || (a.order - b.order));
+
+            if (landingPageMenu) {
+                checklists.forEach(({ filename, title }) => {
+                    const listItem = document.createElement("li");
+                    const link = document.createElement("a");
+                    // Ensure links go through the protected /app path
+                    link.href = `/app/checklists/${filename}`;
+                    link.textContent = title;
+                    listItem.appendChild(link);
+                    landingPageMenu.appendChild(listItem);
+                });
+            }
+        } catch (e) {
+            console.error('Error loading checklists:', e);
+        }
+    }
 
     // Generate checklist menu if on the landing page
     if (landingPageMenu) {
-        checklists.forEach(checklist => {
-            const listItem = document.createElement("li");
-            const link = document.createElement("a");
-            link.href = checklist;
-            link.textContent = `Checklist # ${checklist.replace(".html", "").replace(/_/g, " ")}`;
-            listItem.appendChild(link);
-            landingPageMenu.appendChild(listItem);
-        });
+        renderChecklistMenu();
     }
 
     // --- Barcode/Scanner Functionality START ---

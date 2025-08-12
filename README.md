@@ -12,21 +12,22 @@ A web application for managing warehouse sanitation checklists with user authent
 
 ## ✨ New & Changed Features
 
+- VERIFIED: Dynamic checklist catalog API
+  - New `GET /api/checklists` from dhl_login returns [{ id, title, filename, type, order }]
+  - Frontend (scripts.js, barcode_generator.html, validate-checklist.html) now fetches dynamically instead of hard-coded arrays
+  - Source: dhl_login/routes/checklistsApi.js; Public/scripts.js; Public/barcode_generator.html; Public/validate-checklist.html
+
+- VERIFIED: Validation flow consolidated
+  - Public validation routes consolidated under dhl_login: GET/POST `/api/validate/:id`
+  - Duplicated backend validation routes deprecated with 410
+  - Shared helpers extracted for loading/saving JSON and applying validation
+  - Source: dhl_login/app.js; dhl_login/utils/validationHelpers.js; backend/server.js
+
 - VERIFIED: JWT-based backend auth
   - Frontend fetches a session-issued JWT and includes it as Authorization: Bearer in requests
     - Source: Public/scripts.js lines 5-31, 382-389, 426-439
   - Backend protects endpoints with passport-jwt
     - Source: backend/server.js lines 22-37, 118-123
-
-- VERIFIED: Supervisor validation flow (no login required)
-  - Email links point to dhl_login at /app/validate-checklist/:id
-    - Source: backend/server.js lines 207-214 and dhl_login/app.js lines 393-399
-  - The validation page calls API endpoints served by dhl_login
-    - GET /api/validate/:id and POST /api/validate/:id
-    - Source: dhl_login/app.js lines 187-231 and 233-336
-  - Optional alternative endpoints on backend (for environments without dhl_login routing):
-    - GET/POST /validate-public/:id
-    - Source: backend/server.js lines 384-515
 
 - VERIFIED: Random 20% checklist verification
   - Backend selects ~20% of submitted checkboxes for supervisor spot‑checks

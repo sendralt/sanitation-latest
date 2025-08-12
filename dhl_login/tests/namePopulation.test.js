@@ -1,27 +1,12 @@
 // Test for automatic name population functionality
-process.env.NODE_ENV = 'test';
-
 const request = require('supertest');
 const app = require('../app');
-const sequelize = require('../config/sequelize');
 const { User } = require('../models');
 const { generateToken } = require('../utils/auth');
 const jwt = require('jsonwebtoken');
 
 describe('Automatic Name Population', () => {
   let testUser;
-
-  beforeAll(async () => {
-    // Connect to the database and sync the models
-    await sequelize.authenticate();
-    await sequelize.sync({ force: true });
-  });
-
-  afterAll(async () => {
-    // Clean up all data after tests complete
-    await User.destroy({ where: {}, force: true });
-    await sequelize.close();
-  });
 
   beforeEach(async () => {
     // Clean up data before each test

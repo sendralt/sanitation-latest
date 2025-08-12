@@ -1,48 +1,19 @@
-// Set NODE_ENV to test to ensure we use the test database
-process.env.NODE_ENV = 'test';
-
-const sequelize = require('../config/sequelize');
 const { User, Checklist, Assignment } = require('../models');
-const { 
-  manuallyAssignChecklist, 
-  getAssignableUsers, 
-  getAvailableChecklists, 
-  getCurrentAssignments 
+const {
+  manuallyAssignChecklist,
+  getAssignableUsers,
+  getAvailableChecklists,
+  getCurrentAssignments
 } = require('../utils/assignmentLogic');
 
 describe('Manual Assignment Feature', () => {
   let adminUser, regularUser, regularUser2, checklist1, checklist2;
 
-  beforeAll(async () => {
-    // Connect to the database and sync the models
-    await sequelize.authenticate();
-    // Sync all models with force: true to ensure clean test environment
-    await User.sync({ force: true });
-    await Checklist.sync({ force: true });
-    await Assignment.sync({ force: true });
-  });
-
-  afterAll(async () => {
-    // Clean up all data after tests complete
-    try {
-      await Assignment.destroy({ where: {}, force: true });
-      await Checklist.destroy({ where: {}, force: true });
-      await User.destroy({ where: {}, force: true });
-    } catch (error) {
-      console.warn('Final cleanup warning:', error.message);
-    }
-    await sequelize.close();
-  });
-
   beforeEach(async () => {
     // Clean up data before each test
-    try {
-      await Assignment.destroy({ where: {}, force: true });
-      await Checklist.destroy({ where: {}, force: true });
-      await User.destroy({ where: {}, force: true });
-    } catch (error) {
-      console.warn('Cleanup warning:', error.message);
-    }
+    await Assignment.destroy({ where: {}, force: true });
+    await Checklist.destroy({ where: {}, force: true });
+    await User.destroy({ where: {}, force: true });
 
     // Create test users
     adminUser = await User.create({
@@ -139,7 +110,7 @@ describe('Manual Assignment Feature', () => {
     });
 
     test('should fail when admin user does not exist', async () => {
-      const fakeAdminId = '12345678-1234-1234-1234-123456789abc'; // Valid UUID format but non-existent
+      const fakeAdminId = '12345678-1234-4234-8234-123456789abc'; // Valid UUID v4 format but non-existent
       const result = await manuallyAssignChecklist({
         userId: regularUser.id,
         checklistId: checklist1.id,
@@ -162,7 +133,7 @@ describe('Manual Assignment Feature', () => {
     });
 
     test('should fail when target user does not exist', async () => {
-      const fakeUserId = '12345678-1234-1234-1234-123456789abc'; // Valid UUID format but non-existent
+      const fakeUserId = '12345678-1234-4234-8234-123456789abc'; // Valid UUID v4 format but non-existent
       const result = await manuallyAssignChecklist({
         userId: fakeUserId,
         checklistId: checklist1.id,
@@ -222,7 +193,7 @@ describe('Manual Assignment Feature', () => {
     });
 
     test('should fail when checklist does not exist', async () => {
-      const fakeChecklistId = '12345678-1234-1234-1234-123456789abc'; // Valid UUID format but non-existent
+      const fakeChecklistId = '12345678-1234-4234-8234-123456789abc'; // Valid UUID v4 format but non-existent
       const result = await manuallyAssignChecklist({
         userId: regularUser.id,
         checklistId: fakeChecklistId,
