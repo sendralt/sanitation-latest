@@ -56,7 +56,7 @@ router.get('/users/new', ensureAuthenticated, ensureAdmin, (req, res) => {
 
 // POST route to handle new user creation
 router.post('/users', ensureAuthenticated, ensureAdmin, async (req, res) => {
-  const { username, password, firstName, lastName, securityQuestion1Id, securityAnswer1, securityQuestion2Id, securityAnswer2 } = req.body;
+  const { username, password, firstName, lastName, securityQuestion1Id, securityAnswer1, securityQuestion2Id, securityAnswer2, isAdmin } = req.body;
   const securityAnswers = [
     { questionId: parseInt(securityQuestion1Id, 10), answer: securityAnswer1 },
     { questionId: parseInt(securityQuestion2Id, 10), answer: securityAnswer2 }
@@ -133,8 +133,7 @@ router.post('/users', ensureAuthenticated, ensureAdmin, async (req, res) => {
       securityAnswer1Hash,
       securityQuestion2Id: securityAnswers[1].questionId,
       securityAnswer2Hash,
-      isAdmin: false, // By default, users created via this form are not admins
-                      // Add a checkbox in the form if admin creation is desired here
+      isAdmin: isAdmin === 'true' || isAdmin === true, // Use checkbox value from form
     });
 
     req.flash('success', `User '${username}' created successfully.`);

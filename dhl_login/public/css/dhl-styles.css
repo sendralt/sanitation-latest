@@ -53,8 +53,18 @@ body {
 }
 
 /* Unified Container System */
-.page-container, .login-container {
+.page-container {
   max-width: 800px;
+  margin: 4rem auto;
+  margin-bottom: 11rem;
+  padding: 2.5rem;
+  background-color: lightgoldenrodyellow;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.login-container {
+  max-width: 400px;
   margin: 4rem auto;
   margin-bottom: 11rem;
   padding: 2.5rem;
@@ -451,18 +461,32 @@ body {
     font-size: 0.9rem;
   }
 
-  .page-container, .dashboard-container, .login-container {
+  .page-container, .dashboard-container {
     margin: 1.5rem;
     padding: 1.5rem;
+  }
+
+  .login-container {
+    margin: 1.5rem;
+    padding: 1.5rem;
+    max-width: none; /* Allow full width on mobile */
   }
 }
 
 @media (max-width: 480px) {
-  .page-container, .dashboard-container, .login-container {
+  .page-container, .dashboard-container {
     margin: 1rem;
     padding: 1rem;
     border-radius: 0; /* Full width on very small screens */
     box-shadow: none;
+  }
+
+  .login-container {
+    margin: 1rem;
+    padding: 1rem;
+    border-radius: 0; /* Full width on very small screens */
+    box-shadow: none;
+    max-width: none; /* Allow full width on very small screens */
   }
   .page-header h1, .dashboard-header h1, .login-header h1 {
     font-size: 1.6rem;

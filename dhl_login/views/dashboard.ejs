@@ -1,6 +1,6 @@
 <div class="dashboard-container"<% if (user && user.isAdmin) { %> style="max-width: 1200px;"<% } %>>
     <header class="dashboard-header">
-      <h1>Welcome, <%= user.username %>!</h1>
+      <h1>Welcome, <%= user.firstName %>!</h1>
     </header>
 
     <% if (!user.isAdmin) { %>

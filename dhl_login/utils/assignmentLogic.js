@@ -393,7 +393,10 @@ async function getCurrentAssignments(filters = {}) {
         {
           model: User,
           as: 'user',
-          attributes: ['id', 'username', 'firstName', 'lastName']
+          attributes: ['id', 'username', 'firstName', 'lastName', 'isAdmin'],
+          where: {
+            isAdmin: false // Exclude admin users from assignment results
+          }
         },
         {
           model: Checklist,
