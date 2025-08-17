@@ -32,7 +32,7 @@ function updateCheckboxesFromValidation(formData, validatedCheckboxes = []) {
   });
 }
 
-async function markAssignmentValidated(fileId, supervisorName) {
+async function markAssignmentValidated(fileId, auditorName) {
   try {
     const { Assignment, User } = require('../models');
     const filename = `data_${fileId}.json`;
@@ -53,7 +53,7 @@ async function markAssignmentValidated(fileId, supervisorName) {
 
     const supervisor = await User.findOne({
       where: {
-        firstName: (supervisorName || '').split(' ')[0] || supervisorName,
+        firstName: (auditorName || '').split(' ')[0] || auditorName,
         isAdmin: true
       }
     });

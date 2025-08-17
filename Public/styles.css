@@ -278,7 +278,7 @@ h3, h4 { /* Sub-titles like "A Cell: Wipe Down..." */
   width: 100%;
 }
 
-.supervisor-validation {
+.auditor-validation {
   background-color: #f0f0f0; /* Light background */
   border: 1px solid #ddd;
   padding: 15px;
@@ -287,8 +287,8 @@ h3, h4 { /* Sub-titles like "A Cell: Wipe Down..." */
 }
 
 
-.footer-inputs input.supervisor-name {
-  border-color: #FFCC00;  /* Highlight the border for supervisor input */
+.footer-inputs input.auditor-name {
+  border-color: #FFCC00;  /* Highlight the border for auditor input */
   font-weight: bold;
 }
 

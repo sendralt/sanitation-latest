@@ -204,14 +204,14 @@ app.post('/submit-form', authenticateApi, async (req, res) => {
         // Don't fail the submission if this update fails
     }
 
-    // Send an email to the supervisor with the same timestamp in the checklist link
+    // Send an email to the auditor with the same timestamp in the checklist link
     // BASE_URL should point to the dhl_login server (e.g., https://dot1hundred.com)
     const baseUrl = process.env.BASE_URL || `https://dot1hundred.com`;
     const checklistUrl = `${baseUrl}/app/validate-checklist/${timestamp}`; // Link to UI served by dhl_login
 
 
     // Pass formData.title as the checklistTitle
-    sendEmailToSupervisor(supervisorEmail, checklistUrl, filename, formData.title, (emailError) => {
+    sendEmailToAuditor(supervisorEmail, checklistUrl, filename, formData.title, (emailError) => {
         if (emailError) {
             console.error('Failed to send email:', emailError);
             return res.status(500).json({ error: 'Failed to send email. Please try again.' });
@@ -222,9 +222,9 @@ app.post('/submit-form', authenticateApi, async (req, res) => {
     });
 });
 
-// Send an email to the supervisor(s) with a checklist link, filename, and title
+// Send an email to the auditor(s) with a checklist link, filename, and title
 // supervisorEmail can be a single email string or an array of email strings
-function sendEmailToSupervisor(supervisorEmail, checklistUrl, filename, checklistTitle, callback) {
+function sendEmailToAuditor(supervisorEmail, checklistUrl, filename, checklistTitle, callback) {
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
@@ -240,8 +240,8 @@ function sendEmailToSupervisor(supervisorEmail, checklistUrl, filename, checklis
     const mailOptions = {
         from: process.env.EMAIL_USER,
         to: supervisorEmail, // Nodemailer handles both string and array formats
-        subject: `Sanitation Checklist for Review: ${checklistTitle}`, // Add title to subject
-        html: `<p>A new checklist "<b>${checklistTitle}</b>" (Filename: ${filename}) requires your validation. Click <a href="${checklistUrl}">here</a> to review.</p>` // Add title and filename to body, make link text "here"
+        subject: `Sanitation Checklist for Audit: ${checklistTitle}`, // Add title to subject
+        html: `<p>A new checklist "<b>${checklistTitle}</b>" (Filename: ${filename}) requires your audit validation. Click <a href="${checklistUrl}">here</a> to review.</p>` // Add title and filename to body, make link text "here"
     };
 
     transporter.sendMail(mailOptions, (error, info) => {
@@ -295,9 +295,20 @@ app.post('/validate/:id', authenticateApi, async (req, res) => {
         }
     });
 
-    // Add supervisor feedback to the formData
+    // Add auditor feedback to the formData (using new auditorValidation format)
+    formData.auditorValidation = {
+        auditorName: validationData.supervisorName, // Accept supervisorName for backward compatibility
+        validatedAt: new Date().toISOString(),
+        validatedCheckboxes: validationData.validatedCheckboxes.reduce((acc, cb) => {
+            acc[cb.id] = cb.checked;
+            return acc;
+        }, {})
+    };
+
+    // Also maintain supervisorValidation for backward compatibility
     formData.supervisorValidation = {
         supervisorName: validationData.supervisorName,
+        validatedAt: new Date().toISOString(),
         validatedCheckboxes: validationData.validatedCheckboxes.reduce((acc, cb) => {
             acc[cb.id] = cb.checked;
             return acc;
@@ -326,13 +337,13 @@ app.post('/validate/:id', authenticateApi, async (req, res) => {
         });
 
         if (assignment) {
-            // Find the supervisor user by name (this is a simplified approach)
+            // Find the auditor user by name (this is a simplified approach)
             const supervisor = await User.findOne({
                 where: {
                     // Try to match by first name and last name combination
                     // This is a basic implementation - you might want to improve this matching logic
                     firstName: validationData.supervisorName.split(' ')[0] || validationData.supervisorName,
-                    isAdmin: true // Assuming supervisors are admin users
+                    isAdmin: true // Assuming auditors are admin users
                 }
             });
 
@@ -356,15 +367,15 @@ app.post('/validate/:id', authenticateApi, async (req, res) => {
     console.log(`[Debug] POST /validate/:id - END - ID: ${req.params.id}`);
 });
 
-// --- UNAUTHENTICATED VALIDATION ROUTES FOR SUPERVISORS ---
-// These routes allow supervisors to access validation functionality without JWT authentication
+// --- UNAUTHENTICATED VALIDATION ROUTES FOR AUDITORS ---
+// These routes allow auditors to access validation functionality without JWT authentication
 
-// Unauthenticated GET route for supervisor validation (load the validation page data)
+// Unauthenticated GET route for auditor validation (load the validation page data)
 app.get('/validate-public/:id', (req, res) => {
     return res.status(410).json({ message: 'This endpoint has moved. Please use /api/validate/:id on the auth server.' });
 });
 
-// Unauthenticated POST route for supervisor validation form submission
+// Unauthenticated POST route for auditor validation form submission
 app.post('/validate-public/:id', async (req, res) => {
     // Deprecated: validation endpoints have been consolidated in dhl_login
     return res.status(410).json({ message: 'This endpoint has moved. Please use /api/validate/:id on the auth server.' });
@@ -426,13 +437,32 @@ app.get('/view-checklist-html/:id', authenticateApi, (req, res) => {
 
 // Configuration endpoint to provide frontend with environment-based settings
 app.get('/config', (req, res) => {
-    const supervisorEmailEnv = process.env.SUPERVISOR_EMAIL || 'sendral.ts.1@pg.com';
+    // Check for new AUDITOR_EMAIL first, then fall back to SUPERVISOR_EMAIL
+    let emailEnv = process.env.AUDITOR_EMAIL;
+    let isUsingDeprecatedVar = false;
+
+    if (!emailEnv) {
+        emailEnv = process.env.SUPERVISOR_EMAIL || 'sendral.ts.1@pg.com';
+        if (process.env.SUPERVISOR_EMAIL) {
+            isUsingDeprecatedVar = true;
+            console.warn('[DEPRECATION WARNING] SUPERVISOR_EMAIL environment variable is deprecated. Please use AUDITOR_EMAIL instead.');
+        }
+    }
+
     // Split by comma and trim whitespace, then filter out empty strings
-    const supervisorEmails = supervisorEmailEnv.split(',').map(email => email.trim()).filter(email => email.length > 0);
+    const emails = emailEnv.split(',').map(email => email.trim()).filter(email => email.length > 0);
 
     res.status(200).json({
-        supervisorEmail: supervisorEmails.length === 1 ? supervisorEmails[0] : supervisorEmails, // Single email as string, multiple as array
-        supervisorEmails: supervisorEmails // Always provide as array for consistency
+        // New auditor fields
+        auditorEmail: emails.length === 1 ? emails[0] : emails, // Single email as string, multiple as array
+        auditorEmails: emails, // Always provide as array for consistency
+
+        // Legacy supervisor fields for backward compatibility
+        supervisorEmail: emails.length === 1 ? emails[0] : emails,
+        supervisorEmails: emails,
+
+        // Deprecation info
+        _deprecationWarning: isUsingDeprecatedVar ? 'SUPERVISOR_EMAIL is deprecated, use AUDITOR_EMAIL' : undefined
     });
 });
 

@@ -15,7 +15,7 @@ I scanned the repository (backend, authentication server, and frontend) to ident
 
 - What’s duplicated:
   - Reading checklist JSON by ID, validating presence of `randomCheckboxes`, sending JSON payload (GET)
-  - Processing supervisor validation: iterating `validatedCheckboxes` to update stored structure, saving file, updating `Assignment` to “validated”, looking up supervisor admin (POST)
+  - Processing auditor validation: iterating `validatedCheckboxes` to update stored structure, saving file, updating `Assignment` to “validated”, looking up auditor admin (POST)
   - Implemented in both `backend/server.js` and `dhl_login/app.js`
 
 - Why it matters:
@@ -209,7 +209,7 @@ I scanned the repository (backend, authentication server, and frontend) to ident
 
 - Phase 1: Validation endpoints
   - Choose one server to host all validation routes (recommend `dhl_login` for proximity to UI).
-  - Extract helpers: `loadChecklistData(fileId)`, `saveChecklistData(fileId, data)`, `updateChecklistFromValidation(formData, validatedCheckboxes)`, `markAssignmentValidated(filename, supervisorName)`.
+  - Extract helpers: `loadChecklistData(fileId)`, `saveChecklistData(fileId, data)`, `updateChecklistFromValidation(formData, validatedCheckboxes)`, `markAssignmentValidated(filename, auditorName)`.
   - Replace `backend/server.js` `/validate` and `/validate-public` with proxies or remove if not needed.
 
 - Phase 2: Checklist catalog

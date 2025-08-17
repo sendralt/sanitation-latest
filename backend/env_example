@@ -5,3 +5,9 @@ DB_PATH=/var/www/sanitation-app/data/auth.db # Example production path for SQLit
 EMAIL_USER=dymc.sanitation@gmail.com
 EMAIL_PASS=cdpe gmue aicf hkud
 BASE_URL=https://dot1hundred.com # URL of the dhl_login application (frontend host)
+
+# Auditor email configuration (NEW - preferred)
+AUDITOR_EMAIL=auditor@company.com # Single email or comma-separated list for multiple auditors
+
+# Legacy supervisor email (DEPRECATED - use AUDITOR_EMAIL instead)
+# SUPERVISOR_EMAIL=supervisor@company.com # DEPRECATED: Use AUDITOR_EMAIL instead

@@ -70,7 +70,7 @@ describe('Validation API endpoints', () => {
   describe('POST /api/validate/:id', () => {
     it('should update validation status and save changes', async () => {
       const validationData = {
-        supervisorName: 'Test Supervisor',
+        supervisorName: 'Test Auditor',
         validatedCheckboxes: [
           { id: 'item1', checked: true },
           { id: 'item2', checked: false }
@@ -91,13 +91,13 @@ describe('Validation API endpoints', () => {
       expect(updatedData.checkboxes.H.item3.checked).toBe(false); // unchanged
       expect(updatedData.supervisorValidation).toBeTruthy();
       expect(updatedData.supervisorValidation.validatedAt).toBeTruthy();
-      expect(updatedData.supervisorValidation.supervisorName).toBe('Test Supervisor');
+      expect(updatedData.supervisorValidation.supervisorName).toBe('Test Auditor');
     });
 
     it('should handle empty validation data', async () => {
       const response = await request(app)
         .post(`/api/validate/${testId}`)
-        .send({ supervisorName: 'Test Supervisor', validatedCheckboxes: [] })
+        .send({ supervisorName: 'Test Auditor', validatedCheckboxes: [] })
         .expect(200);
 
       expect(response.body).toHaveProperty('message', 'Validation completed successfully.');
@@ -111,7 +111,7 @@ describe('Validation API endpoints', () => {
     it('should return 404 for non-existent checklist', async () => {
       const response = await request(app)
         .post('/api/validate/nonexistent-id')
-        .send({ supervisorName: 'Test Supervisor', validatedCheckboxes: [] })
+        .send({ supervisorName: 'Test Auditor', validatedCheckboxes: [] })
         .expect(404);
 
       expect(response.body).toHaveProperty('message', 'Checklist not found.');

@@ -11,12 +11,12 @@ A web application for managing warehouse sanitation checklists with role-based a
 - Readiness: Works across desktop/mobile; email notifications link to validation
 
 ## Key Features
-- Authentication and roles (Associate, Supervisor, Admin)
+- Authentication and roles (Associate, Auditor, Admin)
 - Automated assignment lifecycle (assign → perform → submit → validate → complete/rework)
 - 22 checklists by frequency (Daily, Weekly, Quarterly)
 - Barcode/QR generator and scanner to jump to forms
 - Email notifications with direct validation links
-- Supervisor validation UI to accept or request rework
+- Auditor validation UI to accept or request rework
 - Admin dashboard to create users, manage assignments, and view submissions
 
 ## End-to-End Workflow
@@ -41,13 +41,13 @@ A web application for managing warehouse sanitation checklists with role-based a
 
 ## Success Metrics
 - Checklist completion rate and time-to-completion
-- Rework rate after supervisor review
+- Rework rate after auditor review
 - On-time compliance by frequency (daily/weekly/quarterly)
 - Throughput and adoption (active users, assignments closed)
 
 ## Roadmap (Examples)
-- Add Auditor Role
-- Move Supervisor validation process from email to in-app
+- Enhanced Auditor Role features
+- Move Auditor validation process from email to in-app
 - Analytics dashboard (compliance trends, hotspots)
 
 

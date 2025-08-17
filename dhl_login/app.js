@@ -189,20 +189,120 @@ const {
   markAssignmentValidated,
 } = require('./utils/validationHelpers');
 
-// Supervisor validation APIs (consolidated)
-app.get('/api/validate/:id', (req, res) => {
+// NEW: Auditor validation APIs (preferred endpoints)
+app.get('/api/auditor-validate/:id', (req, res) => {
+    const fileId = req.params.id;
+    const filePath = path.join(dataDir, `${fileId}.json`);
+
+    if (!fs.existsSync(filePath)) {
+        return res.status(404).json({ message: 'Checklist not found.' });
+    }
+
+    const formData = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+
+    // Check both new auditorValidation and legacy supervisorValidation formats
+    const existingValidation = formData.auditorValidation || formData.supervisorValidation;
+    if (existingValidation) {
+        return res.status(410).json({
+            message: 'This checklist has already been validated.',
+            alreadyValidated: true,
+            validatedBy: existingValidation.auditorName || existingValidation.supervisorName,
+            validatedAt: existingValidation.validatedAt
+        });
+    }
+
+    if (!formData.randomCheckboxes) {
+        return res.status(400).json({ message: 'No random checkboxes found for validation.' });
+    }
+
+    res.status(200).json(formData);
+});
+
+app.post('/api/auditor-validate/:id', async (req, res) => {
+    const fileId = req.params.id;
+    const filePath = path.join(dataDir, `${fileId}.json`);
+    const validationData = req.body;
+
+    if (!fs.existsSync(filePath)) {
+        return res.status(404).json({ message: 'Checklist not found.' });
+    }
+
+    const formData = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+
+    // Check both new auditorValidation and legacy supervisorValidation formats
+    const existingValidation = formData.auditorValidation || formData.supervisorValidation;
+    if (existingValidation) {
+        return res.status(410).json({
+            message: 'This checklist has already been validated.',
+            alreadyValidated: true,
+            validatedBy: existingValidation.auditorName || existingValidation.supervisorName,
+            validatedAt: existingValidation.validatedAt
+        });
+    }
+
+    updateCheckboxesFromValidation(formData, validationData.validatedCheckboxes);
+
+    // Create new auditorValidation format
+    formData.auditorValidation = {
+        auditorName: validationData.supervisorName, // Accept supervisorName for backward compatibility
+        validatedAt: new Date().toISOString(),
+        validatedCheckboxes: (validationData.validatedCheckboxes || []).reduce((acc, cb) => {
+            acc[cb.id] = cb.checked;
+            return acc;
+        }, {})
+    };
+
+    // Also maintain supervisorValidation for backward compatibility
+    formData.supervisorValidation = {
+        supervisorName: validationData.supervisorName,
+        validatedAt: new Date().toISOString(),
+        validatedCheckboxes: (validationData.validatedCheckboxes || []).reduce((acc, cb) => {
+            acc[cb.id] = cb.checked;
+            return acc;
+        }, {})
+    };
+
+    fs.writeFileSync(filePath, JSON.stringify(formData, null, 2));
+
+    try {
+        await markAssignmentValidated(fileId, validationData.supervisorName);
+        res.status(200).json({
+            message: 'Validation completed successfully.',
+            validatedBy: validationData.supervisorName,
+            validatedAt: formData.auditorValidation.validatedAt
+        });
+    } catch (error) {
+        console.error('Error updating assignment status:', error);
+        res.status(200).json({
+            message: 'Validation saved, but assignment status update failed.',
+            validatedBy: validationData.supervisorName,
+            validatedAt: formData.auditorValidation.validatedAt,
+            warning: 'Assignment status not updated in database'
+        });
+    }
+});
+
+// LEGACY: Supervisor validation APIs (deprecated but maintained for backward compatibility)
+app.get('/api/validate/:id', async (req, res) => {
+    // Add deprecation warning
+    console.warn('[DEPRECATION WARNING] /api/validate/:id endpoint is deprecated. Please use /api/auditor-validate/:id instead.');
+    res.set('X-Deprecated-Endpoint', 'true');
+    res.set('X-Replacement-Endpoint', '/api/auditor-validate/:id');
+
     console.log(`[DEBUG] GET /api/validate/:id - START - ID: ${req.params.id}`);
     const fileId = req.params.id;
     const formData = loadChecklistData(fileId);
     if (!formData) {
         return res.status(404).json({ message: 'Checklist not found.' });
     }
-    if (formData.supervisorValidation) {
+    // Check both new auditorValidation and legacy supervisorValidation formats
+    const existingValidation = formData.auditorValidation || formData.supervisorValidation;
+    if (existingValidation) {
         return res.status(410).json({
             message: 'This checklist has already been validated.',
             alreadyValidated: true,
-            validatedBy: formData.supervisorValidation.supervisorName,
-            validatedAt: formData.supervisorValidation.validatedAt
+            validatedBy: existingValidation.auditorName || existingValidation.supervisorName,
+            validatedAt: existingValidation.validatedAt
         });
     }
     if (!formData.randomCheckboxes || !Array.isArray(formData.randomCheckboxes)) {
@@ -219,6 +319,11 @@ app.get('/api/validate/:id', (req, res) => {
 });
 
 app.post('/api/validate/:id', async (req, res) => {
+    // Add deprecation warning
+    console.warn('[DEPRECATION WARNING] POST /api/validate/:id endpoint is deprecated. Please use POST /api/auditor-validate/:id instead.');
+    res.set('X-Deprecated-Endpoint', 'true');
+    res.set('X-Replacement-Endpoint', '/api/auditor-validate/:id');
+
     console.log(`[DEBUG] POST /api/validate/:id - START - ID: ${req.params.id}`);
     const fileId = req.params.id;
     const validationData = req.body;
@@ -226,15 +331,29 @@ app.post('/api/validate/:id', async (req, res) => {
     if (!formData) {
         return res.status(404).json({ message: 'Checklist not found.' });
     }
-    if (formData.supervisorValidation) {
+    // Check both new auditorValidation and legacy supervisorValidation formats
+    const existingValidation = formData.auditorValidation || formData.supervisorValidation;
+    if (existingValidation) {
         return res.status(410).json({
             message: 'This checklist has already been validated.',
             alreadyValidated: true,
-            validatedBy: formData.supervisorValidation.supervisorName,
-            validatedAt: formData.supervisorValidation.validatedAt
+            validatedBy: existingValidation.auditorName || existingValidation.supervisorName,
+            validatedAt: existingValidation.validatedAt
         });
     }
     updateCheckboxesFromValidation(formData, validationData.validatedCheckboxes);
+
+    // Create new auditorValidation format
+    formData.auditorValidation = {
+        auditorName: validationData.supervisorName, // Accept supervisorName for backward compatibility
+        validatedAt: new Date().toISOString(),
+        validatedCheckboxes: (validationData.validatedCheckboxes || []).reduce((acc, cb) => {
+            acc[cb.id] = cb.checked;
+            return acc;
+        }, {})
+    };
+
+    // Also maintain supervisorValidation for backward compatibility
     formData.supervisorValidation = {
         supervisorName: validationData.supervisorName,
         validatedAt: new Date().toISOString(),
@@ -309,9 +428,9 @@ const ensureWebAuthenticated = (req, res, next) => {
   res.redirect('/login-page');
 };
 
-// --- Specific route for Supervisor Validation page ---
+// --- Specific route for Auditor Validation page ---
 // This ensures that any path like /app/validate-checklist/someID serves the validate-checklist.html file.
-// No authentication required to allow supervisors to access validation links from emails.
+// No authentication required to allow auditors to access validation links from emails.
 app.get('/app/validate-checklist/:id', (req, res) => {
     console.log(`[DEBUG] Validation route hit for ID: ${req.params.id}`);
     res.sendFile(path.join(__dirname, '..', 'Public', 'validate-checklist.html'));

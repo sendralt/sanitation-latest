@@ -375,7 +375,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const filename = currentPath.split('/').pop(); // Get the last part of the path (filename)
 
         // Handle both single email and multiple emails from config
-        const supervisorEmail = appConfig?.supervisorEmails || appConfig?.supervisorEmail || "sendral.ts.1@pg.com";
+        const auditorEmail = appConfig?.supervisorEmails || appConfig?.supervisorEmail || "sendral.ts.1@pg.com";
 
         const data = {
             title: document.title,
@@ -385,7 +385,7 @@ document.addEventListener("DOMContentLoaded", function() {
             comments: commentsTextarea.value,
             //auditorName: auditorNameInput.value,
             //supervisorName: supervisorName.value,
-            supervisorEmail: supervisorEmail, // Use config (single or multiple) or fallback
+            supervisorEmail: auditorEmail, // Use config (single or multiple) or fallback
             checklistFilename: filename, // Add the checklist filename
             userId: currentUser ? currentUser.id : null // Add the user ID
         };

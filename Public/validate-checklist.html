@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Supervisor Checklist Validation</title>
+    <title>Auditor Checklist Validation</title>
     <style>
 /* Delivery Font - Light */
 @font-face {
@@ -491,17 +491,17 @@ body {
 </head>
 <body>
     <div class="page-container">
-        <h1>Supervisor Checklist Validation</h1>
+        <h1>Auditor Checklist Validation</h1>
         <h2 id="checklist-title">Loading checklist title...</h2>
-        
-        <form id="supervisor-validation-form">
+
+        <form id="auditor-validation-form">
             <div id="validation-items-container">
                 <p>Loading validation items...</p>
             </div>
 
             <div class="form-group">
-                <label for="supervisorName">Supervisor's Name:</label>
-                <input type="text" id="supervisorName" name="supervisorName" required>
+                <label for="auditorName">Auditor's Name:</label>
+                <input type="text" id="auditorName" name="auditorName" required>
             </div>
 
             <button type="submit">Submit Validation</button>
@@ -980,8 +980,8 @@ document.addEventListener("DOMContentLoaded", function() {
         document.addEventListener('DOMContentLoaded', async () => {
             const checklistTitleEl = document.getElementById('checklist-title');
             const itemsContainerEl = document.getElementById('validation-items-container');
-            const validationForm = document.getElementById('supervisor-validation-form');
-            const supervisorNameInput = document.getElementById('supervisorName');
+            const validationForm = document.getElementById('auditor-validation-form');
+            const auditorNameInput = document.getElementById('auditorName');
             const messageArea = document.getElementById('message-area');
 
             let checklistId = null;
@@ -1020,11 +1020,20 @@ document.addEventListener("DOMContentLoaded", function() {
                  return;
             }
             
-            // Fetch checklist data for validation (no authentication required for supervisors)
+            // Fetch checklist data for validation (no authentication required for auditors)
             try {
-                const response = await fetch(`/api/validate/${checklistId}`, {
+                // Try new auditor endpoint first, fallback to legacy endpoint
+                let response = await fetch(`/api/auditor-validate/${checklistId}`, {
                     method: 'GET'
                 });
+
+                // If auditor endpoint fails, try legacy supervisor endpoint
+                if (!response.ok && response.status === 404) {
+                    console.warn('Auditor endpoint not available, falling back to legacy supervisor endpoint');
+                    response = await fetch(`/api/validate/${checklistId}`, {
+                        method: 'GET'
+                    });
+                }
 
                 if (!response.ok) {
                     const errorData = await response.json().catch(() => ({ message: `HTTP error ${response.status}` }));
@@ -1141,9 +1150,9 @@ document.addEventListener("DOMContentLoaded", function() {
             // Handle form submission
             validationForm.addEventListener('submit', async (event) => {
                 event.preventDefault();
-                const supervisorName = supervisorNameInput.value.trim();
-                if (!supervisorName) {
-                    displayMessage('Supervisor name is required.', 'error');
+                const auditorName = auditorNameInput.value.trim();
+                if (!auditorName) {
+                    displayMessage('Auditor name is required.', 'error');
                     return;
                 }
 
@@ -1156,16 +1165,32 @@ document.addEventListener("DOMContentLoaded", function() {
                 });
 
                 try {
-                    const response = await fetch(`/api/validate/${checklistId}`, {
+                    // Try new auditor endpoint first, fallback to legacy endpoint
+                    let response = await fetch(`/api/auditor-validate/${checklistId}`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({
-                            supervisorName: supervisorName,
+                            supervisorName: auditorName,
                             validatedCheckboxes: validatedCheckboxes
                         })
                     });
+
+                    // If auditor endpoint fails, try legacy supervisor endpoint
+                    if (!response.ok && response.status === 404) {
+                        console.warn('Auditor endpoint not available, falling back to legacy supervisor endpoint');
+                        response = await fetch(`/api/validate/${checklistId}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                supervisorName: auditorName,
+                                validatedCheckboxes: validatedCheckboxes
+                            })
+                        });
+                    }
 
                     if (!response.ok) {
                          const errorData = await response.json().catch(() => ({ message: `HTTP error ${response.status}` }));

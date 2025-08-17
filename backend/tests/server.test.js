@@ -20,7 +20,7 @@ afterAll((done) => {
 });
 
 describe('GET /config', () => {
-  it('should return configuration with supervisor email(s)', async () => {
+  it('should return configuration with auditor email(s)', async () => {
     const res = await request(app).get('/config');
     expect(res.statusCode).toEqual(200);
     expect(res.body).toHaveProperty('supervisorEmail');

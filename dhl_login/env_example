@@ -9,3 +9,6 @@ INITIAL_ADMIN_USERNAME=admin
 INITIAL_ADMIN_PASSWORD=password123
 INITIAL_ADMIN_SEC_ANSWER1=Fluffy
 INITIAL_ADMIN_SEC_ANSWER2=Central Elementary
+
+# Note: AUDITOR_EMAIL should be configured in the backend/.env file
+# The backend server provides auditor email configuration via the /config endpoint

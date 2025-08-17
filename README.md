@@ -166,7 +166,7 @@ npm start
    - Add comments where necessary
 4. **Submit**: Click submit when complete - next checklist is automatically assigned
 
-### 👨‍💼 For Supervisors
+### 👨‍💼 For Auditors
 
 1. **Email Notifications**: Receive automatic emails when checklists are submitted
 2. **Review Process**: Click the validation link in the email
@@ -229,7 +229,7 @@ cd backend && npm test      # Backend API tests
 ### 📧 Email Notifications
 - **Service**: Gmail SMTP
 - **Configuration**: Set `EMAIL_USER` and `EMAIL_PASS` in `backend/.env`
-- **Supervisor Email**: Currently configured in frontend code
+- **Auditor Email**: Currently configured in frontend code
 - **Templates**: Automatic notifications with validation links
 
 ### 🗄️ Database Storage
