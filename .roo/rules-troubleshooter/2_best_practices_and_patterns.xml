@@ -1,0 +1,105 @@
+<troubleshooting_knowledge_base>
+  <overview>
+    This file contains structured knowledge, patterns, and best practices for the Troubleshooter mode, derived from the project's knowledge base.
+  </overview>
+
+  <general_principles>
+    <principle name="Isolate Variables">Test each component independently (browser, network, server, application).</principle>
+    <principle name="Verify Assumptions">Don't assume the obvious cause is correct; verify with objective tools like `curl`.</principle>
+    <principle name="Document False Leads">Recording what didn't work prevents repeating ineffective approaches.</principle>
+    <principle name="Environment Context">Always note the specific environment details for future reference.</principle>
+    <principle name="Prevention Focus">Always include prevention strategies in the final documentation to avoid recurring issues.</principle>
+  </general_principles>
+
+  <decision_trees>
+    <tree name="HTTP/HTTPS Redirect Issues">
+      <step question="Is the redirect happening?">
+        <answer case="YES">
+          <next_step>Check server logs for a server-side redirect.</next_step>
+          <sub_step question="Is it a server-side redirect?">
+            <answer case="YES">
+              <conclusion>Review application code (e.g., `app.js`, routes) for redirect logic.</conclusion>
+            </answer>
+            <answer case="NO">
+              <conclusion>It's a browser-side issue. Test in incognito mode, try a different browser, and check for extensions like HTTPS Everywhere.</conclusion>
+            </answer>
+          </sub_step>
+        </answer>
+        <answer case="NO">
+          <conclusion>The issue is resolved or was misdiagnosed.</conclusion>
+        </answer>
+      </step>
+    </tree>
+    <tree name="Port Access Issues">
+      <step question="Can't access localhost:PORT?">
+        <next_step>Is the application running? Use `netstat -ano | findstr :PORT` to check.</next_step>
+        <sub_step question="Is the application running?">
+          <answer case="NO">
+            <conclusion>Start the application.</conclusion>
+          </answer>
+          <answer case="YES">
+            <next_step>Check for firewall blocks (e.g., Windows Defender).</next_step>
+            <next_step>Check for browser cache issues by clearing the cache or using incognito mode.</next_step>
+            <conclusion>Verify the correct port is specified in the application's configuration.</conclusion>
+          </answer>
+        </sub_step>
+      </step>
+    </tree>
+  </decision_trees>
+
+  <common_issue_patterns>
+    <pattern name="Browser-Related Issues">
+      <symptoms>Unexpected redirects, cached responses, extension conflicts.</symptoms>
+      <first_steps>Test in incognito mode, try a different browser, disable extensions.</first_steps>
+      <tools>Browser developer tools, `curl` for objective verification.</tools>
+    </pattern>
+    <pattern name="Configuration Issues">
+      <symptoms>Environment-specific failures, missing variables, wrong ports.</symptoms>
+      <first_steps>Verify configuration files, check environment variables, validate syntax.</first_steps>
+      <tools>Config validators, environment dumps (`printenv`), diff tools.</tools>
+    </pattern>
+    <pattern name="Network Issues">
+      <symptoms>Connection timeouts, DNS failures, firewall blocks.</symptoms>
+      <first_steps>Test connectivity, check DNS, verify firewall rules.</first_steps>
+      <tools>ping, nslookup, telnet, netstat.</tools>
+    </pattern>
+  </common_issue_patterns>
+
+  <knowledge_base_entry_template>
+    <title>Template for New Knowledge Base Entries</title>
+    <description>Use this template when documenting a new issue in `docs/troubleshooting_knowledge_base.md`.</description>
+    <template><![CDATA[
+## Issue ID: [CATEGORY-DESCRIPTION-###]
+**Tags:** #category #technology #severity
+**Date:** YYYY-MM-DD
+**Environment:** [OS, Browser, Framework versions]
+**Reporter:** [Name/Team]
+
+### Problem Description
+[Clear description of symptoms observed]
+
+### Root Cause Analysis
+[To be filled after investigation]
+
+### Diagnostic Steps
+1. [Step-by-step process]
+2. [Include commands and tools used]
+3. [Note verification methods and false leads]
+
+### Solution Applied
+[Specific actions taken to resolve]
+
+### Prevention Tips
+[How to avoid this issue in the future]
+
+### Related Issues
+[Cross-references to similar problems]
+
+### Time Investment
+- **Investigation Time:** [Hours]
+- **Resolution Time:** [Hours]
+- **Total Impact:** [Hours/People affected]
+]]></template>
+  </knowledge_base_entry_template>
+
+</troubleshooting_knowledge_base>

@@ -1,0 +1,94 @@
+<troubleshooting_workflow>
+  <overview>
+    This workflow guides the Troubleshooter mode through a systematic process of diagnosing, investigating, and resolving technical issues. It emphasizes leveraging a knowledge base, methodical investigation, and continuous learning through documentation.
+  </overview>
+
+  <pre_investigation_protocol>
+    <title>Step 1: Automatic Triage and Planning</title>
+    <step number="1">
+      <action>Knowledge Base Pattern Check</action>
+      <details>
+        <detail>When a user reports a technical issue (e.g., "error," "not working," "timeout"), first search the `docs/troubleshooting_knowledge_base.md` file.</detail>
+        <detail>Look for similar symptoms, error messages, or tags to find documented issues or relevant decision trees.</detail>
+        <detail>If a matching pattern is found, use it to form an initial hypothesis.</detail>
+      </details>
+      <tools>
+        <tool>search_files</tool>
+      </tools>
+    </step>
+    <step number="2">
+      <action>Issue Classification and Planning</action>
+      <details>
+        <detail>Based on the user's report and knowledge base check, classify the issue's severity (#critical, #high, #medium, #low).</detail>
+        <detail>Estimate the complexity. If it seems likely to take more than 20 minutes, immediately create a structured task list using `update_todo_list`.</detail>
+        <detail>Note the environment context (OS, browser, framework versions) if provided.</detail>
+      </details>
+      <tools>
+        <tool>update_todo_list</tool>
+      </tools>
+    </step>
+  </pre_investigation_protocol>
+
+  <investigation_protocol>
+    <title>Step 2: Systematic Investigation</title>
+    <step number="1">
+      <action>Follow Decision Trees and Workflows</action>
+      <details>
+        <detail>Apply the relevant decision tree from the knowledge base (e.g., HTTP/HTTPS Redirects, Port Access).</detail>
+        <detail>Follow the "Standard Investigation Process" outlined in the knowledge base: Reproduce -> Gather Info -> Form Hypothesis -> Test Systematically -> Implement Solution.</detail>
+      </details>
+    </step>
+    <step number="2">
+      <action>Use Standardized Diagnostic Tools</action>
+      <details>
+        <detail>Use commands from the "Quick Reference Commands" section of the knowledge base for diagnostics (e.g., `curl`, `netstat`, `nslookup`).</detail>
+        <detail>Verify server-side behavior independently of the browser to isolate issues.</detail>
+      </details>
+      <tools>
+        <tool>execute_command</tool>
+      </tools>
+    </step>
+    <step number="3">
+      <action>Real-Time Documentation</action>
+      <details>
+        <detail>Keep track of each diagnostic step and its outcome.</detail>
+        <detail>Immediately document any false leads to avoid repeating steps (e.g., "Ruled out server config because curl response was correct.").</detail>
+        <detail>Update the task list as steps are completed or new steps are identified.</detail>
+      </details>
+      <tools>
+        <tool>update_todo_list</tool>
+      </tools>
+    </step>
+  </investigation_protocol>
+
+  <post_resolution_protocol>
+    <title>Step 3: Knowledge Base Update and Continuous Improvement</title>
+    <step number="1">
+      <action>Prompt for Knowledge Base Update</action>
+      <details>
+        <detail>After successfully resolving an issue, announce the intention to update the knowledge base.</detail>
+        <detail>Example: "I'll now update the troubleshooting knowledge base with our findings. This session revealed [key insights] that should be documented."</detail>
+      </details>
+    </step>
+    <step number="2">
+      <action>Create a Structured Knowledge Base Entry</action>
+      <details>
+        <detail>Create a new entry in `docs/troubleshooting_knowledge_base.md` following the "New Issue Template".</detail>
+        <detail>Generate a unique Issue ID (e.g., `[CATEGORY-DESCRIPTION-###]`).</detail>
+        <detail>Fill in all sections: Problem Description, Root Cause Analysis, Diagnostic Steps (including false leads), Solution Applied, and Prevention Tips.</detail>
+      </details>
+      <tools>
+        <tool>apply_diff</tool>
+        <tool>insert_content</tool>
+      </tools>
+    </step>
+    <step number="3">
+      <action>Pattern Recognition and Analysis</action>
+      <details>
+        <detail>After documenting the new issue, analyze it in the context of existing entries.</detail>
+        <detail>If a similar issue exists, suggest consolidating them or cross-referencing.</detail>
+        <detail>If a new pattern emerges, recommend updating or creating a new decision tree.</detail>
+      </details>
+    </step>
+  </post_resolution_protocol>
+</troubleshooting_workflow>
