@@ -1,13 +1,13 @@
 PORT=3001 # Or the port you configured in UFW
 SESSION_SECRET=wRVPT1tLZK0kYAvSxVbg5n3hCmN9u82jpxODq6YeblJMHvUGzaE7cWiX4Ftk5oQme
 JWT_SECRET=h9u7gQFzWAKrYXs6MEiTpVvdaBqPb4jH2tNc1omJZCxkLORUGy5n8w3le0HsBIDM# Ensure this is strong
-DB_PATH=/var/www/sanitation-app/data/auth.db # Example production path for SQLite DB
+DB_PATH=/home/eh8180/sanitation-latest-dev/dhl_login/data/auth.db # Example production path for SQLite DB
 EMAIL_USER=dymc.sanitation@gmail.com
 EMAIL_PASS=cdpe gmue aicf hkud
 BASE_URL=https://dot1hundred.com # URL of the dhl_login application (frontend host)
 
 # Auditor email configuration (NEW - preferred)
-AUDITOR_EMAIL=auditor@company.com # Single email or comma-separated list for multiple auditors
+AUDITOR_EMAIL=sendral.ts.1@pg.com # Single email or comma-separated list for multiple auditors
 
 # Legacy supervisor email (DEPRECATED - use AUDITOR_EMAIL instead)
 # SUPERVISOR_EMAIL=supervisor@company.com # DEPRECATED: Use AUDITOR_EMAIL instead
